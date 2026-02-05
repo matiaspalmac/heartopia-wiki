@@ -9,7 +9,7 @@ import { CATEGORIES } from "@/lib/data";
 import { 
   Fish, Bug, Bird, PawPrint, Sprout, TreeDeciduous, 
   Trophy, ArrowRight, MapPin, Clock, Sparkles,
-  Users, ChefHat, Calculator 
+  Users, ChefHat, Calculator, Gift
 } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";

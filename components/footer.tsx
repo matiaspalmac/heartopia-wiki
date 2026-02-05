@@ -9,6 +9,7 @@ import {
   TreeDeciduous,
   Trophy,
   Heart,
+  Users,
 } from "lucide-react";
 
 const DiscordLink = "https://discord.gg/wnkBUBbaRW";
@@ -32,6 +33,10 @@ const categories = [
   { href: "/wiki/cultivos", label: "Cultivos", icon: Sprout },
   { href: "/wiki/recolectables", label: "Recolectables", icon: TreeDeciduous },
   { href: "/wiki/logros", label: "Logros", icon: Trophy },
+  { href: "/wiki/codigos", label: "Códigos", icon: Trophy },
+  { href: "/wiki/habitantes", label: "Habitantes", icon: PawPrint },
+  { href: "/wiki/recetas", label: "Recetas", icon: Sprout },
+  { href: "/staff", label: "Nuestro Equipo", icon: Users },
 ];
 
 export function Footer() {

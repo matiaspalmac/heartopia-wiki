@@ -986,6 +986,7 @@ export const CATEGORIES = [
   { id: 'recetas', name: 'Recetas', icon: 'ChefHat', description: 'Cocina y comida', count: Object.keys(RECETAS).length },
   { id: 'logros', name: 'Logros', icon: 'Trophy', description: 'Títulos y logros', count: Object.keys(LOGROS).length },
   { id: 'codigos', name: 'Códigos', icon: 'Gift', description: 'Códigos de recompensa', count: Object.keys(CODIGOS).length },
+  
 ];
 
 export type CategoryId = 'peces' | 'insectos' | 'aves' | 'animales' | 'cultivos' | 'recolectables' | 'habitantes' | 'recetas' | 'logros' | 'codigos';

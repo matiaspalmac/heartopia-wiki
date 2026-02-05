@@ -6,7 +6,8 @@ import { useState, useEffect } from "react";
 import { 
   Menu, Search, Fish, Bug, Bird, Sprout, 
   Trophy, PawPrint, Users, ChefHat, Calculator, 
-  ChevronDown, Sun, Moon 
+  ChevronDown, Sun, Moon, 
+  Users2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
@@ -143,12 +144,18 @@ export function Header() {
             </Button>
           </Link>
 
-          <a href="https://discord.gg/wnkBUBbaRW" target="_blank" rel="noopener noreferrer" className="hidden sm:flex">
-             <Button size="sm" className="h-10 rounded-xl bg-[#5865F2] hover:bg-[#4752C4] font-bold gap-2 shadow-lg shadow-[#5865F2]/20 border-none">
-               <DiscordIcon />
-               Discord
-             </Button>
-          </a>
+                    
+          <Link href="/staff" className="hidden sm:flex">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="h-10 rounded-xl font-bold gap-2 text-primary hover:bg-primary/10 hover:text-primary-foreground bg-primary/5 transition-all"
+              >
+                <Users2 className="h-4 w-4" />
+                <span className="hidden lg:inline">Nuestro Equipo</span>
+                <span className="lg:hidden">Staff</span>
+              </Button>
+          </Link>
 
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
