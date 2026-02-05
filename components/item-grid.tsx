@@ -277,16 +277,23 @@ function ItemCard({
             </div>
           </>
         );
-case "recolectables":
-        // Lógica para determinar el color según la ubicación o nombre
+      case "recolectables":
         const getResourceStyle = () => {
           const loc = data.ubicacion?.toLowerCase() || "";
           const nameLower = name.toLowerCase();
-          
-          if (nameLower.includes("madera") || nameLower.includes("rama")) return "bg-orange-50 text-orange-700 border-orange-100";
-          if (loc.includes("hogar") || loc.includes("fruta")) return "bg-rose-50 text-rose-700 border-rose-100";
-          if (loc.includes("bosque") || loc.includes("seta") || loc.includes("champiñón")) return "bg-emerald-50 text-emerald-700 border-emerald-100";
-          if (loc.includes("mina") || loc.includes("estrella")) return "bg-blue-50 text-blue-700 border-blue-100";
+
+          if (nameLower.includes("madera") || nameLower.includes("rama"))
+            return "bg-orange-50 text-orange-700 border-orange-100";
+          if (loc.includes("hogar") || loc.includes("fruta"))
+            return "bg-rose-50 text-rose-700 border-rose-100";
+          if (
+            loc.includes("bosque") ||
+            loc.includes("seta") ||
+            loc.includes("champiñón")
+          )
+            return "bg-emerald-50 text-emerald-700 border-emerald-100";
+          if (loc.includes("mina") || loc.includes("estrella"))
+            return "bg-blue-50 text-blue-700 border-blue-100";
           return "bg-slate-50 text-slate-700 border-slate-100";
         };
 
@@ -295,14 +302,18 @@ case "recolectables":
         return (
           <div className="flex flex-col gap-3">
             <div className="flex items-center gap-2">
-              <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-[11px] font-bold uppercase tracking-wide ${resourceStyle}`}>
+              <div
+                className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-[11px] font-bold uppercase tracking-wide ${resourceStyle}`}
+              >
                 <MapPin className="h-3 w-3" />
                 {safeStr(data.ubicacion)}
               </div>
             </div>
             <div className="grid grid-cols-2 gap-2 pt-1">
               <div className="flex flex-col gap-1 rounded-xl bg-amber-50/50 border border-amber-100 p-2.5 transition-colors hover:bg-amber-50">
-                <span className="text-[10px] font-bold text-amber-600 uppercase tracking-tight">Venta</span>
+                <span className="text-[10px] font-bold text-amber-600 uppercase tracking-tight">
+                  Venta
+                </span>
                 <div className="flex items-center gap-1.5">
                   <div className="p-1 rounded-full bg-amber-100">
                     <Coins className="h-3.5 w-3.5 text-amber-600" />
@@ -314,7 +325,9 @@ case "recolectables":
               </div>
               {data.ganancia_energia != null ? (
                 <div className="flex flex-col gap-1 rounded-xl bg-yellow-50/50 border border-yellow-100 p-2.5 transition-colors hover:bg-yellow-50">
-                  <span className="text-[10px] font-bold text-yellow-600 uppercase tracking-tight">Energía</span>
+                  <span className="text-[10px] font-bold text-yellow-600 uppercase tracking-tight">
+                    Energía
+                  </span>
                   <div className="flex items-center gap-1.5">
                     <div className="p-1 rounded-full bg-yellow-100">
                       <Zap className="h-3.5 w-3.5 text-yellow-600 fill-yellow-600" />
@@ -326,7 +339,9 @@ case "recolectables":
                 </div>
               ) : (
                 <div className="flex flex-col justify-center items-center rounded-xl bg-slate-50/30 border border-dashed border-slate-200 p-2.5">
-                  <span className="text-[10px] font-medium text-slate-400">Material</span>
+                  <span className="text-[10px] font-medium text-slate-400">
+                    Material
+                  </span>
                 </div>
               )}
             </div>
@@ -501,65 +516,77 @@ case "recolectables":
         );
 
       case "codigos":
-  const [copied, setCopied] = useState(false);
+        const [copied, setCopied] = useState(false);
 
-  const handleCopy = (code: string) => {
-    navigator.clipboard.writeText(code);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
+        const handleCopy = (code: string) => {
+          navigator.clipboard.writeText(code);
+          setCopied(true);
+          setTimeout(() => setCopied(false), 2000);
+        };
 
-  const isActive = data.status === "active";
-  const isExpiringSoon = data.expirationDate === "2026-02-07";
+        const isActive = data.status === "active";
+        const isExpiringSoon = data.expirationDate === "2026-02-07";
 
-  return (
-    <div className="flex flex-col gap-4">
-      {/* Cabecera del Código */}
-      <div className="flex items-center justify-between p-3 rounded-xl bg-muted/50 border-2 border-dashed border-primary/20">
-        <code className="text-lg font-black tracking-wider text-primary">
-          {name}
-        </code>
-        <button
-          onClick={() => handleCopy(name)}
-          className="p-2 hover:bg-primary/10 rounded-lg transition-colors relative"
-          title="Copiar código"
-        >
-          {copied ? <Check className="h-5 w-5 text-green-500" /> : <Copy className="h-5 w-5 text-muted-foreground" />}
-        </button>
-      </div>
+        return (
+          <div className="flex flex-col gap-4">
+            <div className="flex items-center justify-between p-3 rounded-xl bg-muted/50 border-2 border-dashed border-primary/20">
+              <code className="text-lg font-black tracking-wider text-primary">
+                {name}
+              </code>
+              <button
+                onClick={() => handleCopy(name)}
+                className="p-2 hover:bg-primary/10 rounded-lg transition-colors relative"
+                title="Copiar código"
+              >
+                {copied ? (
+                  <Check className="h-5 w-5 text-green-500" />
+                ) : (
+                  <Copy className="h-5 w-5 text-muted-foreground" />
+                )}
+              </button>
+            </div>
 
-      {/* Recompensas */}
-      <div className="space-y-2">
-        <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-1">
-          <Gift className="h-3 w-3" /> Recompensas
-        </p>
-        <div className="flex flex-wrap gap-1">
-          {safeArr(data.rewards).map((reward, idx) => (
-            <Badge key={idx} variant="secondary" className="bg-primary/5 text-primary border-primary/10">
-              {reward}
-            </Badge>
-          ))}
-        </div>
-      </div>
+            <div className="space-y-2">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-1">
+                <Gift className="h-3 w-3" /> Recompensas
+              </p>
+              <div className="flex flex-wrap gap-1">
+                {safeArr(data.rewards).map((reward, idx) => (
+                  <Badge
+                    key={idx}
+                    variant="secondary"
+                    className="bg-primary/5 text-primary border-primary/10"
+                  >
+                    {reward}
+                  </Badge>
+                ))}
+              </div>
+            </div>
 
-      {/* Meta info: Expiración */}
-      <div className="flex items-center justify-between pt-2 border-t mt-auto">
-        <div className="flex items-center gap-1.5">
-          <Calendar className="h-3.5 w-3.5 text-muted-foreground" />
-          <span className={`text-xs font-medium ${isExpiringSoon ? 'text-orange-600' : 'text-muted-foreground'}`}>
-            {isActive ? `Expira: ${data.expirationDate}` : "Código Expirado"}
-          </span>
-        </div>
-        
-        {isExpiringSoon && isActive && (
-          <Badge variant="destructive" className="animate-pulse text-[10px] px-1.5 py-0">
-            ¡CADUCA PRONTO!
-          </Badge>
-        )}
-      </div>
-    </div>
-  );
-      
+            <div className="flex items-center justify-between pt-2 border-t mt-auto">
+              <div className="flex items-center gap-1.5">
+                <Calendar className="h-3.5 w-3.5 text-muted-foreground" />
+                <span
+                  className={`text-xs font-medium ${isExpiringSoon ? "text-orange-600" : "text-muted-foreground"}`}
+                >
+                  {isActive
+                    ? `Expira: ${data.expirationDate}`
+                    : "Código Expirado"}
+                </span>
+              </div>
+
+              {isExpiringSoon && isActive && (
+                <Badge
+                  variant="destructive"
+                  className="animate-pulse text-[10px] px-1.5 py-0"
+                >
+                  ¡CADUCA PRONTO!
+                </Badge>
+              )}
+            </div>
+          </div>
+        );
+
       case "logros":
         const getCategoryStyles = (cat) => {
           if (cat?.includes("Oculto"))
@@ -638,7 +665,6 @@ case "recolectables":
       default:
         return null;
     }
-    
   };
 
   return (

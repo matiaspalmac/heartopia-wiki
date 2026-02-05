@@ -62,7 +62,6 @@ const STAFF = [
       "Ayuda con la recopilación de datos y la gestión del servidor de Discord.",
   },
 ];
-
 export default function StaffPage() {
   return (
     <div className="min-h-screen bg-background">
@@ -72,7 +71,7 @@ export default function StaffPage() {
         <div className="text-center mb-16">
           <Badge
             variant="outline"
-            className="mb-4 px-4 py-1 border-primary/20 text-primary bg-primary/5"
+            className="mb-4 px-4 py-1 border-primary/20 text-primary bg-primary/5 dark:bg-primary/10"
           >
             Comunidad Heartopia Chile
           </Badge>
@@ -81,32 +80,32 @@ export default function StaffPage() {
           </h1>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
             Conoce a las personas que mantienen esta guía actualizada y
-            acompáñanos en nuestro servidor de Discord.
+            acompañanos en nuestro servidor de Discord.
           </p>
         </div>
-
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-2 mb-20">
           {STAFF.map((member) => (
             <Card
               key={member.name}
-              className={`overflow-hidden border-2 ${member.borderColor} transition-all hover:shadow-xl group`}
+              className={`overflow-hidden border-2 ${member.borderColor} dark:bg-zinc-900/50 transition-all hover:shadow-xl group`}
             >
               <CardContent className="p-0">
                 <div
-                  className={`p-6 ${member.bgColor} border-b ${member.borderColor} relative overflow-hidden`}
+                  className={`p-6 relative overflow-hidden border-b ${member.borderColor} 
+    ${member.bgColor} dark:bg-zinc-950`}
                 >
+
                   <Star
-                    className={`absolute -right-4 -top-4 h-24 w-24 ${member.color} opacity-5 transition-transform group-hover:scale-110 group-hover:rotate-12`}
+                    className={`absolute -right-4 -top-4 h-24 w-24 ${member.color} 
+      opacity-10 dark:opacity-20 transition-transform group-hover:scale-110 group-hover:rotate-12`}
                   />
 
                   <div className="flex items-center gap-5 relative z-10">
                     <div className="relative">
                       <div
-                        className={`absolute inset-0 rounded-full blur-md opacity-20 ${member.color.replace("text", "bg")}`}
+                        className={`absolute inset-0 rounded-full blur-xl opacity-20 dark:opacity-50 ${member.color.replace("text", "bg")}`}
                       />
-                      <div
-                        className={`relative h-20 w-20 rounded-full border-4 border-white shadow-lg overflow-hidden`}
-                      >
+                      <div className="relative h-20 w-20 rounded-full border-4 border-white dark:border-zinc-800 shadow-lg overflow-hidden">
                         <Image
                           src={member.image}
                           alt={member.name}
@@ -115,19 +114,21 @@ export default function StaffPage() {
                         />
                       </div>
                       <div
-                        className={`absolute -bottom-1 -right-1 p-1.5 rounded-full bg-white shadow-sm border ${member.borderColor} ${member.color}`}
+                        className={`absolute -bottom-1 -right-1 p-1.5 rounded-full bg-white dark:bg-zinc-900 shadow-sm border ${member.borderColor} ${member.color}`}
                       >
                         {member.icon}
                       </div>
                     </div>
 
                     <div>
-                      <h3 className="font-black text-foreground text-2xl tracking-tight leading-tight">
+                      <h3 className="font-black text-foreground dark:text-white text-2xl tracking-tight leading-tight">
                         {member.name}
                       </h3>
+
                       <Badge
                         variant="secondary"
-                        className={`mt-1 text-[10px] font-bold uppercase tracking-[0.15em] px-2 py-0 ${member.color} bg-white/50 backdrop-blur-sm border-current/10`}
+                        className={`mt-1 text-[10px] font-bold uppercase tracking-[0.15em] px-2 py-0 
+          ${member.color} bg-white/80 dark:bg-zinc-800/80 backdrop-blur-sm border-current/10`}
                       >
                         {member.role}
                       </Badge>
@@ -135,8 +136,8 @@ export default function StaffPage() {
                   </div>
                 </div>
 
-                <div className="p-6 bg-white">
-                  <p className="text-sm text-muted-foreground leading-relaxed italic">
+                <div className="p-6 bg-white dark:bg-transparent">
+                  <p className="text-sm text-muted-foreground dark:text-zinc-400 leading-relaxed italic">
                     "{member.description}"
                   </p>
                 </div>
@@ -199,7 +200,7 @@ export default function StaffPage() {
                   </div>
                 </div>
                 <p className="text-xs text-blue-100 font-bold tracking-wide uppercase">
-                  +114 Ciudadanos Unidos
+                  +114 Usuarios
                 </p>
               </div>
             </div>
