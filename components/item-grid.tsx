@@ -1,8 +1,6 @@
 "use client";
 
-import React from "react"
-
-import { useState, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -15,8 +13,35 @@ import {
   Briefcase
 } from "lucide-react";
 
+type BaseData = {
+  ubicacion?: string;
+  nivel?: number;
+  tipo?: string;
+  clima?: string[];
+  horario?: string[];
+  clima_preferido?: string[];
+  comida_favorita?: string[];
+  tiempo_crecimiento?: string;
+  nivel_jardineria?: number | string;
+  compra_semilla?: number | string;
+  venta_semilla?: number | string;
+  precio_venta?: number | string;
+  ganancia_energia?: number | null;
+  rol?: string;
+  descripcion?: string;
+  rareza?: string;
+  ingredientes?: string;
+  valor?: number | null;
+  requisito?: string;
+  titulo?: string;
+  nota?: string;
+  actividad?: string;
+};
+
+type ItemData = BaseData;
+
 interface ItemGridProps {
-  items: [string, Record<string, unknown>][];
+  items: [string, ItemData][];
   categoryId: CategoryId;
 }
 
@@ -24,16 +49,19 @@ const weatherIcons: Record<string, React.ReactNode> = {
   "Soleado": <Sun className="h-4 w-4 text-amber-500" />,
   "Lluvioso": <CloudRain className="h-4 w-4 text-blue-500" />,
   "Arcoiris": <Rainbow className="h-4 w-4 text-purple-500" />,
+  "Arcoíris": <Rainbow className="h-4 w-4 text-purple-500" />,
 };
 
 const timeIcons: Record<string, React.ReactNode> = {
   "Noche": <Moon className="h-4 w-4 text-indigo-400" />,
   "Amanecer": <Sunrise className="h-4 w-4 text-orange-400" />,
   "Dia": <Sun className="h-4 w-4 text-yellow-500" />,
+  "Día": <Sun className="h-4 w-4 text-yellow-500" />,
   "Atardecer": <Sunset className="h-4 w-4 text-rose-400" />,
 };
 
-function renderStars(level: number) {
+function renderStars(level: number | undefined) {
+  if (typeof level !== 'number') return null;
   return (
     <div className="flex items-center gap-0.5">
       {Array.from({ length: Math.min(level, 10) }).map((_, i) => (
@@ -43,7 +71,14 @@ function renderStars(level: number) {
   );
 }
 
-function ItemCard({ name, data, categoryId }: { name: string; data: Record<string, unknown>; categoryId: CategoryId }) {
+function ItemCard({ name, data, categoryId }: { name: string; data: ItemData; categoryId: CategoryId }) {
+  const safeStr = (v: unknown): string => {
+    if (typeof v === 'string' || typeof v === 'number') return String(v);
+    return '—';
+  };
+  const safeNum = (v: unknown): number | undefined => typeof v === 'number' ? v : undefined;
+  const safeArr = <T = string>(v: unknown): T[] => Array.isArray(v) ? v as T[] : [];
+
   const renderContent = () => {
     switch (categoryId) {
       case "peces":
@@ -53,21 +88,21 @@ function ItemCard({ name, data, categoryId }: { name: string; data: Record<strin
           <>
             <div className="flex items-start gap-2 text-sm">
               <MapPin className="h-4 w-4 text-muted-foreground shrink-0 mt-0.5" />
-              <span className="text-muted-foreground">{String(data.ubicacion || "-")}</span>
+              <span className="text-muted-foreground">{safeStr(data.ubicacion)}</span>
             </div>
-            {data.nivel && (
+            {data.nivel != null && (
               <div className="flex items-center gap-2 text-sm">
-                <span className="text-muted-foreground">Nivel {String(data.nivel)}</span>
-                {renderStars(Number(data.nivel))}
+                <span className="text-muted-foreground">Nivel {safeStr(data.nivel)}</span>
+                {renderStars(safeNum(data.nivel))}
               </div>
             )}
             {data.tipo && (
               <Badge variant="outline" className="w-fit text-xs">
-                {String(data.tipo)}
+                {safeStr(data.tipo)}
               </Badge>
             )}
             <div className="flex flex-wrap gap-1.5 pt-2">
-              {(data.clima as string[] || []).map((c) => (
+              {safeArr(data.clima).map((c) => (
                 <div key={c} className="flex items-center gap-1 rounded-full bg-secondary px-2 py-1 text-xs">
                   {weatherIcons[c] || null}
                   <span>{c}</span>
@@ -75,7 +110,7 @@ function ItemCard({ name, data, categoryId }: { name: string; data: Record<strin
               ))}
             </div>
             <div className="flex flex-wrap gap-1.5">
-              {(data.horario as string[] || []).map((h) => (
+              {safeArr(data.horario).map((h) => (
                 <div key={h} className="flex items-center gap-1 rounded-full bg-secondary px-2 py-1 text-xs">
                   {timeIcons[h] || <Clock className="h-3 w-3" />}
                   <span>{h}</span>
@@ -90,7 +125,7 @@ function ItemCard({ name, data, categoryId }: { name: string; data: Record<strin
           <>
             <div className="flex items-start gap-2 text-sm">
               <MapPin className="h-4 w-4 text-muted-foreground shrink-0 mt-0.5" />
-              <span className="text-muted-foreground">{String(data.ubicacion || "-")}</span>
+              <span className="text-muted-foreground">{safeStr(data.ubicacion)}</span>
             </div>
             {data.comida_favorita && (
               <div className="space-y-1">
@@ -99,7 +134,7 @@ function ItemCard({ name, data, categoryId }: { name: string; data: Record<strin
                   <span>Comida favorita:</span>
                 </div>
                 <div className="flex flex-wrap gap-1">
-                  {(data.comida_favorita as string[]).map((food) => (
+                  {safeArr(data.comida_favorita).map((food) => (
                     <Badge key={food} variant="secondary" className="text-xs">
                       {food}
                     </Badge>
@@ -109,7 +144,7 @@ function ItemCard({ name, data, categoryId }: { name: string; data: Record<strin
             )}
             {data.clima_preferido && (
               <div className="flex flex-wrap gap-1.5 pt-2">
-                {(data.clima_preferido as string[]).map((c) => (
+                {safeArr(data.clima_preferido).map((c) => (
                   <div key={c} className="flex items-center gap-1 rounded-full bg-secondary px-2 py-1 text-xs">
                     {weatherIcons[c] || null}
                     <span>{c}</span>
@@ -126,11 +161,11 @@ function ItemCard({ name, data, categoryId }: { name: string; data: Record<strin
             <div className="grid grid-cols-2 gap-3 text-sm">
               <div className="flex items-center gap-2">
                 <Timer className="h-4 w-4 text-muted-foreground" />
-                <span className="text-muted-foreground">{String(data.tiempo_crecimiento || "-")}</span>
+                <span className="text-muted-foreground">{safeStr(data.tiempo_crecimiento)}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Star className="h-4 w-4 text-amber-400" />
-                <span className="text-muted-foreground">Nivel {String(data.nivel_jardineria || "-")}</span>
+                <span className="text-muted-foreground">Nivel {safeStr(data.nivel_jardineria)}</span>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-3 text-sm pt-2">
@@ -138,14 +173,14 @@ function ItemCard({ name, data, categoryId }: { name: string; data: Record<strin
                 <p className="text-xs text-muted-foreground">Compra semilla</p>
                 <p className="font-semibold text-foreground flex items-center gap-1">
                   <Coins className="h-3.5 w-3.5 text-amber-500" />
-                  {String(data.compra_semilla || "-")}
+                  {safeStr(data.compra_semilla)}
                 </p>
               </div>
               <div className="rounded-lg bg-secondary/50 p-2">
                 <p className="text-xs text-muted-foreground">Venta semilla</p>
                 <p className="font-semibold text-foreground flex items-center gap-1">
                   <Coins className="h-3.5 w-3.5 text-amber-500" />
-                  {String(data.venta_semilla || "-")}
+                  {safeStr(data.venta_semilla)}
                 </p>
               </div>
             </div>
@@ -157,22 +192,22 @@ function ItemCard({ name, data, categoryId }: { name: string; data: Record<strin
           <>
             <div className="flex items-start gap-2 text-sm">
               <MapPin className="h-4 w-4 text-muted-foreground shrink-0 mt-0.5" />
-              <span className="text-muted-foreground">{String(data.ubicacion || "-")}</span>
+              <span className="text-muted-foreground">{safeStr(data.ubicacion)}</span>
             </div>
             <div className="grid grid-cols-2 gap-3 text-sm pt-2">
               <div className="rounded-lg bg-secondary/50 p-2">
                 <p className="text-xs text-muted-foreground">Precio venta</p>
                 <p className="font-semibold text-foreground flex items-center gap-1">
                   <Coins className="h-3.5 w-3.5 text-amber-500" />
-                  {String(data.precio_venta || "-")}
+                  {safeStr(data.precio_venta)}
                 </p>
               </div>
-              {data.ganancia_energia && (
+              {data.ganancia_energia != null && (
                 <div className="rounded-lg bg-secondary/50 p-2">
                   <p className="text-xs text-muted-foreground">Energia</p>
                   <p className="font-semibold text-foreground flex items-center gap-1">
                     <Zap className="h-3.5 w-3.5 text-yellow-500" />
-                    +{String(data.ganancia_energia)}
+                    +{safeStr(data.ganancia_energia)}
                   </p>
                 </div>
               )}
@@ -186,16 +221,16 @@ function ItemCard({ name, data, categoryId }: { name: string; data: Record<strin
             <div className="flex items-center gap-2 mb-2">
               <Badge className="bg-primary/20 text-primary border-primary/30">
                 <Briefcase className="h-3 w-3 mr-1" />
-                {String(data.rol || "-")}
+                {safeStr(data.rol)}
               </Badge>
             </div>
             <div className="flex items-start gap-2 text-sm">
               <Users className="h-4 w-4 text-muted-foreground shrink-0 mt-0.5" />
-              <span className="text-muted-foreground">{String(data.descripcion || "-")}</span>
+              <span className="text-muted-foreground">{safeStr(data.descripcion)}</span>
             </div>
             <div className="flex items-start gap-2 text-sm pt-2">
               <MapPin className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-              <span className="text-muted-foreground">{String(data.ubicacion || "-")}</span>
+              <span className="text-muted-foreground">{safeStr(data.ubicacion)}</span>
             </div>
           </>
         );
@@ -205,19 +240,19 @@ function ItemCard({ name, data, categoryId }: { name: string; data: Record<strin
           <>
             <div className="flex items-center gap-2 mb-2">
               <Badge variant="secondary" className="text-xs">
-                {String(data.rareza || "Comun")}
+                {safeStr(data.rareza) || "Comun"}
               </Badge>
             </div>
             <div className="flex items-start gap-2 text-sm">
               <ChefHat className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-              <span className="text-muted-foreground">{String(data.ingredientes || "-")}</span>
+              <span className="text-muted-foreground">{safeStr(data.ingredientes)}</span>
             </div>
-            {data.valor && (
+            {data.valor != null && (
               <div className="rounded-lg bg-secondary/50 p-2 mt-2">
                 <p className="text-xs text-muted-foreground">Valor de venta</p>
                 <p className="font-semibold text-foreground flex items-center gap-1">
                   <Coins className="h-3.5 w-3.5 text-amber-500" />
-                  {String(data.valor)}
+                  {safeStr(data.valor)}
                 </p>
               </div>
             )}
@@ -229,19 +264,19 @@ function ItemCard({ name, data, categoryId }: { name: string; data: Record<strin
           <>
             <div className="flex items-start gap-2 text-sm">
               <Award className="h-4 w-4 text-purple-500 shrink-0 mt-0.5" />
-              <span className="text-muted-foreground">{String(data.requisito || "-")}</span>
+              <span className="text-muted-foreground">{safeStr(data.requisito)}</span>
             </div>
             {data.titulo && (
               <div className="pt-2">
                 <p className="text-xs text-muted-foreground mb-1">Titulo desbloqueado:</p>
                 <Badge className="bg-gradient-to-r from-amber-500 to-orange-500 text-white">
-                  {String(data.titulo)}
+                  {safeStr(data.titulo)}
                 </Badge>
               </div>
             )}
             {data.nota && (
               <p className="text-xs text-muted-foreground italic pt-1">
-                EN: {String(data.nota)}
+                EN: {safeStr(data.nota)}
               </p>
             )}
           </>
@@ -269,7 +304,6 @@ export function ItemGrid({ items, categoryId }: ItemGridProps) {
   const [levelFilter, setLevelFilter] = useState<string>("all");
   const [typeFilter, setTypeFilter] = useState<string>("all");
 
-  // Get unique types for filter
   const types = useMemo(() => {
     const typeSet = new Set<string>();
     items.forEach(([_, data]) => {
@@ -278,26 +312,21 @@ export function ItemGrid({ items, categoryId }: ItemGridProps) {
     return Array.from(typeSet).sort();
   }, [items]);
 
-  // Filter items
   const filteredItems = useMemo(() => {
     return items.filter(([name, data]) => {
-      // Search filter
       const searchLower = search.toLowerCase();
       const matchesSearch = name.toLowerCase().includes(searchLower) ||
         (data.ubicacion && String(data.ubicacion).toLowerCase().includes(searchLower)) ||
         (data.tipo && String(data.tipo).toLowerCase().includes(searchLower));
       
       if (!matchesSearch) return false;
-
-      // Level filter
-      if (levelFilter !== "all" && data.nivel) {
+      if (levelFilter !== "all" && data.nivel != null) {
         const level = Number(data.nivel);
         if (levelFilter === "low" && level > 3) return false;
         if (levelFilter === "mid" && (level < 4 || level > 6)) return false;
         if (levelFilter === "high" && level < 7) return false;
       }
 
-      // Type filter
       if (typeFilter !== "all" && data.tipo && String(data.tipo) !== typeFilter) {
         return false;
       }
@@ -310,7 +339,6 @@ export function ItemGrid({ items, categoryId }: ItemGridProps) {
 
   return (
     <div className="space-y-6">
-      {/* Filters */}
       <div className="flex flex-col gap-4 rounded-xl bg-card p-4 shadow-sm sm:flex-row sm:items-center">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -319,13 +347,14 @@ export function ItemGrid({ items, categoryId }: ItemGridProps) {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="pl-9"
+            aria-label="Buscar ítems"
           />
         </div>
         
         {(categoryId === "peces" || categoryId === "insectos" || categoryId === "aves") && (
           <>
             <Select value={levelFilter} onValueChange={setLevelFilter}>
-              <SelectTrigger className="w-full sm:w-40">
+              <SelectTrigger className="w-full sm:w-40" aria-label="Filtro de nivel">
                 <SelectValue placeholder="Nivel" />
               </SelectTrigger>
               <SelectContent>
@@ -338,7 +367,7 @@ export function ItemGrid({ items, categoryId }: ItemGridProps) {
 
             {types.length > 0 && (
               <Select value={typeFilter} onValueChange={setTypeFilter}>
-                <SelectTrigger className="w-full sm:w-40">
+                <SelectTrigger className="w-full sm:w-40" aria-label="Filtro de tipo">
                   <SelectValue placeholder="Tipo" />
                 </SelectTrigger>
                 <SelectContent>
@@ -352,38 +381,35 @@ export function ItemGrid({ items, categoryId }: ItemGridProps) {
           </>
         )}
 
-        {hasFilters && (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => {
-              setSearch("");
-              setLevelFilter("all");
-              setTypeFilter("all");
-            }}
-            className="gap-1.5"
-          >
-            <X className="h-4 w-4" />
-            Limpiar
-          </Button>
-        )}
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => {
+            setSearch("");
+            setLevelFilter("all");
+            setTypeFilter("all");
+          }}
+          className="gap-1.5"
+          disabled={!hasFilters}
+        >
+          <X className="h-4 w-4" />
+          Limpiar
+        </Button>
       </div>
 
-      {/* Results count */}
       <div className="flex items-center justify-between">
         <p className="text-sm text-muted-foreground">
           Mostrando {filteredItems.length} de {items.length} items
         </p>
       </div>
 
-      {/* Grid */}
       {filteredItems.length > 0 ? (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {filteredItems.map(([name, data]) => (
             <ItemCard 
-              key={name} 
+              key={name}
               name={name} 
-              data={data as Record<string, unknown>} 
+              data={data} 
               categoryId={categoryId} 
             />
           ))}

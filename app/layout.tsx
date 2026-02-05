@@ -4,29 +4,20 @@ import { Nunito, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
-const _nunito = Nunito({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"] });
-const _geistMono = Geist_Mono({ subsets: ["latin"] });
+const nunito = Nunito({ 
+  subsets: ["latin"], 
+  variable: '--font-nunito',
+  weight: ["400", "500", "600", "700", "800"] 
+});
+
+const geistMono = Geist_Mono({ 
+  subsets: ["latin"],
+  variable: '--font-geist-mono'
+});
 
 export const metadata: Metadata = {
-  title: 'Heartopia Wiki - Tu guia del pueblito',
-  description: 'Wiki completa de Heartopia con informacion sobre peces, insectos, aves, animales, cultivos, recolectables y logros.',
-  icons: {
-    icon: [
-      {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
-    ],
-    apple: '/apple-icon.png',
-  },
+  title: 'Heartopia Chile Wiki',
+  description: 'Wiki completa de Heartopia con información sobre peces, insectos, aves, animales, cultivos, recolectables y logros.',
 }
 
 export default function RootLayout({
@@ -35,8 +26,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
-      <body className={`font-sans antialiased`}>
+    <html lang="es" className={`${nunito.variable} ${geistMono.variable}`}>
+      <body className="font-sans antialiased bg-background m-0 p-0 min-h-screen">
         {children}
         <Analytics />
       </body>

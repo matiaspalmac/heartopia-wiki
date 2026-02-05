@@ -43,7 +43,6 @@ export default async function CategoryPage({ params }: PageProps) {
       <Header />
       
       <main className="mx-auto max-w-7xl px-4 py-8">
-        {/* Breadcrumb */}
         <div className="mb-6">
           <Link 
             href="/" 
@@ -54,7 +53,6 @@ export default async function CategoryPage({ params }: PageProps) {
           </Link>
         </div>
 
-        {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
             <h1 className="text-3xl font-bold text-foreground md:text-4xl">
@@ -69,10 +67,8 @@ export default async function CategoryPage({ params }: PageProps) {
           </p>
         </div>
 
-        {/* Items Grid */}
         <ItemGrid items={items} categoryId={categoryId} />
 
-        {/* Map Section for Animals */}
         {categoryId === "animales" && (
           <section className="mt-16">
             <Card className="overflow-hidden">

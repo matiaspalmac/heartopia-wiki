@@ -4,7 +4,6 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Heartopia Wiki - Cozy Pink Village Theme */
   --background: oklch(0.97 0.02 350);
   --foreground: oklch(0.25 0.04 350);
   --card: oklch(0.99 0.015 350);
@@ -41,7 +40,6 @@
 }
 
 .dark {
-  /* Heartopia Wiki Dark - Cozy Pink Night Theme */
   --background: oklch(0.18 0.02 350);
   --foreground: oklch(0.92 0.02 350);
   --card: oklch(0.22 0.02 350);
