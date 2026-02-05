@@ -10,7 +10,7 @@ import type { CategoryId } from "@/lib/data";
 import { 
   MapPin, Clock, Sun, CloudRain, Rainbow, Moon, Sunrise, Sunset, 
   Star, Timer, Coins, Zap, Heart, Award, Search, X, Users, ChefHat,
-  Briefcase
+  Briefcase, TrendingUp
 } from "lucide-react";
 
 type BaseData = {
@@ -38,6 +38,9 @@ type BaseData = {
   actividad?: string;
   imagen?: string;
   nombre?: string;
+  costo?: number | null;
+  energia?: number | null;
+  valores?: number[];
 };
 
 type ItemData = BaseData;
@@ -225,12 +228,7 @@ case "habitantes":
                 <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-full border-2 border-primary/20 bg-[#f8f0f0] shadow-sm">
                   <img 
                     src={data.imagen} 
-                    alt={name} 
-                    /* Explicación del cambio:
-                       - object-cover: Llena el círculo completamente.
-                       - scale-150: Hace zoom para que el personaje no se vea pequeño.
-                       - object-top: Asegura que veamos la cabeza y no los pies.
-                    */
+                    alt={name}
                     className="h-full w-full object-cover object-top scale-[1.35] transition-transform duration-300 hover:scale-[1.5]"
                     onError={(e) => { 
                       (e.target as HTMLImageElement).style.display = 'none'; 
@@ -259,31 +257,97 @@ case "habitantes":
             </div>
           </div>
         );
-
-      case "recetas":
         return (
-          <>
-            <div className="flex items-center gap-2 mb-2">
-              <Badge variant="secondary" className="text-xs">
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center justify-between gap-2">
+              <Badge variant="outline" className="text-[10px] uppercase border-primary/20 text-primary">
+                Lv. {data.nivel || "1"}
+              </Badge>
+              <Badge className="text-[10px] uppercase bg-primary/10 text-primary border-none">
                 {safeStr(data.rareza) || "Comun"}
               </Badge>
             </div>
-            <div className="flex items-start gap-2 text-sm">
+            <div className="flex items-start gap-2.5 text-sm p-2 rounded-xl bg-muted/30 border border-border/40">
               <ChefHat className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-              <span className="text-muted-foreground">{safeStr(data.ingredientes)}</span>
+              <span className="text-muted-foreground leading-tight">{safeStr(data.ingredientes)}</span>
             </div>
-            {data.valor != null && (
-              <div className="rounded-lg bg-secondary/50 p-2 mt-2">
-                <p className="text-xs text-muted-foreground">Valor de venta</p>
-                <p className="font-semibold text-foreground flex items-center gap-1">
-                  <Coins className="h-3.5 w-3.5 text-amber-500" />
-                  {safeStr(data.valor)}
-                </p>
+            <div className="grid grid-cols-2 gap-2 mt-1">
+              {data.valor != null && (
+                <div className="rounded-xl bg-amber-50/50 border border-amber-100 p-2">
+                  <p className="text-[10px] text-amber-600/80 font-bold uppercase tracking-wider">Venta</p>
+                  <p className="font-bold text-amber-700 flex items-center gap-1">
+                    <Coins className="h-3.5 w-3.5" />
+                    {safeStr(data.valor)}
+                  </p>
+                </div>
+              )}
+              
+              {data.energia != null && (
+                <div className="rounded-xl bg-emerald-50/50 border border-emerald-100 p-2">
+                  <p className="text-[10px] text-emerald-600/80 font-bold uppercase tracking-wider">Energía</p>
+                  <p className="font-bold text-emerald-700 flex items-center gap-1">
+                    <Zap className="h-3.5 w-3.5" />
+                    +{safeStr(data.energia)}
+                  </p>
+                </div>
+              )}
+            </div>
+            {data.valor && data.costo && (
+              <div className="px-2 py-1.5 rounded-lg border border-dashed border-border flex justify-between items-center">
+                <span className="text-[10px] text-muted-foreground uppercase font-medium">Ganancia Est.</span>
+                <span className="text-xs font-bold text-green-600">
+                  +{(Number(data.valor) - Number(data.costo))}
+                </span>
               </div>
             )}
-          </>
+          </div>
         );
+        case "recetas":
+        return (
+          <div className="flex flex-col gap-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <ChefHat className="h-5 w-5 text-primary" />
+                <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Lv. {data.nivel}</span>
+              </div>
+              <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 capitalize">
+                {safeStr(data.rareza)}
+              </Badge>
+            </div>
 
+            <div className="bg-muted/30 p-3 rounded-2xl border border-border/50">
+              <p className="text-[10px] uppercase font-bold text-muted-foreground/60 mb-1">Ingredientes Necesarios</p>
+              <p className="text-sm text-foreground/90 leading-snug">{safeStr(data.ingredientes)}</p>
+            </div>
+
+            {data.valores && (
+              <div className="space-y-2">
+                <p className="text-[10px] uppercase font-bold text-amber-600 tracking-tighter">Precios de Venta por Calidad</p>
+                <div className="grid grid-cols-5 gap-1">
+                  {data.valores.map((precio, index) => (
+                    <div key={index} className="flex flex-col items-center bg-amber-50/50 rounded-lg py-1.5 border border-amber-100">
+                      <div className="flex items-center text-[9px] text-amber-500 mb-0.5">
+                        {index + 1}<Star className="h-2 w-2 fill-current" />
+                      </div>
+                      <span className="text-[11px] font-bold text-amber-900">{precio}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            {data.costo && data.valores && (
+              <div className="flex items-center justify-between pt-3 border-t border-dashed border-border">
+                <div className="text-[10px] text-muted-foreground">
+                  Costo: <span className="font-mono text-foreground">{data.costo}</span>
+                </div>
+                <div className="flex items-center gap-1 text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
+                  <TrendingUp className="h-3 w-3" />
+                  Ganancia Máx: +{data.valores[4] - data.costo}
+                </div>
+              </div>
+            )}
+          </div>
+        );
       case "logros":
         return (
           <div className="flex flex-col gap-3">
