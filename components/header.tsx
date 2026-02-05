@@ -29,6 +29,7 @@ const mainNav = [
   { href: "/wiki/insectos", label: "Insectos", icon: Bug },
   { href: "/wiki/aves", label: "Aves", icon: Bird },
   { href: "/wiki/animales", label: "Animales", icon: PawPrint },
+  { href: "/eventos", label: "Eventos", icon: Sprout },
   { href: "/wiki/codigos", label: "Códigos", icon: Trophy },
 
 ];

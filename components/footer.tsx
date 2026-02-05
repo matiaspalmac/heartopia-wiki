@@ -37,6 +37,7 @@ const categories = [
   { href: "/wiki/habitantes", label: "Habitantes", icon: PawPrint },
   { href: "/wiki/recetas", label: "Recetas", icon: Sprout },
   { href: "/staff", label: "Nuestro Equipo", icon: Users },
+  { href: "/eventos", label: "Eventos", icon: Heart },
 ];
 
 export function Footer() {

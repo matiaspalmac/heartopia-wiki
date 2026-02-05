@@ -62,6 +62,7 @@ const STAFF = [
       "Ayuda con la recopilación de datos y la gestión del servidor de Discord.",
   },
 ];
+
 export default function StaffPage() {
   return (
     <div className="min-h-screen bg-background">

@@ -40,7 +40,12 @@ import {
   Check,
   Copy,
 } from "lucide-react";
-
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 type BaseData = {
   ubicacion?: string;
   nivel?: number;
@@ -69,13 +74,13 @@ type BaseData = {
   costo?: number | null;
   energia?: number | null;
   valores?: number[];
-  nivel_receta?: number | string;
   categoria?: string;
   titulo_recompensa?: string;
   consejos?: string;
   status?: string;
   rewards?: string[];
   expirationDate?: string;
+  nivel_receta?: number | string;
 };
 
 type ItemData = BaseData;
@@ -129,6 +134,42 @@ function ItemCard({
   const safeArr = <T = string,>(v: unknown): T[] =>
     Array.isArray(v) ? (v as T[]) : [];
 
+  const getLevelConfig = () => {
+    switch (categoryId) {
+      case "peces":
+        return {
+          label: "Nivel de pesca",
+          info: "Nivel de pesca necesario para poder encontrar a este pez",
+        };
+      case "insectos":
+        return {
+          label: "Nivel de captura",
+          info: "Nivel de captura necesario para encontrar este insecto",
+        };
+      case "aves":
+        return {
+          label: "Nivel de observación",
+          info: "Nivel necesario para avistar esta ave",
+        };
+      case "cultivos":
+        return {
+          label: "Nivel de jardinería",
+          info: "Nivel de jardinería necesario para plantar esta semilla",
+        };
+      case "recetas":
+        return {
+          label: "Nivel de cocina",
+          info: "Nivel de cocina necesario para preparar esta receta",
+        };
+      default:
+        return {
+          label: "Nivel requerido",
+          info: "Nivel necesario para esta actividad",
+        };
+    }
+  };
+
+  const levelConfig = getLevelConfig();
   const renderContent = () => {
     switch (categoryId) {
       case "peces":
@@ -143,12 +184,22 @@ function ItemCard({
               </span>
             </div>
             {data.nivel != null && (
-              <div className="flex items-center gap-2 text-sm">
-                <span className="text-muted-foreground">
-                  Nivel {safeStr(data.nivel)}
-                </span>
-                {renderStars(safeNum(data.nivel))}
-              </div>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <div className="flex items-center gap-2 text-sm cursor-help w-fit">
+                      <span className="text-muted-foreground font-medium">
+                        {levelConfig.label} {safeStr(data.nivel)}
+                      </span>
+                      {renderStars(safeNum(data.nivel))}
+                      <Info className="h-3 w-3 text-muted-foreground/50" />
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p className="text-xs">{levelConfig.info}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             )}
             {data.tipo && (
               <Badge variant="outline" className="w-fit text-xs">
@@ -253,10 +304,21 @@ function ItemCard({
                 </span>
               </div>
               <div className="flex items-center gap-2">
-                <Star className="h-4 w-4 text-amber-400" />
-                <span className="text-muted-foreground">
-                  Nivel {safeStr(data.nivel_jardineria)}
-                </span>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div className="flex items-center gap-2 cursor-help w-fit">
+                        <Star className="h-4 w-4 text-amber-400" />
+                        <span className="text-muted-foreground">
+                          {levelConfig.label} {safeStr(data.nivel_jardineria)}
+                        </span>
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p className="text-xs">{levelConfig.info}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-3 text-sm pt-2">
@@ -393,70 +455,28 @@ function ItemCard({
             </div>
           </div>
         );
-        return (
-          <div className="flex flex-col gap-3">
-            <div className="flex items-center justify-between gap-2">
-              <Badge
-                variant="outline"
-                className="text-[10px] uppercase border-primary/20 text-primary"
-              >
-                Lv. {data.nivel || "1"}
-              </Badge>
-              <Badge className="text-[10px] uppercase bg-primary/10 text-primary border-none">
-                {safeStr(data.rareza) || "Comun"}
-              </Badge>
-            </div>
-            <div className="flex items-start gap-2.5 text-sm p-2 rounded-xl bg-muted/30 border border-border/40">
-              <ChefHat className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-              <span className="text-muted-foreground leading-tight">
-                {safeStr(data.ingredientes)}
-              </span>
-            </div>
-            <div className="grid grid-cols-2 gap-2 mt-1">
-              {data.valor != null && (
-                <div className="rounded-xl bg-amber-50/50 border border-amber-100 p-2">
-                  <p className="text-[10px] text-amber-600/80 font-bold uppercase tracking-wider">
-                    Venta
-                  </p>
-                  <p className="font-bold text-amber-700 flex items-center gap-1">
-                    <Coins className="h-3.5 w-3.5" />
-                    {safeStr(data.valor)}
-                  </p>
-                </div>
-              )}
 
-              {data.energia != null && (
-                <div className="rounded-xl bg-emerald-50/50 border border-emerald-100 p-2">
-                  <p className="text-[10px] text-emerald-600/80 font-bold uppercase tracking-wider">
-                    Energía
-                  </p>
-                  <p className="font-bold text-emerald-700 flex items-center gap-1">
-                    <Zap className="h-3.5 w-3.5" />+{safeStr(data.energia)}
-                  </p>
-                </div>
-              )}
-            </div>
-            {data.valor && data.costo && (
-              <div className="px-2 py-1.5 rounded-lg border border-dashed border-border flex justify-between items-center">
-                <span className="text-[10px] text-muted-foreground uppercase font-medium">
-                  Ganancia Est.
-                </span>
-                <span className="text-xs font-bold text-green-600">
-                  +{Number(data.valor) - Number(data.costo)}
-                </span>
-              </div>
-            )}
-          </div>
-        );
       case "recetas":
         return (
           <div className="flex flex-col gap-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <ChefHat className="h-5 w-5 text-primary" />
-                <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
-                  Lv. {data.nivel}
-                </span>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div className="flex items-center gap-2 cursor-help w-fit">
+                        <Star className="h-4 w-4 text-amber-400" />
+                        <span className="text-muted-foreground">
+                          {levelConfig.label} {safeStr(data.nivel_receta)}
+                        </span>
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p className="text-xs">{levelConfig.info}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </div>
               <Badge
                 variant="outline"
