@@ -28,12 +28,15 @@ const mainNav = [
   { href: "/wiki/insectos", label: "Insectos", icon: Bug },
   { href: "/wiki/aves", label: "Aves", icon: Bird },
   { href: "/wiki/animales", label: "Animales", icon: PawPrint },
+  { href: "/wiki/codigos", label: "Códigos", icon: Trophy },
+
 ];
 
 const moreNav = [
   { href: "/wiki/cultivos", label: "Cultivos", icon: Sprout },
   { href: "/wiki/habitantes", label: "Habitantes", icon: Users },
   { href: "/wiki/recetas", label: "Recetas", icon: ChefHat },
+  { href: "/wiki/recolectables", label: "Recolectables", icon: Calculator },
   { href: "/wiki/logros", label: "Logros", icon: Trophy },
 ];
 

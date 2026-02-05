@@ -6,7 +6,7 @@ import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { 
   PECES, INSECTOS, AVES, ANIMALES, CULTIVOS, 
-  RECOLECTABLES, HABITANTES, RECETAS, LOGROS 
+  RECOLECTABLES, HABITANTES, RECETAS, LOGROS, CODIGOS
 } from "@/lib/data";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -29,6 +29,7 @@ const allData = [
   { category: "habitantes", categoryName: "Habitantes", icon: Users, data: HABITANTES },
   { category: "recetas", categoryName: "Recetas", icon: ChefHat, data: RECETAS },
   { category: "logros", categoryName: "Logros", icon: Trophy, data: LOGROS },
+  { category: "codigos", categoryName: "Códigos", icon: Trophy, data: CODIGOS },
 ];
 
 const categoryColors: Record<string, string> = {

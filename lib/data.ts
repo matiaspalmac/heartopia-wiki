@@ -303,18 +303,30 @@ export const RECOLECTABLES = {
   "Piedra": { "ubicacion": "Hogar", "precio_venta": 8, "ganancia_energia": null },
   "Mineral": { "ubicacion": "Hogar", "precio_venta": 14, "ganancia_energia": null },
   "Fluorita Impecable": { "ubicacion": "Mina de Fluorita", "precio_venta": 150, "ganancia_energia": null },
-  "Fragmento de Estrella": { "ubicacion": "Lluvia de Meteoritos (Mineral de Meteorito)", "precio_venta": 150, "ganancia_energia": null },
-  "Manzana": { "ubicacion": "Hogar", "precio_venta": 2, "ganancia_energia": 88 },
-  "Mandarina": { "ubicacion": "Hogar", "precio_venta": 2, "ganancia_energia": 88 },
-  "Arándano Azul": { "ubicacion": "Hogar", "precio_venta": 1, "ganancia_energia": 65 },
-  "Frambuesa": { "ubicacion": "Hogar", "precio_venta": 2, "ganancia_energia": 67 },
-  "Shiitake": { "ubicacion": "Aldea de Pescadores", "precio_venta": 1, "ganancia_energia": 65 },
+  "Fluorita Perfecta": { "ubicacion": "Mina de Fluorita", "precio_venta": 150, "ganancia_energia": null },
+  "Fragmento de Estrella Fugaz": { "ubicacion": "Lluvia de Meteoritos", "precio_venta": 150, "ganancia_energia": null },
+  "Manzana": { "ubicacion": "Hogar", "precio_venta": 28, "ganancia_energia": 8 },
+  "Mandarina": { "ubicacion": "Hogar", "precio_venta": 28, "ganancia_energia": 8 },
+  "Arándano Azul": { "ubicacion": "Hogar", "precio_venta": 16, "ganancia_energia": 5 },
+  "Frambuesa": { "ubicacion": "Hogar", "precio_venta": 26, "ganancia_energia": 7 },
+  "Shiitake": { "ubicacion": "Aldea de Pescadores", "precio_venta": 16, "ganancia_energia": 5 },
   "Shiitake Extraño (Negro)": { "ubicacion": "Aldea de Pescadores", "precio_venta": 16, "ganancia_energia": null },
-  "Champiñón de París": { "ubicacion": "Campo de Flores", "precio_venta": 1, "ganancia_energia": 65 },
-  "Boleto (Penny Bun)": { "ubicacion": "Bosque", "precio_venta": 1, "ganancia_energia": 65 },
-  "Gírgola (Oyster Mushroom)": { "ubicacion": "Montaña Onsen", "precio_venta": 1, "ganancia_energia": 65 },
+  "Shiitake Extraño (Rojo)": { "ubicacion": "Aldea de Pescadores", "precio_venta": 16, "ganancia_energia": null },
+  "Shiitake Extraño (Azul)": { "ubicacion": "Aldea de Pescadores", "precio_venta": 16, "ganancia_energia": null },
+  "Champiñón de París": { "ubicacion": "Campo de Flores", "precio_venta": 16, "ganancia_energia": 5 },
+  "Champiñón Extraño (Azul)": { "ubicacion": "Campo de Flores", "precio_venta": 16, "ganancia_energia": null },
+  "Champiñón Extraño (Rosa)": { "ubicacion": "Campo de Flores", "precio_venta": 16, "ganancia_energia": null },
+  "Champiñón Extraño (Verde)": { "ubicacion": "Campo de Flores", "precio_venta": 16, "ganancia_energia": null },
+  "Boleto (Penny Bun)": { "ubicacion": "Bosque", "precio_venta": 16, "ganancia_energia": 5 },
+  "Boleto Extraño (Morado)": { "ubicacion": "Bosque", "precio_venta": 16, "ganancia_energia": null },
+  "Boleto Extraño (Rojo)": { "ubicacion": "Bosque", "precio_venta": 16, "ganancia_energia": null },
+  "Boleto Extraño (Rosa)": { "ubicacion": "Bosque", "precio_venta": 16, "ganancia_energia": null },
+  "Seta de Ostra": { "ubicacion": "Montaña Onsen", "precio_venta": 16, "ganancia_energia": 5 },
+  "Seta de Ostra Extraña (Morado)": { "ubicacion": "Montaña Onsen", "precio_venta": 16, "ganancia_energia": null },
+  "Seta de Ostra Extraña (Naranja)": { "ubicacion": "Montaña Onsen", "precio_venta": 16, "ganancia_energia": null },
+  "Seta de Ostra Extraña (Rosa)": { "ubicacion": "Montaña Onsen", "precio_venta": 16, "ganancia_energia": null },
   "Trufa Negra": { "ubicacion": "Bosque (Isla del Bosque)", "precio_venta": 99, "ganancia_energia": 25 },
-  "Matsutake": { "ubicacion": "Bosque (Pinar del Roble Espíritu)", "precio_venta": 5, "ganancia_energia": null }
+  "Matsutake": { "ubicacion": "Bosque (Pinar del Roble Espíritu)", "precio_venta": 0, "ganancia_energia": 5 }
 };
 
 export const HABITANTES = {
@@ -835,6 +847,134 @@ export const LOGROS = {
   }
 };
 
+export const CODIGOS = {
+  "specialgift0103": {
+    status: "active",
+    rewards: ["100x Cristales de Luz de Luna"],
+    expirationDate: "2026-02-07",
+  },
+  "heartopia0108": {
+    status: "active",
+    rewards: ["100x Cristales de Luz de Luna"],
+    expirationDate: "2026-02-07",
+  },
+  "mylittlepony": {
+    status: "active",
+    rewards: ["100x Cristales de Luz de Luna"],
+    expirationDate: "2026-02-07",
+  },
+  "dcthx4u": {
+    status: "active",
+    rewards: ["10x Estrellas de Deseo"],
+    expirationDate: "2026-06-30"
+  },
+  "r4p8n6m2q9": {
+    status: "active",
+    rewards: ["10x Estrellas de Deseo", "3x Atrayentes de Peces Sirena", "10x Fertilizante"],
+    expirationDate: "2026-03-31"
+  },
+  "heartopia10m": {
+    status: "active",
+    rewards: ["10x Estrellas de Deseo"],
+    expirationDate: "2026-03-31"
+  },
+  "lifewithline": {
+    status: "active",
+    rewards: ["10x Estrellas de Deseo"],
+    expirationDate: "2026-03-31"
+  },
+  "happy2026": {
+    status: "active",
+    rewards: ["10x Cristales de Luz de Luna", "8888 Oro"],
+    expirationDate: "2026-03-31"
+  },
+  "k7m9q2a8l5": {
+    status: "active",
+    rewards: ["5x Estrellas de Deseo", "3x Atrayentes de Peces Sirena", "10x Fertilizante"],
+    expirationDate: "2026-03-31"
+  },
+  "heartopia5m": {
+    status: "active",
+    rewards: ["10x Estrellas de Deseo"],
+    expirationDate: "2026-03-31"
+  },
+  "top1thanks": {
+    status: "active",
+    rewards: ["5x Estrellas de Deseo", "2x Perfume de Sirena", "10x Mandarinas"],
+    expirationDate: "2026-03-31"
+  },
+  "r4a8x2n": {
+    status: "active",
+    rewards: ["5x Estrellas de Deseo", "10x Aceleradores de Crecimiento", "10x Naranjas"],
+    expirationDate: "2026-03-31"
+  },
+  "true5mthks": {
+    status: "active",
+    rewards: ["10x Madera de Calidad", "2x Ensalada Especial del Chef", "20x Ramas"],
+    expirationDate: "2026-03-31"
+  },
+  "letsparty": {
+    status: "active",
+    rewards: ["15x Estrellas de Deseo", "5000 Oro", "3x Kits de Reparación"],
+    expirationDate: "2026-03-31"
+  },
+  "b8n2k5l": {
+    status: "active",
+    rewards: ["2x Fluorita Perfecta", "6x Madera Rara", "10x Piedra"],
+    expirationDate: "2026-03-31"
+  },
+  "m7r9q4a": {
+    status: "active",
+    rewards: ["2x Perfume de Sirena", "10000 Oro", "10x Huevos"],
+    expirationDate: "2026-03-31"
+  },
+  "x2l8k6p": {
+    status: "active",
+    rewards: ["5x Estrellas de Deseo", "10x Fertilizante", "10x Manzanas"],
+    expirationDate: "2026-03-31"
+  },
+  "h9q3a7m5": {
+    status: "active",
+    rewards: ["2x Madera de Roble Errante", "10x Leche", "10x Madera"],
+    expirationDate: "2026-03-31"
+  },
+  "letsbuild": {
+    status: "active",
+    rewards: ["15x Estrellas de Deseo", "5000 Oro", "10x Fertilizante"],
+    expirationDate: "2026-03-31"
+  },
+  "letsdressup": {
+    status: "active",
+    rewards: ["15x Estrellas de Deseo", "5000 Oro", "10x Aceleradores de Crecimiento"],
+    expirationDate: "2026-03-31"
+  },
+  "a7k9m2q8l": {
+    status: "active",
+    rewards: ["5x Estrellas de Deseo", "3x Kits de Reparación", "10x Arándanos"],
+    expirationDate: "2026-03-31"
+  },
+  "z4p6n8r2": {
+    status: "active",
+    rewards: ["10x Madera de Calidad", "2x Ensalada Especial del Chef", "20x Ramas"],
+    expirationDate: "2026-03-31"
+  },
+  "Crystals": {
+    status: "expired",
+    rewards: ["100x Cristales de Luz de Luna"],
+    expirationDate: "Expirado"
+  },
+  "officialstream": {
+    status: "expired",
+    rewards: ["Desconocido"],
+    expirationDate: "Expirado"
+  },
+  "finaltest": {
+    status: "expired",
+    rewards: ["Desconocido"],
+    expirationDate: "Expirado"
+  }
+};
+
 export const CATEGORIES = [
   { id: 'peces', name: 'Peces', icon: 'Fish', description: 'Guía completa de pesca', count: Object.keys(PECES).length },
   { id: 'insectos', name: 'Insectos', icon: 'Bug', description: 'Captura de insectos', count: Object.keys(INSECTOS).length },
@@ -845,9 +985,10 @@ export const CATEGORIES = [
   { id: 'habitantes', name: 'Habitantes', icon: 'Users', description: 'NPCs del pueblo', count: Object.keys(HABITANTES).length },
   { id: 'recetas', name: 'Recetas', icon: 'ChefHat', description: 'Cocina y comida', count: Object.keys(RECETAS).length },
   { id: 'logros', name: 'Logros', icon: 'Trophy', description: 'Títulos y logros', count: Object.keys(LOGROS).length },
+  { id: 'codigos', name: 'Códigos', icon: 'Gift', description: 'Códigos de recompensa', count: Object.keys(CODIGOS).length },
 ];
 
-export type CategoryId = 'peces' | 'insectos' | 'aves' | 'animales' | 'cultivos' | 'recolectables' | 'habitantes' | 'recetas' | 'logros';
+export type CategoryId = 'peces' | 'insectos' | 'aves' | 'animales' | 'cultivos' | 'recolectables' | 'habitantes' | 'recetas' | 'logros' | 'codigos';
 
 export function getCategoryData(categoryId: CategoryId) {
   switch (categoryId) {
@@ -860,6 +1001,7 @@ export function getCategoryData(categoryId: CategoryId) {
     case 'habitantes': return HABITANTES;
     case 'recetas': return RECETAS;
     case 'logros': return LOGROS;
+    case 'codigos': return CODIGOS;
     default: return {};
   }
 }

@@ -19,6 +19,7 @@ const categoryTitles: Record<CategoryId, { title: string; subtitle: string }> = 
   habitantes: { title: "Habitantes", subtitle: "NPCs del pueblo - Conoce a todos los personajes" },
   recetas: { title: "Recetas", subtitle: "Cocina - Todas las recetas disponibles" },
   logros: { title: "Logros", subtitle: "Titulos y logros - Desbloquea todas las recompensas" },
+  codigos: { title: "Códigos", subtitle: "Códigos promocionales - Canjea códigos para obtener recompensas especiales" },
 };
 
 interface PageProps {
