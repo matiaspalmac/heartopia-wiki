@@ -10,7 +10,7 @@ import type { CategoryId } from "@/lib/data";
 import { 
   MapPin, Clock, Sun, CloudRain, Rainbow, Moon, Sunrise, Sunset, 
   Star, Timer, Coins, Zap, Heart, Award, Search, X, Users, ChefHat,
-  Briefcase, TrendingUp
+  Briefcase, TrendingUp, Info
 } from "lucide-react";
 
 type BaseData = {
@@ -41,6 +41,10 @@ type BaseData = {
   costo?: number | null;
   energia?: number | null;
   valores?: number[];
+  nivel_receta?: number | string;
+  categoria?: string;
+  titulo_recompensa?: string;
+  consejos?: string;
 };
 
 type ItemData = BaseData;
@@ -348,47 +352,73 @@ case "habitantes":
             )}
           </div>
         );
-      case "logros":
+case "logros":
+        const getCategoryStyles = (cat) => {
+          if (cat?.includes("Oculto")) return "border-slate-200 bg-slate-50 text-slate-600";
+          if (cat?.includes("Pesca")) return "border-blue-100 bg-blue-50 text-blue-600";
+          if (cat?.includes("Insectos")) return "border-amber-100 bg-amber-50 text-amber-600";
+          if (cat?.includes("Aves")) return "border-sky-100 bg-sky-50 text-sky-600";
+          if (cat?.includes("Jardinería")) return "border-emerald-100 bg-emerald-50 text-emerald-600";
+          if (cat?.includes("Estacional")) return "border-orange-100 bg-orange-50 text-orange-600";
+          return "border-purple-100 bg-purple-50 text-purple-600";
+        };
+
+        const categoryStyle = getCategoryStyles(data.categoria);
+
         return (
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-4">
+            {/* Cabecera con Categoría e Imagen */}
             <div className="flex items-start gap-4">
-              {data.imagen && (
-                <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl border border-purple-100 bg-purple-50/50 p-2 shadow-sm">
+              <div className={`relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl border p-2 shadow-sm flex items-center justify-center ${categoryStyle}`}>
+                {data.imagen ? (
                   <img 
                     src={data.imagen} 
                     alt={name} 
                     className="h-full w-full object-contain drop-shadow-md"
-                    onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                    onError={(e) => { (e.target).style.display = 'none'; }}
                   />
-                </div>
-              )}
-              <div className="flex-1 space-y-1.5">
-                <div className="flex items-start gap-2 text-sm leading-snug">
-                  <Award className="h-4 w-4 text-purple-500 shrink-0 mt-0.5" />
-                  <span className="text-muted-foreground font-medium">{safeStr(data.requisito)}</span>
-                </div>
-                
-                {data.titulo && (
-                  <div className="flex flex-col gap-1">
-                    <p className="text-[10px] uppercase tracking-wider text-muted-foreground/70 font-bold">Título Ganado</p>
-                    <Badge className="w-fit bg-gradient-to-r from-purple-500 to-indigo-500 text-white border-none shadow-sm text-xs py-0.5">
-                      {safeStr(data.titulo)}
-                    </Badge>
-                  </div>
+                ) : (
+                  <Award className="h-10 w-10 opacity-40" />
                 )}
+              </div>
+              
+              <div className="flex-1 space-y-2">
+                <Badge variant="outline" className={`text-[10px] uppercase font-bold border-none px-0 ${categoryStyle.split(' ')[2]}`}>
+                  {safeStr(data.categoria)}
+                </Badge>
+                <div className="flex items-start gap-2 text-sm leading-snug">
+                  <span className="text-foreground font-semibold">{safeStr(data.requisito)}</span>
+                </div>
               </div>
             </div>
 
-            {data.nota && (
-              <div className="mt-1 rounded-lg bg-secondary/30 px-2 py-1.5">
-                <p className="text-[11px] text-muted-foreground/80 italic text-center">
-                  Original: {safeStr(data.nota)}
+            {/* Recompensa de Título */}
+            {data.titulo_recompensa && (
+              <div className="flex flex-col gap-1.5 p-3 rounded-xl bg-gradient-to-br from-purple-500/10 to-indigo-500/10 border border-purple-100">
+                <p className="text-[10px] uppercase tracking-wider text-purple-600/70 font-bold flex items-center gap-1">
+                  <Star className="h-3 w-3 fill-current" /> Título de Recompensa
+                </p>
+                <span className="text-sm font-black text-indigo-700">
+                  {safeStr(data.titulo_recompensa)}
+                </span>
+              </div>
+            )}
+
+            {/* Consejos/Tips */}
+            {data.consejos && (
+              <div className="rounded-xl bg-muted/40 p-3 border border-border/50">
+                <div className="flex items-center gap-2 mb-1">
+                  <Info className="h-3 w-3 text-muted-foreground" />
+                  <p className="text-[10px] uppercase font-bold text-muted-foreground tracking-tight">Consejo Pro</p>
+                </div>
+                <p className="text-xs text-muted-foreground leading-relaxed italic">
+                  "{safeStr(data.consejos)}"
                 </p>
               </div>
             )}
           </div>
         );
-      
+
       default:
         return null;
     }

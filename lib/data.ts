@@ -415,38 +415,384 @@ export const RECETAS = {
 };
 
 export const LOGROS = {
-  "Nunca con las manos vacías": { "requisito": "Nivel 10 en el hobby de Pesca", "titulo": "Pescador Místico", "nota": "Skilled Angler", "imagen": "/logros/never-empty-handed.webp" },
-  "Pescador Místico": { "requisito": "Activa la fase oculta del Evento de Pesca 10 veces en total", "titulo": "Pescador", "nota": "Fisher", "imagen": "/logros/mystic-fisher.webp" },
-  "Bendición del Cardumen": { "requisito": "Activa 100 cardúmenes en total durante eventos de pesca", "titulo": "Bendición", "nota": "Blessing", "imagen": "/logros/shoals-blessing.webp" },
-  "Marinero Fuerte": { "requisito": "Atrapa peces de más de 100kg por 2 veces consecutivas", "titulo": "Sedal de Pesca", "nota": "Fishing Line", "imagen": "/logros/strong-sailor.webp" },
-  "Fortuna de Peces Gemelos": { "requisito": "Atrapa 2 peces de 5 estrellas en menos de 1 minuto", "titulo": "Águila Pescadora", "nota": "Osprey", "imagen": "/logros/twin-fish-fortune.webp" },
-  "Máquina de Pesca": { "requisito": "Atrapa un total de 50 peces de más de 100kg cada uno", "titulo": "Cesta de Peces", "nota": "Fish Basket", "imagen": "/logros/fishing-machine.webp" },
-  "Frenesí de Tiburones": { "requisito": "Atrapa 3 tiburones de sombras doradas en un solo evento de pesca marina", "titulo": "Jaula de Tiburones", "nota": "Shark Cage", "imagen": "/logros/shark-frenzy.webp" },
-  "Invocador de Cardúmenes": { "requisito": "Activa 3 cardúmenes en un solo evento de pesca", "titulo": "Invocador de Cardúmenes", "nota": "Shoal Caller", "imagen": "/logros/shoal-caller.webp" },
-  "Pescador de Luz Estelar": { "requisito": "Atrapa 4 peces de 5 estrellas en un solo evento de pesca", "titulo": "Maníaco de la Pesca", "nota": "Fishing Maniac", "imagen": "/logros/starlight-fisher.webp" },
-  "Leyenda de la Cocina del Pueblo": { "requisito": "Nivel 10 en el hobby de Cocina", "titulo": "Chef", "nota": "Chef", "imagen": "/logros/town-cooking-legend.webp" },
-  "Rápido y Perfecto": { "requisito": "Cocina 2 platos de 5 estrellas en menos de 60 segundos", "titulo": "Reloj de Cocina", "nota": "Kitchen Clock", "imagen": "/logros/fast-and-lawless.webp" },
-  "Toque Verde": { "requisito": "Nivel 10 en el hobby de Jardinería", "titulo": "Horticultor", "nota": "Horticulturist", "imagen": "/logros/green-touch.webp" },
-  "Cosecha Abundante": { "requisito": "Cosecha cultivos de 5 estrellas mientras la Cosecha de Bonificación está activa", "titulo": "Cosecha", "nota": "Harvest", "imagen": "/logros/plentiful-harvest.webp" },
-  "Suerte del Arcoíris": { "requisito": "Activa 2 bendiciones híbridas de arcoíris en un solo riego de área múltiple", "titulo": "Suerte del Arcoíris", "nota": "Rainbow Luck", "imagen": "/logros/rainbow-luck.webp" },
-  "Sirviente Gatuno Ace": { "requisito": "Nivel 10 en el hobby de Cuidado de Gatos", "titulo": "Amante de los Gatos", "nota": "Cat Lover", "imagen": "/logros/ace-cat-servant.webp" },
-  "Cantina Miau-Miau": { "requisito": "Alimenta a 5 gatos con su comida favorita", "titulo": "Comida para Gatos", "nota": "Cat Food", "imagen": "/logros/meow-meow-canteen.webp" },
-  "Entrenador de Perros Ace": { "requisito": "Nivel 10 en el hobby de Cuidado de Perros", "titulo": "Amigo de los Perros", "nota": "Dog Pal", "imagen": "/logros/ace-dog-trainer.webp" },
-  "Cantina Perruna": { "requisito": "Alimenta a 3 perros con su comida favorita", "titulo": "Comida para Perros", "nota": "Dog Food", "imagen": "/logros/doggie-canteen.webp" },
-  "Comandante de Insectos": { "requisito": "Nivel 10 en el hobby de Captura de Insectos", "titulo": "Maestro de Insectos", "nota": "Insect Master", "imagen": "/logros/insect-commander.webp" },
-  "Rastreador Místico": { "requisito": "Activa la fase oculta del evento de captura de insectos 10 veces", "titulo": "Exploración", "nota": "Exploration", "imagen": "/logros/mystic-tracker.webp" },
-  "Recolector de Insectos": { "requisito": "Atrapa 3 insectos con una sola burbuja de captura", "titulo": "Triple Captura", "nota": "Triple Catch", "imagen": "/logros/insect-harvester.webp" },
-  "Susurrador de Aves": { "requisito": "Nivel 10 en el hobby de Avistamiento de Aves", "titulo": "Susurrador de Aves", "nota": "Bird Whisperer", "imagen": "/logros/bird-whisperer.webp" },
-  "Caminante de Nubes": { "requisito": "Activa la fase oculta del evento de aves 10 veces", "titulo": "Cielo", "nota": "Sky", "imagen": "/logros/cloud-walker.webp" },
-  "Artista de Esculturas de Arena": { "requisito": "Nivel 5 en el hobby de Esculturas de Arena", "titulo": "Escultor de Arena", "nota": "Sand Sculptor", "imagen": "/logros/sand-sculpture-artist.webp" },
-  "Patrocinador de Cohetes": { "requisito": "Gana un total de 500,000 de Oro vendiendo a Albert Jr.", "titulo": "Cohete", "nota": "Rocket", "imagen": "/logros/rocket-sponsor.webp" },
-  "Miembro D.G.": { "requisito": "Alcanza el nivel 30 de Miembro D.G.", "titulo": "Miembro D.G.", "nota": "D.G. Member", "imagen": null },
-  "Vecino Animal": { "requisito": "Alcanza el nivel 10 de vínculo con 8 grupos de animales", "titulo": "Nuevo Vecino", "nota": "New Neighbour", "imagen": "/logros/animal-neighbors.webp" },
-  "Guardián de Animales": { "requisito": "Descubre la comida favorita de 8 grupos de animales", "titulo": "Delicioso", "nota": "Delicious", "imagen": "/logros/animal-sitter.webp" },
-  "Experto en Reparaciones": { "requisito": "Comparte kits de reparación con 100 miembros D.G. en total", "titulo": "Reparaciones", "nota": "Repairs", "imagen": "/logros/repair-expert.webp" },
-  "Estrella del Pop": { "requisito": "Recibe un total de 100 Likes en tu casa", "titulo": "Estrella Naciente", "nota": "Rising Star", "imagen": "/logros/star.webp" },
-  "Compañero de Onsen": { "requisito": "Toma un baño termal con amigos", "titulo": "Onsen", "nota": "Onsen", "imagen": "/logros/friends-of-the-hot-springs.webp" },
-  "Bajo la Lluvia de Meteoritos": { "requisito": "Pide un deseo bajo un meteorito con amigos", "titulo": "Géminis", "nota": "Gemini", "imagen": null }
+  "Armonía con la Brisa": {
+    "categoria": "🐦 Observación de Aves",
+    "requisito": "Activa 100 Oleadas de Pájaros en total durante los Eventos de Observación de Aves.",
+    "consejos": "Participa en Eventos de Observación de Aves con más personas.",
+    "titulo_recompensa": "Resonancia",
+    "imagen": "/logros/armonia-con-la-brisa.webp"
+  },
+  "Artista de Esculturas de Arena": {
+    "categoria": "🎄 Estacional",
+    "requisito": "Alcanza el Nivel Cinco del Hobby de Esculturas de Arena.",
+    "consejos": "Hobby estacional que solo está disponible durante un tiempo limitado del año.",
+    "titulo_recompensa": "Escultor de Arena",
+    "imagen": "/logros/sand-sculpture-artist.webp"
+  },
+  "Artista de Rompecabezas": {
+    "categoria": "⭐ General",
+    "requisito": "Maximiza el Sueño de Rompecabezas.",
+    "consejos": "Compra nuevos rompecabezas de Ka Ching y complétalos.",
+    "titulo_recompensa": "Rompecabezas",
+    "imagen": "/logros/artista-rompecabezas.webp"
+  },
+  "Atractor Humano de Insectos": {
+    "categoria": "🦋 Caza de Insectos",
+    "requisito": "Activa cuatro Enjambres en un único Evento de Captura de Insectos.",
+    "consejos": "Participa en Eventos de Captura de Insectos con más personas.",
+    "titulo_recompensa": "Atractor de Insectos",
+    "imagen": "/logros/atractor-humano-insectos.webp"
+  },
+  "Autor de Bestsellers": {
+    "categoria": "💬 SocialOculto",
+    "requisito": "¡Estos libros son ambos bestsellers!",
+    "titulo_recompensa": "Desconocido",
+    "imagen": null
+  },
+  "Bajo la Lluvia de Meteoros": {
+    "categoria": "💬 SocialOculto",
+    "requisito": "Se dice que todos los deseos se hacen realidad bajo la lluvia de meteoros.",
+    "titulo_recompensa": "Géminis",
+    "imagen": null
+  },
+  "Bendición de los Cardúmenes": {
+    "categoria": "🎣 Pesca",
+    "requisito": "Activa 100 Cardúmenes a lo largo de múltiples Eventos de Pesca.",
+    "consejos": "Intenta organizar o participar en Eventos de Pesca con más personas.",
+    "titulo_recompensa": "Bendición",
+    "imagen": "/logros/shoals-blessing.webp"
+  },
+  "Bendición de los Cinco Insectos": {
+    "categoria": "🦋 Caza de Insectos",
+    "requisito": "Captura cinco insectos de 5 Estrellas durante un único Evento de Captura de Insectos.",
+    "consejos": "Aumenta tu nivel del Hobby de Captura de Insectos para aumentar tus probabilidades.",
+    "titulo_recompensa": "Señor de los Insectos",
+    "imagen": "/logros/bendicion-cinco-insectos.webp"
+  },
+  "Calabaciarquía": {
+    "categoria": "🎄 Estacional",
+    "requisito": "Alcanza el Nivel Cinco del Hobby de Tallado de Calabazas.",
+    "consejos": "Hobby estacional que solo está disponible durante un tiempo limitado del año.",
+    "titulo_recompensa": "Cabeza de Calabaza",
+    "imagen": "/logros/calabaciarquia.webp"
+  },
+  "Caminante de Nubes": {
+    "categoria": "🐦 Observación de Aves",
+    "requisito": "Activa la fase oculta de un Evento de Observación de Aves 10 veces a lo largo de múltiples eventos.",
+    "consejos": "Participa en Eventos de Observación de Aves con más personas.",
+    "titulo_recompensa": "Cielo",
+    "imagen": "/logros/cloud-walker.webp"
+  },
+  "Cantina Miau-Miau": {
+    "categoria": "🐱 Cuidado de Gatos",
+    "requisito": "Alimenta a cinco Gatos con su comida favorita.",
+    "consejos": "Alimenta a tu gato con su comida favorita y evita ir directamente a la comida estándar para gatos vendida en la tienda de mascotas.",
+    "titulo_recompensa": "Comida para Gatos",
+    "imagen": "/logros/meow-meow-canteen.webp"
+  },
+  "Cantina Perruna": {
+    "categoria": "🐕 Cuidado de Perros",
+    "requisito": "Alimenta a tres Perros con su comida favorita.",
+    "consejos": "Alimenta a tu perro con su comida favorita y evita ir directamente a la comida estándar para perros vendida en la tienda de mascotas.",
+    "titulo_recompensa": "Comida para Perros",
+    "imagen": "/logros/doggie-canteen.webp"
+  },
+  "CD de Música Dorado": {
+    "categoria": "⭐ General",
+    "requisito": "Maximiza el Sueño de Músico.",
+    "consejos": "Toca, Graba y Publica Música para que otros la disfruten.",
+    "titulo_recompensa": "Música",
+    "imagen": "/logros/cd-musica-dorado.webp"
+  },
+  "Coleccionista": {
+    "categoria": "⭐ General",
+    "requisito": "Conviértete en Coleccionista Experto.",
+    "consejos": "Abre tu icono de Colección en el Reloj para ver tu Estado de Coleccionista actual. Coleccionista Experto es el rango más alto - sigue tu progreso con el medidor.",
+    "titulo_recompensa": "Coleccionista",
+    "imagen": "/logros/coleccionista.webp"
+  },
+  "Coleccionista de Libros": {
+    "categoria": "💬 SocialOculto",
+    "requisito": "¡Las estanterías de casa están casi llenas!",
+    "titulo_recompensa": "Desconocido",
+    "imagen": null
+  },
+  "Coleccionista de Polvo de Estrellas": {
+    "categoria": "⭐ General",
+    "requisito": "Recoge 60 Fragmentos de Estrellas Fugaces.",
+    "consejos": "Los Fragmentos de Estrellas Fugaces se pueden recoger durante las Lluvias de Meteoros, que puedes anticipar revisando el clima próximo en tu Reloj.",
+    "titulo_recompensa": "Recolector de Estrellas",
+    "imagen": "/logros/coleccionista-polvo-estrellas.webp"
+  },
+  "Comandante de Enjambres": {
+    "categoria": "🦋 Caza de Insectos",
+    "requisito": "Activa 100 Enjambres en total durante los Eventos de Captura de Insectos.",
+    "consejos": "Participa en Eventos de Captura de Insectos con más personas.",
+    "titulo_recompensa": "Enjambre",
+    "imagen": "/logros/comandante-enjambres.webp"
+  },
+  "Comandante de Insectos": {
+    "categoria": "🦋 Caza de Insectos",
+    "requisito": "Alcanza el Nivel 10 del Hobby de Captura de Insectos.",
+    "consejos": "Captura Insectos diariamente y participa en Eventos de Captura de Insectos para acelerar esto.",
+    "titulo_recompensa": "Maestro de Insectos",
+    "imagen": "/logros/insect-commander.webp"
+  },
+  "Compañero de Onsen": {
+    "categoria": "💬 SocialOculto",
+    "requisito": "Entre el vapor arremolinado, la amistad se profundiza silenciosamente.",
+    "titulo_recompensa": "Onsen",
+    "imagen": "/logros/friends-of-the-hot-springs.webp"
+  },
+  "Compartidor de Atractores Inflables": {
+    "categoria": "💬 SocialOculto",
+    "requisito": "Cuando usas el Atractor de Insectos Inflable, no solo los insectos lo notan, sino que mucha gente también lo ve.",
+    "titulo_recompensa": "Desconocido",
+    "imagen": null
+  },
+  "Coro Alegre": {
+    "categoria": "🐦 Observación de Aves",
+    "requisito": "Activa tres Oleadas de Pájaros en un único Evento de Observación de Aves.",
+    "consejos": "Participa en Eventos de Observación de Aves con más personas.",
+    "titulo_recompensa": "Pluma",
+    "imagen": "/logros/coro-alegre.webp"
+  },
+  "Cosecha Abundante": {
+    "categoria": "🌱 Jardinería",
+    "requisito": "Cosecha cultivos de 5 Estrellas mientras la Cosecha Bonus está activa.",
+    "consejos": "Aumenta tu rango del Hobby de Jardinería para aumentar tus probabilidades. El evento de Cosecha Bonus ocurre durante el clima de Arcoíris.",
+    "titulo_recompensa": "Cosecha",
+    "imagen": "/logros/plentiful-harvest.webp"
+  },
+  "Cosechador de Insectos": {
+    "categoria": "🦋 Caza de Insectos",
+    "requisito": "Captura tres insectos con una sola burbuja de captura de insectos.",
+    "consejos": "Cerca de los estanques, normalmente puedes encontrar grandes grupos de libélulas o mariposas. Intenta alinear tu disparo para golpear a varios a la vez.",
+    "titulo_recompensa": "Captura Triple",
+    "imagen": "/logros/insect-harvester.webp"
+  },
+  "Cuidador de Animales": {
+    "categoria": "⭐ General",
+    "requisito": "Descubre la comida favorita de los ocho grupos de animales.",
+    "consejos": "Prueba varios artículos de tu inventario para descubrir qué les gusta a los animales. Una vez descubierto, mostrará un corazón al llenar el Comedero.",
+    "titulo_recompensa": "Delicioso",
+    "imagen": "/logros/animal-sitter.webp"
+  },
+  "Diplomático Gastronómico": {
+    "categoria": "💬 SocialOculto",
+    "requisito": "Ofrecer comida con ambas manos crea lazos invisibles.",
+    "titulo_recompensa": "Desconocido",
+    "imagen": null
+  },
+  "Elfo del Hielo": {
+    "categoria": "⭐ General",
+    "requisito": "Maximiza el Sueño de Patinaje Artístico para alcanzar el nivel Elfo del Hielo.",
+    "consejos": "Practica patinaje artístico regularmente para mejorar tu nivel del sueño.",
+    "titulo_recompensa": "Patinaje sobre Hielo",
+    "imagen": "/logros/elfo-hielo.webp"
+  },
+  "Entrenador de Perros Experto": {
+    "categoria": "🐕 Cuidado de Perros",
+    "requisito": "Alcanza el Nivel 10 en el Hobby de Cuidado de Perros.",
+    "consejos": "Asegúrate de alimentar, entrenar y jugar con tu perro cada día.",
+    "titulo_recompensa": "Compañero de Perros",
+    "imagen": "/logros/ace-dog-trainer.webp"
+  },
+  "Estrella Pop": {
+    "categoria": "💬 SocialOculto",
+    "requisito": "Tu amabilidad o personalidad ha ganado el aprecio de muchos Miembros D.G.",
+    "titulo_recompensa": "Estrella en Ascenso",
+    "imagen": "/logros/star.webp"
+  },
+  "Experto en Reparaciones": {
+    "categoria": "💬 SocialOculto",
+    "requisito": "Las herramientas reparadas traen alegría a todos y hacen que cada día funcione mejor.",
+    "titulo_recompensa": "Reparaciones",
+    "imagen": "/logros/repair-expert.webp"
+  },
+  "Fortuna del Pez Gemelo": {
+    "categoria": "🎣 Pesca",
+    "requisito": "Atrapa dos peces de 5 Estrellas en un minuto.",
+    "consejos": "Más fácil de lograr durante un Evento de Pesca, pero necesitarás un rango más alto en el Hobby de Pesca.",
+    "titulo_recompensa": "Águila Pescadora",
+    "imagen": "/logros/twin-fish-fortune.webp"
+  },
+  "Frenesí de Tiburones": {
+    "categoria": "🎣 Pesca",
+    "requisito": "Atrapa tres Tiburones de Sombras de Peces Dorados durante un único Evento de Pesca en el Mar.",
+    "consejos": "Continúa aumentando tu rango del Hobby de Pesca y prioriza las sombras doradas durante los Eventos de Pesca en el Mar.",
+    "titulo_recompensa": "Jaula de Tiburones",
+    "imagen": "/logros/shark-frenzy.webp"
+  },
+  "Invocador de Cardúmenes": {
+    "categoria": "🎣 Pesca",
+    "requisito": "Activa tres Cardúmenes en un único Evento de Pesca.",
+    "consejos": "Puedes activarlos en un viaje en solitario, pero es más probable que se activen si tienes un grupo más grande en un Evento de Pesca.",
+    "titulo_recompensa": "Invocador de Cardúmenes",
+    "imagen": "/logros/shoal-caller.webp"
+  },
+  "Lector de Libros (Astralis)": {
+    "categoria": "💬 SocialOculto",
+    "requisito": "Mil lectores ven mil Astralis diferentes.",
+    "titulo_recompensa": "Desconocido",
+    "imagen": null
+  },
+  "Leyenda Culinaria del Pueblo": {
+    "categoria": "🍳 Cocina",
+    "requisito": "Alcanza el Nivel 10 en el Hobby de Cocina.",
+    "consejos": "Experimenta con ingredientes para crear nuevas variaciones de recetas. Si no tienes recetas nuevas, considera cocinar mermelada u otros artículos que se cocinen rápidamente.",
+    "titulo_recompensa": "Chef",
+    "imagen": "/logros/town-cooking-legend.webp"
+  },
+  "Maestro de la Pesca Marina": {
+    "categoria": "🎣 PescaOculto",
+    "requisito": "Ganarás el respeto tanto de Vanya como del Amante de la Pesca.",
+    "titulo_recompensa": "Pescador de Mar",
+    "imagen": null
+  },
+  "Máquina de Pescar": {
+    "categoria": "🎣 Pesca",
+    "requisito": "Atrapa 50 peces que pesen más de 100 kg cada uno.",
+    "consejos": "Esto es acumulativo, así que busca sombras más grandes mientras pescas.",
+    "titulo_recompensa": "Cesta de Peces",
+    "imagen": "/logros/fishing-machine.webp"
+  },
+  "Marinero Fuerte": {
+    "categoria": "🎣 Pesca",
+    "requisito": "Atrapa peces de más de 100 kg dos veces. Deben ser consecutivas.",
+    "consejos": "Prioriza las sombras más grandes mientras pescas durante un Evento de Pesca.",
+    "titulo_recompensa": "Línea de Pesca",
+    "imagen": "/logros/strong-sailor.webp"
+  },
+  "Mayorista de Arbustos": {
+    "categoria": "💬 SocialOculto",
+    "requisito": "El verde se extiende silenciosamente mientras los pájaros cantan desde las ramas.",
+    "titulo_recompensa": "Desconocido",
+    "imagen": null
+  },
+  "Miembro D.G.": {
+    "categoria": "⭐ General",
+    "requisito": "Alcanza el Nivel 30 del Gremio de Desarrolladores.",
+    "consejos": "Continúa completando Solicitudes Diarias para aumentar tu Rango D.G.",
+    "titulo_recompensa": "Miembro D.G.",
+    "imagen": null
+  },
+  "Momento Decisivo": {
+    "categoria": "🐦 Observación de Aves",
+    "requisito": "Obtén diez Tarjetas de Información de 5 Estrellas durante un único Evento de Observación de Aves.",
+    "consejos": "Aumenta tu nivel del Hobby de Observación de Aves para aumentar tus probabilidades de obtener Tarjetas de 5 Estrellas. Además, busca acciones únicas al observar aves.",
+    "titulo_recompensa": "Momento",
+    "imagen": "/logros/momento-decisivo.webp"
+  },
+  "Nunca con las Manos Vacías": {
+    "categoria": "🎣 Pesca",
+    "requisito": "Alcanza el Nivel 10 del Hobby de Pesca",
+    "consejos": "Participa en Eventos de Pesca para avanzar más rápido.",
+    "titulo_recompensa": "Pescador Hábil",
+    "imagen": "/logros/never-empty-handed.webp"
+  },
+  "Patrocinador del Cohete": {
+    "categoria": "⭐ General",
+    "requisito": "Gana 500,000 Oro vendiendo artículos a Albert Jr.",
+    "consejos": "Vende artículos de alto valor a Albert Jr., como platos preparados o artículos artesanales.",
+    "titulo_recompensa": "Cohete",
+    "imagen": "/logros/rocket-sponsor.webp"
+  },
+  "Pescador de Luz Estelar": {
+    "categoria": "🎣 Pesca",
+    "requisito": "Atrapa cuatro Peces de 5 Estrellas en un único Evento de Pesca.",
+    "consejos": "Aumenta tu rango del Hobby de Pesca para poder atrapar Peces de 5 Estrellas.",
+    "titulo_recompensa": "Maníaco de la Pesca",
+    "imagen": "/logros/starlight-fisher.webp"
+  },
+  "Pescador Místico": {
+    "categoria": "🎣 Pesca",
+    "requisito": "Activa la fase oculta del Evento de Pesca 10 veces a lo largo de múltiples Eventos de Pesca.",
+    "consejos": "Intenta organizar o participar en Eventos de Pesca con más personas.",
+    "titulo_recompensa": "Pescador",
+    "imagen": "/logros/mystic-fisher.webp"
+  },
+  "Pluma Persistente": {
+    "categoria": "⭐ General",
+    "requisito": "Maximiza el Sueño de Escritura.",
+    "consejos": "Escribe libros usando el Escritorio y publícalos para que otros los lean.",
+    "titulo_recompensa": "Escritura",
+    "imagen": "/logros/pluma-persistente.webp"
+  },
+  "Rápido e Impecable": {
+    "categoria": "🍳 Cocina",
+    "requisito": "Cocina dos platos de 5 Estrellas en 60 segundos.",
+    "consejos": "Aumenta tu nivel del Hobby de Cocina para poder cocinar platos de 5 Estrellas.",
+    "titulo_recompensa": "Reloj de Cocina",
+    "imagen": "/logros/fast-and-lawless.webp"
+  },
+  "Rastreador Místico": {
+    "categoria": "🦋 Caza de Insectos",
+    "requisito": "Activa la fase oculta durante los Eventos de Captura de Insectos 10 veces a lo largo de múltiples Eventos.",
+    "consejos": "Participa en Eventos de Captura de Insectos con más personas.",
+    "titulo_recompensa": "Exploración",
+    "imagen": "/logros/mystic-tracker.webp"
+  },
+  "Rey de la Nieve": {
+    "categoria": "🎄 Estacional",
+    "requisito": "Alcanza el Nivel Cinco del Hobby de Esculturas de Nieve.",
+    "consejos": "Hobby estacional que solo está disponible durante un tiempo limitado del año.",
+    "titulo_recompensa": "Rey de la Nieve",
+    "imagen": "/logros/rey-nieve.webp"
+  },
+  "Rey de los Insectos de la Montaña Onsen": {
+    "categoria": "🦋 Caza de InsectosOculto",
+    "requisito": "Todos los insectos emergerán para rendirte homenaje.",
+    "titulo_recompensa": "Desconocido",
+    "imagen": null
+  },
+  "Romance en el Hielo": {
+    "categoria": "💬 SocialOculto",
+    "requisito": "La luz fluyente en el horizonte, junto con la figura bailando sincronizada en el hielo - juntos deletrean 'romance'.",
+    "titulo_recompensa": "Desconocido",
+    "imagen": null
+  },
+  "Sirviente de Gatos Experto": {
+    "categoria": "🐱 Cuidado de Gatos",
+    "requisito": "Alcanza el Nivel 10 en el Hobby de Cuidado de Gatos.",
+    "consejos": "Asegúrate de alimentar, entrenar y jugar con tu gato cada día.",
+    "titulo_recompensa": "Amante de los Gatos",
+    "imagen": "/logros/ace-cat-servant.webp"
+  },
+  "Suerte del Arcoíris": {
+    "categoria": "🌱 Jardinería",
+    "requisito": "Activa dos Bendiciones de Híbridos Arcoíris en un único riego de múltiples áreas.",
+    "consejos": "Los arcoíris son un fenómeno raro, así que asegúrate de revisar tu Reloj para el próximo clima y no perderte el siguiente Arcoíris.",
+    "titulo_recompensa": "Suerte del Arcoíris",
+    "imagen": "/logros/rainbow-luck.webp"
+  },
+  "Susurrador de Pájaros": {
+    "categoria": "🐦 Observación de Aves",
+    "requisito": "Alcanza el Nivel 10 del Hobby de Observación de Aves.",
+    "consejos": "Participa en Eventos de Observación de Aves para avanzar más rápido.",
+    "titulo_recompensa": "Susurrador de Pájaros",
+    "imagen": "/logros/bird-whisperer.webp"
+  },
+  "Toque Verde": {
+    "categoria": "🌱 Jardinería",
+    "requisito": "Alcanza el Nivel 10 en el Hobby de Jardinería.",
+    "consejos": "Asegúrate de cosechar los cultivos tan pronto como estén listos y replanta las semillas inmediatamente. No olvides regar cuando sea necesario.",
+    "titulo_recompensa": "Horticultor",
+    "imagen": "/logros/green-touch.webp"
+  },
+  "Vecino Animal": {
+    "categoria": "⭐ General",
+    "requisito": "Alcanza el Nivel 10 con ocho grupos de animales diferentes.",
+    "consejos": "Continúa revisando los Comederos de Animales e interactúa con ellos diariamente. Prioriza llenar el Comedero con su comida favorita.",
+    "titulo_recompensa": "Nuevo Vecino",
+    "imagen": "/logros/animal-neighbors.webp"
+  },
+  "Voluntario de Ramos Arcoíris": {
+    "categoria": "💬 SocialOculto",
+    "requisito": "Incluso sin días de Arcoíris, la vida sigue siendo colorida y vibrante gracias a ti.",
+    "titulo_recompensa": "Desconocido",
+    "imagen": null
+  }
 };
 
 export const CATEGORIES = [
