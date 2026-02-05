@@ -36,6 +36,8 @@ type BaseData = {
   titulo?: string;
   nota?: string;
   actividad?: string;
+  imagen?: string;
+  nombre?: string;
 };
 
 type ItemData = BaseData;
@@ -214,25 +216,48 @@ function ItemCard({ name, data, categoryId }: { name: string; data: ItemData; ca
             </div>
           </>
         );
-      
-      case "habitantes":
+
+case "habitantes":
         return (
-          <>
-            <div className="flex items-center gap-2 mb-2">
-              <Badge className="bg-primary/20 text-primary border-primary/30">
-                <Briefcase className="h-3 w-3 mr-1" />
-                {safeStr(data.rol)}
-              </Badge>
+          <div className="flex flex-col gap-4">
+            <div className="flex items-start gap-4">
+              {data.imagen && (
+                <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-full border-2 border-primary/20 bg-[#f8f0f0] shadow-sm">
+                  <img 
+                    src={data.imagen} 
+                    alt={name} 
+                    /* Explicación del cambio:
+                       - object-cover: Llena el círculo completamente.
+                       - scale-150: Hace zoom para que el personaje no se vea pequeño.
+                       - object-top: Asegura que veamos la cabeza y no los pies.
+                    */
+                    className="h-full w-full object-cover object-top scale-[1.35] transition-transform duration-300 hover:scale-[1.5]"
+                    onError={(e) => { 
+                      (e.target as HTMLImageElement).style.display = 'none'; 
+                    }}
+                  />
+                </div>
+              )}
+              <div className="flex flex-col gap-2 flex-1">
+                <Badge className="w-fit bg-rose-100 text-rose-600 border-rose-200 hover:bg-rose-200 shadow-none capitalize">
+                  <Briefcase className="h-3 w-3 mr-1" />
+                  {safeStr(data.rol)}
+                </Badge>
+                
+                <div className="flex items-start gap-2 text-[13px] leading-relaxed">
+                  <Users className="h-4 w-4 text-muted-foreground shrink-0 mt-0.5" />
+                  <p className="text-muted-foreground italic">
+                    "{safeStr(data.descripcion)}"
+                  </p>
+                </div>
+              </div>
             </div>
-            <div className="flex items-start gap-2 text-sm">
-              <Users className="h-4 w-4 text-muted-foreground shrink-0 mt-0.5" />
-              <span className="text-muted-foreground">{safeStr(data.descripcion)}</span>
+
+            <div className="flex items-center gap-2 text-xs pt-3 border-t border-dashed border-rose-200">
+              <MapPin className="h-3.5 w-3.5 text-rose-400 shrink-0" />
+              <span className="font-medium text-muted-foreground">{safeStr(data.ubicacion)}</span>
             </div>
-            <div className="flex items-start gap-2 text-sm pt-2">
-              <MapPin className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-              <span className="text-muted-foreground">{safeStr(data.ubicacion)}</span>
-            </div>
-          </>
+          </div>
         );
 
       case "recetas":
@@ -261,25 +286,43 @@ function ItemCard({ name, data, categoryId }: { name: string; data: ItemData; ca
 
       case "logros":
         return (
-          <>
-            <div className="flex items-start gap-2 text-sm">
-              <Award className="h-4 w-4 text-purple-500 shrink-0 mt-0.5" />
-              <span className="text-muted-foreground">{safeStr(data.requisito)}</span>
+          <div className="flex flex-col gap-3">
+            <div className="flex items-start gap-4">
+              {data.imagen && (
+                <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl border border-purple-100 bg-purple-50/50 p-2 shadow-sm">
+                  <img 
+                    src={data.imagen} 
+                    alt={name} 
+                    className="h-full w-full object-contain drop-shadow-md"
+                    onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                  />
+                </div>
+              )}
+              <div className="flex-1 space-y-1.5">
+                <div className="flex items-start gap-2 text-sm leading-snug">
+                  <Award className="h-4 w-4 text-purple-500 shrink-0 mt-0.5" />
+                  <span className="text-muted-foreground font-medium">{safeStr(data.requisito)}</span>
+                </div>
+                
+                {data.titulo && (
+                  <div className="flex flex-col gap-1">
+                    <p className="text-[10px] uppercase tracking-wider text-muted-foreground/70 font-bold">Título Ganado</p>
+                    <Badge className="w-fit bg-gradient-to-r from-purple-500 to-indigo-500 text-white border-none shadow-sm text-xs py-0.5">
+                      {safeStr(data.titulo)}
+                    </Badge>
+                  </div>
+                )}
+              </div>
             </div>
-            {data.titulo && (
-              <div className="pt-2">
-                <p className="text-xs text-muted-foreground mb-1">Titulo desbloqueado:</p>
-                <Badge className="bg-gradient-to-r from-amber-500 to-orange-500 text-white">
-                  {safeStr(data.titulo)}
-                </Badge>
+
+            {data.nota && (
+              <div className="mt-1 rounded-lg bg-secondary/30 px-2 py-1.5">
+                <p className="text-[11px] text-muted-foreground/80 italic text-center">
+                  Original: {safeStr(data.nota)}
+                </p>
               </div>
             )}
-            {data.nota && (
-              <p className="text-xs text-muted-foreground italic pt-1">
-                EN: {safeStr(data.nota)}
-              </p>
-            )}
-          </>
+          </div>
         );
       
       default:

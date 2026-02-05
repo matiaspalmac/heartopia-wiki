@@ -278,19 +278,84 @@ export const RECOLECTABLES = {
 };
 
 export const HABITANTES = {
-  "Doris": { "rol": "Comerciante Estelar", "descripcion": "Versión Meteorito (intercambio de fragmentos por muebles estelares) o Versión Lluvia (receta exclusiva de azúcar).", "ubicacion": "Variable según el clima" },
-  "Albert Jr": { "rol": "Comerciante", "descripcion": "Comerciante que te permite vender tu excedente por monedas de oro.", "ubicacion": "Centro del pueblo" },
-  "Joan": { "rol": "Animal Mistress", "descripcion": "Tienda de comida y complementos para perros/gatos.", "ubicacion": "Tienda de mascotas" },
-  "Bailey J": { "rol": "Especialista en Aves", "descripcion": "Recompensas y evento 'Regreso al nido'.", "ubicacion": "Campo de Flores" },
-  "Annie": { "rol": "Tienda de Música", "descripcion": "Tienda de música, instrumentos y entretenimiento.", "ubicacion": "Centro del pueblo" },
-  "Dorothee": { "rol": "Musa de la Moda", "descripcion": "Tienda de ropa que cambia todos los días.", "ubicacion": "Boutique" },
-  "Bob": { "rol": "Artesano", "descripcion": "El abuelo manitas de muebles construidos de forma natural.", "ubicacion": "Taller de carpintería" },
-  "Blanco": { "rol": "Jardinero Experto", "descripcion": "Experto en jardinería (semillas de flores y hortalizas).", "ubicacion": "Invernadero" },
-  "Massimo": { "rol": "Chef", "descripcion": "Chef (recetas y equipamiento de cocina).", "ubicacion": "Restaurante" },
-  "Vanya": { "rol": "Experta en Pesca", "descripcion": "Experta en pesca (equipos y acuarios).", "ubicacion": "Muelle" },
-  "Naniwa": { "rol": "Entomóloga", "descripcion": "Vivarios, burbujas y eventos de caza de insectos.", "ubicacion": "Laboratorio" },
-  "Andrew": { "rol": "Biker", "descripcion": "Biker para facilitar tus viajes rápidos.", "ubicacion": "Estación de transporte" },
-  "Bill": { "rol": "Capitán", "descripcion": "Responsable del evento 'Pesca en el mar en barco'.", "ubicacion": "Puerto" }
+  "Doris": { 
+    "rol": "Comerciante Estelar", 
+    "imagen": "/npc/doris-rain.webp", 
+    "descripcion": "Versión Meteorito (intercambio de fragmentos por muebles estelares) o Versión Lluvia (receta exclusiva de azúcar).", 
+    "ubicacion": "Variable según el clima" 
+  },
+  "Albert Jr": { 
+    "rol": "Comerciante", 
+    "imagen": "/npc/albert-jr.webp", 
+    "descripcion": "Comerciante que te permite vender tu excedente por monedas de oro.", 
+    "ubicacion": "Centro del pueblo" 
+  },
+  "Señora Joan": { 
+    "rol": "Animal Mistress", 
+    "imagen": "/npc/mrs-joan.webp", 
+    "descripcion": "Tienda de comida y complementos para perros/gatos.", 
+    "ubicacion": "Tienda de mascotas" 
+  },
+  "Bailey J": { 
+    "rol": "Especialista en Aves", 
+    "imagen": "/npc/bailey-j.webp",  
+    "descripcion": "Recompensas y evento 'Regreso al nido'.", 
+    "ubicacion": "Campo de Flores" 
+  },
+  "Annie": { 
+    "rol": "Tienda de Música",   
+    "imagen": "/npc/annie.webp",   
+    "descripcion": "Tienda de música, instrumentos y entretenimiento.",   
+    "ubicacion": "Tienda de música" 
+  },
+  "Dorothee": { 
+    "rol": "Diseñadora de Moda", 
+    "imagen": "/npc/dorothee.webp", 
+    "descripcion": "Tienda de ropa que cambia todos los días.", 
+    "ubicacion": "Boutique"
+  },
+  "Bob": { 
+    "rol": "Artesano", 
+    "imagen": "/npc/bob.webp", 
+    "descripcion": "El abuelo manitas de muebles construidos de forma natural.", 
+    "ubicacion": "Taller de carpintería" 
+  },
+  "Blanc": { 
+    "rol": "Jardinero Experto", 
+    "imagen": "/npc/blanc.webp", 
+    "descripcion": "Experto en jardinería (semillas de flores y hortalizas).", 
+    "ubicacion": "Invernadero" 
+  },
+  "Massimo": { 
+    "rol": "Chef", 
+    "imagen": "/npc/massimo.webp",   
+    "descripcion": "Chef (recetas y equipamiento de cocina).",  
+    "ubicacion": "Restaurante" 
+  },
+  "Vanya": { 
+    "rol": "Experta en Pesca", 
+    "imagen": "/npc/vanya.webp",   
+    "descripcion": "Experta en pesca (equipos y acuarios).",  
+    "ubicacion": "Muelle" 
+  },
+  "Naniwa": { 
+    "rol": "Entomóloga",  
+    "imagen": "/npc/naniwa.webp",   
+    "descripcion": "Vivarios, burbujas y eventos de caza de insectos.",  
+    "ubicacion": "Laboratorio"
+  },
+  "Andrew": { 
+    "rol": "Biker",   
+    "imagen": "/npc/andrew.webp",   
+    "descripcion": "Biker para facilitar tus viajes rápidos.",   
+    "ubicacion": "Estación de transporte"
+  },
+  "Bill": { 
+    "rol": "Capitán",  
+    "imagen": "/npc/bill.webp",   
+    "descripcion": "Responsable del evento 'Pesca en el mar en barco'.",   
+    "ubicacion": "Puerto"
+  }
 };
 
 export const RECETAS = {
@@ -339,38 +404,38 @@ export const RECETAS = {
 };
 
 export const LOGROS = {
-  "Nunca con las manos vacías": { "requisito": "Nivel 10 en el hobby de Pesca", "titulo": "Pescador Místico", "nota": "Skilled Angler" },
-  "Pescador Místico": { "requisito": "Activa la fase oculta del Evento de Pesca 10 veces en total", "titulo": "Pescador", "nota": "Fisher" },
-  "Bendición del Cardumen": { "requisito": "Activa 100 cardúmenes en total durante eventos de pesca", "titulo": "Bendición", "nota": "Blessing" },
-  "Marinero Fuerte": { "requisito": "Atrapa peces de más de 100kg por 2 veces consecutivas", "titulo": "Sedal de Pesca", "nota": "Fishing Line" },
-  "Fortuna de Peces Gemelos": { "requisito": "Atrapa 2 peces de 5 estrellas en menos de 1 minuto", "titulo": "Águila Pescadora", "nota": "Osprey" },
-  "Máquina de Pesca": { "requisito": "Atrapa un total de 50 peces de más de 100kg cada uno", "titulo": "Cesta de Peces", "nota": "Fish Basket" },
-  "Frenesí de Tiburones": { "requisito": "Atrapa 3 tiburones de sombras doradas en un solo evento de pesca marina", "titulo": "Jaula de Tiburones", "nota": "Shark Cage" },
-  "Invocador de Cardúmenes": { "requisito": "Activa 3 cardúmenes en un solo evento de pesca", "titulo": "Invocador de Cardúmenes", "nota": "Shoal Caller" },
-  "Pescador de Luz Estelar": { "requisito": "Atrapa 4 peces de 5 estrellas en un solo evento de pesca", "titulo": "Maníaco de la Pesca", "nota": "Fishing Maniac" },
-  "Leyenda de la Cocina del Pueblo": { "requisito": "Nivel 10 en el hobby de Cocina", "titulo": "Chef", "nota": "Chef" },
-  "Rápido y Perfecto": { "requisito": "Cocina 2 platos de 5 estrellas en menos de 60 segundos", "titulo": "Reloj de Cocina", "nota": "Kitchen Clock" },
-  "Toque Verde": { "requisito": "Nivel 10 en el hobby de Jardinería", "titulo": "Horticultor", "nota": "Horticulturist" },
-  "Cosecha Abundante": { "requisito": "Cosecha cultivos de 5 estrellas mientras la Cosecha de Bonificación está activa", "titulo": "Cosecha", "nota": "Harvest" },
-  "Suerte del Arcoíris": { "requisito": "Activa 2 bendiciones híbridas de arcoíris en un solo riego de área múltiple", "titulo": "Suerte del Arcoíris", "nota": "Rainbow Luck" },
-  "Sirviente Gatuno Ace": { "requisito": "Nivel 10 en el hobby de Cuidado de Gatos", "titulo": "Amante de los Gatos", "nota": "Cat Lover" },
-  "Cantina Miau-Miau": { "requisito": "Alimenta a 5 gatos con su comida favorita", "titulo": "Comida para Gatos", "nota": "Cat Food" },
-  "Entrenador de Perros Ace": { "requisito": "Nivel 10 en el hobby de Cuidado de Perros", "titulo": "Amigo de los Perros", "nota": "Dog Pal" },
-  "Cantina Perruna": { "requisito": "Alimenta a 3 perros con su comida favorita", "titulo": "Comida para Perros", "nota": "Dog Food" },
-  "Comandante de Insectos": { "requisito": "Nivel 10 en el hobby de Captura de Insectos", "titulo": "Maestro de Insectos", "nota": "Insect Master" },
-  "Rastreador Místico": { "requisito": "Activa la fase oculta del evento de captura de insectos 10 veces", "titulo": "Exploración", "nota": "Exploration" },
-  "Recolector de Insectos": { "requisito": "Atrapa 3 insectos con una sola burbuja de captura", "titulo": "Triple Captura", "nota": "Triple Catch" },
-  "Susurrador de Aves": { "requisito": "Nivel 10 en el hobby de Avistamiento de Aves", "titulo": "Susurrador de Aves", "nota": "Bird Whisperer" },
-  "Caminante de Nubes": { "requisito": "Activa la fase oculta del evento de aves 10 veces", "titulo": "Cielo", "nota": "Sky" },
-  "Artista de Esculturas de Arena": { "requisito": "Nivel 5 en el hobby de Esculturas de Arena", "titulo": "Escultor de Arena", "nota": "Sand Sculptor" },
-  "Patrocinador de Cohetes": { "requisito": "Gana un total de 500,000 de Oro vendiendo a Albert Jr.", "titulo": "Cohete", "nota": "Rocket" },
-  "Miembro D.G.": { "requisito": "Alcanza el nivel 30 de Miembro D.G.", "titulo": "Miembro D.G.", "nota": "D.G. Member" },
-  "Vecino Animal": { "requisito": "Alcanza el nivel 10 de vínculo con 8 grupos de animales", "titulo": "Nuevo Vecino", "nota": "New Neighbour" },
-  "Guardián de Animales": { "requisito": "Descubre la comida favorita de 8 grupos de animales", "titulo": "Delicioso", "nota": "Delicious" },
-  "Experto en Reparaciones": { "requisito": "Comparte kits de reparación con 100 miembros D.G. en total", "titulo": "Reparaciones", "nota": "Repairs" },
-  "Estrella del Pop": { "requisito": "Recibe un total de 100 Likes en tu casa", "titulo": "Estrella Naciente", "nota": "Rising Star" },
-  "Compañero de Onsen": { "requisito": "Toma un baño termal con amigos", "titulo": "Onsen", "nota": "Onsen" },
-  "Bajo la Lluvia de Meteoritos": { "requisito": "Pide un deseo bajo un meteorito con amigos", "titulo": "Géminis", "nota": "Gemini" }
+  "Nunca con las manos vacías": { "requisito": "Nivel 10 en el hobby de Pesca", "titulo": "Pescador Místico", "nota": "Skilled Angler", "imagen": "/logros/never-empty-handed.webp" },
+  "Pescador Místico": { "requisito": "Activa la fase oculta del Evento de Pesca 10 veces en total", "titulo": "Pescador", "nota": "Fisher", "imagen": "/logros/mystic-fisher.webp" },
+  "Bendición del Cardumen": { "requisito": "Activa 100 cardúmenes en total durante eventos de pesca", "titulo": "Bendición", "nota": "Blessing", "imagen": "/logros/shoals-blessing.webp" },
+  "Marinero Fuerte": { "requisito": "Atrapa peces de más de 100kg por 2 veces consecutivas", "titulo": "Sedal de Pesca", "nota": "Fishing Line", "imagen": "/logros/strong-sailor.webp" },
+  "Fortuna de Peces Gemelos": { "requisito": "Atrapa 2 peces de 5 estrellas en menos de 1 minuto", "titulo": "Águila Pescadora", "nota": "Osprey", "imagen": "/logros/twin-fish-fortune.webp" },
+  "Máquina de Pesca": { "requisito": "Atrapa un total de 50 peces de más de 100kg cada uno", "titulo": "Cesta de Peces", "nota": "Fish Basket", "imagen": "/logros/fishing-machine.webp" },
+  "Frenesí de Tiburones": { "requisito": "Atrapa 3 tiburones de sombras doradas en un solo evento de pesca marina", "titulo": "Jaula de Tiburones", "nota": "Shark Cage", "imagen": "/logros/shark-frenzy.webp" },
+  "Invocador de Cardúmenes": { "requisito": "Activa 3 cardúmenes en un solo evento de pesca", "titulo": "Invocador de Cardúmenes", "nota": "Shoal Caller", "imagen": "/logros/shoal-caller.webp" },
+  "Pescador de Luz Estelar": { "requisito": "Atrapa 4 peces de 5 estrellas en un solo evento de pesca", "titulo": "Maníaco de la Pesca", "nota": "Fishing Maniac", "imagen": "/logros/starlight-fisher.webp" },
+  "Leyenda de la Cocina del Pueblo": { "requisito": "Nivel 10 en el hobby de Cocina", "titulo": "Chef", "nota": "Chef", "imagen": "/logros/town-cooking-legend.webp" },
+  "Rápido y Perfecto": { "requisito": "Cocina 2 platos de 5 estrellas en menos de 60 segundos", "titulo": "Reloj de Cocina", "nota": "Kitchen Clock", "imagen": "/logros/fast-and-lawless.webp" },
+  "Toque Verde": { "requisito": "Nivel 10 en el hobby de Jardinería", "titulo": "Horticultor", "nota": "Horticulturist", "imagen": "/logros/green-touch.webp" },
+  "Cosecha Abundante": { "requisito": "Cosecha cultivos de 5 estrellas mientras la Cosecha de Bonificación está activa", "titulo": "Cosecha", "nota": "Harvest", "imagen": "/logros/plentiful-harvest.webp" },
+  "Suerte del Arcoíris": { "requisito": "Activa 2 bendiciones híbridas de arcoíris en un solo riego de área múltiple", "titulo": "Suerte del Arcoíris", "nota": "Rainbow Luck", "imagen": "/logros/rainbow-luck.webp" },
+  "Sirviente Gatuno Ace": { "requisito": "Nivel 10 en el hobby de Cuidado de Gatos", "titulo": "Amante de los Gatos", "nota": "Cat Lover", "imagen": "/logros/ace-cat-servant.webp" },
+  "Cantina Miau-Miau": { "requisito": "Alimenta a 5 gatos con su comida favorita", "titulo": "Comida para Gatos", "nota": "Cat Food", "imagen": "/logros/meow-meow-canteen.webp" },
+  "Entrenador de Perros Ace": { "requisito": "Nivel 10 en el hobby de Cuidado de Perros", "titulo": "Amigo de los Perros", "nota": "Dog Pal", "imagen": "/logros/ace-dog-trainer.webp" },
+  "Cantina Perruna": { "requisito": "Alimenta a 3 perros con su comida favorita", "titulo": "Comida para Perros", "nota": "Dog Food", "imagen": "/logros/doggie-canteen.webp" },
+  "Comandante de Insectos": { "requisito": "Nivel 10 en el hobby de Captura de Insectos", "titulo": "Maestro de Insectos", "nota": "Insect Master", "imagen": "/logros/insect-commander.webp" },
+  "Rastreador Místico": { "requisito": "Activa la fase oculta del evento de captura de insectos 10 veces", "titulo": "Exploración", "nota": "Exploration", "imagen": "/logros/mystic-tracker.webp" },
+  "Recolector de Insectos": { "requisito": "Atrapa 3 insectos con una sola burbuja de captura", "titulo": "Triple Captura", "nota": "Triple Catch", "imagen": "/logros/insect-harvester.webp" },
+  "Susurrador de Aves": { "requisito": "Nivel 10 en el hobby de Avistamiento de Aves", "titulo": "Susurrador de Aves", "nota": "Bird Whisperer", "imagen": "/logros/bird-whisperer.webp" },
+  "Caminante de Nubes": { "requisito": "Activa la fase oculta del evento de aves 10 veces", "titulo": "Cielo", "nota": "Sky", "imagen": "/logros/cloud-walker.webp" },
+  "Artista de Esculturas de Arena": { "requisito": "Nivel 5 en el hobby de Esculturas de Arena", "titulo": "Escultor de Arena", "nota": "Sand Sculptor", "imagen": "/logros/sand-sculpture-artist.webp" },
+  "Patrocinador de Cohetes": { "requisito": "Gana un total de 500,000 de Oro vendiendo a Albert Jr.", "titulo": "Cohete", "nota": "Rocket", "imagen": "/logros/rocket-sponsor.webp" },
+  "Miembro D.G.": { "requisito": "Alcanza el nivel 30 de Miembro D.G.", "titulo": "Miembro D.G.", "nota": "D.G. Member", "imagen": null },
+  "Vecino Animal": { "requisito": "Alcanza el nivel 10 de vínculo con 8 grupos de animales", "titulo": "Nuevo Vecino", "nota": "New Neighbour", "imagen": "/logros/animal-neighbors.webp" },
+  "Guardián de Animales": { "requisito": "Descubre la comida favorita de 8 grupos de animales", "titulo": "Delicioso", "nota": "Delicious", "imagen": "/logros/animal-sitter.webp" },
+  "Experto en Reparaciones": { "requisito": "Comparte kits de reparación con 100 miembros D.G. en total", "titulo": "Reparaciones", "nota": "Repairs", "imagen": "/logros/repair-expert.webp" },
+  "Estrella del Pop": { "requisito": "Recibe un total de 100 Likes en tu casa", "titulo": "Estrella Naciente", "nota": "Rising Star", "imagen": "/logros/star.webp" },
+  "Compañero de Onsen": { "requisito": "Toma un baño termal con amigos", "titulo": "Onsen", "nota": "Onsen", "imagen": "/logros/friends-of-the-hot-springs.webp" },
+  "Bajo la Lluvia de Meteoritos": { "requisito": "Pide un deseo bajo un meteorito con amigos", "titulo": "Géminis", "nota": "Gemini", "imagen": null }
 };
 
 export const CATEGORIES = [
