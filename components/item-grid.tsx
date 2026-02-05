@@ -128,41 +128,56 @@ function ItemCard({ name, data, categoryId }: { name: string; data: ItemData; ca
             </div>
           </>
         );
-      
       case "animales":
-        return (
-          <>
-            <div className="flex items-start gap-2 text-sm">
-              <MapPin className="h-4 w-4 text-muted-foreground shrink-0 mt-0.5" />
-              <span className="text-muted-foreground">{safeStr(data.ubicacion)}</span>
-            </div>
-            {data.comida_favorita && (
-              <div className="space-y-1">
-                <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
-                  <Heart className="h-4 w-4 text-rose-400" />
-                  <span>Comida favorita:</span>
-                </div>
-                <div className="flex flex-wrap gap-1">
-                  {safeArr(data.comida_favorita).map((food) => (
-                    <Badge key={food} variant="secondary" className="text-xs">
-                      {food}
-                    </Badge>
-                  ))}
-                </div>
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="flex items-start gap-4">
+        {data.imagen && (
+          <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl border-2 border-primary/10 bg-muted/50 shadow-sm flex items-center justify-center p-1">
+            <img 
+              src={data.imagen} 
+              alt={name}
+              className="h-full w-full object-contain transition-transform hover:scale-110"
+              onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+            />
+          </div>
+        )}
+        <div className="flex flex-col gap-2 flex-1">
+          <div className="flex items-start gap-2 text-sm">
+            <MapPin className="h-4 w-4 text-muted-foreground shrink-0 mt-0.5" />
+            <span className="text-muted-foreground">{safeStr(data.ubicacion)}</span>
+          </div>
+          
+          {data.comida_favorita && (
+            <div className="space-y-1">
+              <div className="flex items-center gap-1.5 text-[11px] font-bold text-muted-foreground uppercase tracking-wider">
+                <Heart className="h-3 w-3 text-rose-400 fill-rose-400" />
+                <span>Favoritos</span>
               </div>
-            )}
-            {data.clima_preferido && (
-              <div className="flex flex-wrap gap-1.5 pt-2">
-                {safeArr(data.clima_preferido).map((c) => (
-                  <div key={c} className="flex items-center gap-1 rounded-full bg-secondary px-2 py-1 text-xs">
-                    {weatherIcons[c] || null}
-                    <span>{c}</span>
-                  </div>
+              <div className="flex flex-wrap gap-1">
+                {safeArr(data.comida_favorita).map((food) => (
+                  <Badge key={food} variant="secondary" className="text-[10px] px-2 py-0">
+                    {food}
+                  </Badge>
                 ))}
               </div>
-            )}
-          </>
-        );
+            </div>
+          )}
+        </div>
+      </div>
+      
+      {data.clima_preferido && (
+        <div className="flex flex-wrap gap-1.5 pt-2 border-t border-dashed">
+          {safeArr(data.clima_preferido).map((c) => (
+            <div key={c} className="flex items-center gap-1 rounded-full bg-blue-50 text-blue-600 px-2 py-1 text-[10px] font-medium border border-blue-100">
+              {weatherIcons[c] || <Sun className="h-3 w-3" />}
+              <span>{c}</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
       
       case "cultivos":
         return (
