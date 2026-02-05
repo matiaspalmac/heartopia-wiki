@@ -352,7 +352,8 @@ case "habitantes":
             )}
           </div>
         );
-case "logros":
+
+      case "logros":
         const getCategoryStyles = (cat) => {
           if (cat?.includes("Oculto")) return "border-slate-200 bg-slate-50 text-slate-600";
           if (cat?.includes("Pesca")) return "border-blue-100 bg-blue-50 text-blue-600";
@@ -362,12 +363,9 @@ case "logros":
           if (cat?.includes("Estacional")) return "border-orange-100 bg-orange-50 text-orange-600";
           return "border-purple-100 bg-purple-50 text-purple-600";
         };
-
         const categoryStyle = getCategoryStyles(data.categoria);
-
         return (
           <div className="flex flex-col gap-4">
-            {/* Cabecera con Categoría e Imagen */}
             <div className="flex items-start gap-4">
               <div className={`relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl border p-2 shadow-sm flex items-center justify-center ${categoryStyle}`}>
                 {data.imagen ? (
@@ -381,7 +379,6 @@ case "logros":
                   <Award className="h-10 w-10 opacity-40" />
                 )}
               </div>
-              
               <div className="flex-1 space-y-2">
                 <Badge variant="outline" className={`text-[10px] uppercase font-bold border-none px-0 ${categoryStyle.split(' ')[2]}`}>
                   {safeStr(data.categoria)}
@@ -391,8 +388,6 @@ case "logros":
                 </div>
               </div>
             </div>
-
-            {/* Recompensa de Título */}
             {data.titulo_recompensa && (
               <div className="flex flex-col gap-1.5 p-3 rounded-xl bg-gradient-to-br from-purple-500/10 to-indigo-500/10 border border-purple-100">
                 <p className="text-[10px] uppercase tracking-wider text-purple-600/70 font-bold flex items-center gap-1">
@@ -403,8 +398,6 @@ case "logros":
                 </span>
               </div>
             )}
-
-            {/* Consejos/Tips */}
             {data.consejos && (
               <div className="rounded-xl bg-muted/40 p-3 border border-border/50">
                 <div className="flex items-center gap-2 mb-1">
@@ -418,7 +411,6 @@ case "logros":
             )}
           </div>
         );
-
       default:
         return null;
     }
