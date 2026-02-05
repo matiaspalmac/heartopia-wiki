@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { Nunito, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
+import { url } from "inspector/promises"
 
 const nunito = Nunito({ 
   subsets: ["latin"], 
@@ -18,7 +19,13 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: 'Heartopia Chile Wiki',
   description: 'Wiki completa de Heartopia con información sobre peces, insectos, aves, animales, cultivos, recolectables y logros.',
-}
+  icons: {
+    icon: '/annie.jpg',
+    shortcut: '/annie.jpg',
+    apple: '/annie.jpg',
+  },
+};
+
 
 export default function RootLayout({
   children,
