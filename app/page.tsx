@@ -23,6 +23,8 @@ import {
   ChefHat,
   Calculator,
   Gift,
+  ShieldCheck,
+  ExternalLink,
 } from "lucide-react";
 import {
   Card,
@@ -45,6 +47,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Users,
   ChefHat,
   Calculator,
+  Gift,
 };
 
 const categoryColors: Record<string, string> = {
@@ -64,6 +67,7 @@ export default function HomePage() {
   useEffect(() => {
     setIsLoaded(true);
   }, []);
+
   return (
     <div className="min-h-screen bg-background font-sans">
       <Header />
@@ -71,19 +75,25 @@ export default function HomePage() {
       <main>
         <section className="relative overflow-hidden pt-8 pb-24 md:pt-16 md:pb-32">
           <div className="absolute inset-0 -z-10 bg-[radial-gradient(45%_40%_at_50%_50%,var(--tw-gradient-stops))] from-primary/20 via-transparent to-transparent" />
-
           <div className="absolute -top-24 right-0 -z-10 h-[500px] w-[500px] bg-accent/10 blur-[120px] rounded-full" />
 
           <div className="mx-auto max-w-7xl px-4">
             <div className="grid items-center gap-12 lg:grid-cols-2">
               <div className="text-center lg:text-left space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-                <Badge
-                  variant="secondary"
-                  className="bg-primary/10 text-primary border-primary/20 px-4 py-1.5 rounded-full"
-                >
-                  <Sparkles className="mr-2 h-4 w-4" />
-                  Proyecto Oficial - Comunidad Heartopia Chile
-                </Badge>
+                <div className="space-y-4">
+                  <Badge
+                    variant="secondary"
+                    className="bg-primary/10 text-primary border-primary/20 px-4 py-1.5 rounded-full"
+                  >
+                    <Sparkles className="mr-2 h-4 w-4" />
+                    Proyecto de la Comunidad Heartopia Chile
+                  </Badge>
+                  
+                  <div className="flex items-center justify-center lg:justify-start gap-2 text-[10px] uppercase tracking-widest font-black text-muted-foreground/60">
+                    <ShieldCheck className="h-3 w-3" />
+                    Sitio no oficial hecho por fans
+                  </div>
+                </div>
 
                 <h1 className="text-5xl font-black tracking-tight text-foreground md:text-7xl lg:leading-[1.1]">
                   El corazón de <br />
@@ -93,10 +103,9 @@ export default function HomePage() {
                 </h1>
 
                 <p className="mx-auto lg:mx-0 max-w-xl text-lg text-muted-foreground leading-relaxed">
-                  Bienvenido a la Wiki creada por{" "}
-                  <strong>nuestra comunidad</strong>. Centralizamos toda la
-                  información del pueblito para que ningún vecino se pierda de
-                  nada.
+                  Bienvenido a la Wiki independiente creada por{" "}
+                  <strong>nuestra comunidad</strong>. Centralizamos la
+                  información para que ningún vecino se pierda de nada.
                 </p>
 
                 <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
@@ -115,16 +124,13 @@ export default function HomePage() {
                     className="h-14 px-8 rounded-2xl gap-2 text-base font-bold border-2 bg-background/50 backdrop-blur-sm"
                     asChild
                   >
-                    <a
-                      href="https://discord.gg/wnkBUBbaRW"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
+                    <a href="https://discord.gg/wnkBUBbaRW" target="_blank" rel="noopener noreferrer">
                       Unirse al Discord
                     </a>
                   </Button>
                 </div>
 
+                {/* Crédito Dei */}
                 <div className="flex items-center justify-center lg:justify-start gap-3 pt-4">
                   <div className="flex items-center gap-3 px-4 py-2 rounded-2xl bg-secondary/50 border border-border">
                     <div className="h-10 w-10 rounded-full border-2 border-primary overflow-hidden bg-primary/20 flex items-center justify-center shadow-sm">
@@ -303,9 +309,9 @@ export default function HomePage() {
             </div>
           </div>
         </section>
-        <section className="py-20 mb-20">
+        <section className="py-20">
           <div className="mx-auto max-w-5xl px-4">
-            <div className="rounded-[3rem] bg-primary p-8 md:p-16 text-primary-foreground text-center relative overflow-hidden">
+            <div className="rounded-[3rem] bg-primary p-8 md:p-16 text-primary-foreground text-center relative overflow-hidden shadow-2xl shadow-primary/20">
               <div className="absolute top-0 right-0 p-8 opacity-20 rotate-12">
                 <Users className="h-40 w-40" />
               </div>
@@ -323,14 +329,33 @@ export default function HomePage() {
                 className="h-14 px-10 rounded-2xl font-black text-lg hover:scale-110 transition-transform shadow-xl"
                 asChild
               >
-                <a
-                  href="https://discord.gg/wnkBUBbaRW"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <a href="https://discord.gg/wnkBUBbaRW" target="_blank" rel="noopener noreferrer">
                   ¡Quiero Colaborar!
                 </a>
               </Button>
+            </div>
+          </div>
+        </section>
+
+        <section className="pb-20">
+          <div className="mx-auto max-w-7xl px-4">
+            <div className="flex flex-col items-center p-8 rounded-[2.5rem] bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 text-center">
+              <ShieldCheck className="h-8 w-8 text-muted-foreground mb-4" />
+              <h3 className="text-sm font-black uppercase tracking-widest mb-2">Información Legal y Afiliación</h3>
+              <p className="text-sm text-muted-foreground max-w-3xl leading-relaxed">
+                Heartopia Chile Wiki es un sitio web independiente operado por fans. <br className="hidden md:block" />
+                No estamos afiliados, asociados, autorizados ni respaldados por <strong>XD Interactive Entertainment Co., Ltd.</strong> o sus socios. 
+                Heartopia es una marca registrada de XD Interactive.
+              </p>
+              <div className="mt-4 flex gap-4">
+                <a 
+                  href="https://heartopia.xd.com" 
+                  target="_blank" 
+                  className="text-xs font-bold text-primary flex items-center gap-1 hover:underline"
+                >
+                  Visitar sitio oficial de Heartopia <ExternalLink className="h-3 w-3" />
+                </a>
+              </div>
             </div>
           </div>
         </section>

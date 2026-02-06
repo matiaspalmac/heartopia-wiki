@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -10,6 +12,8 @@ import {
   Trophy,
   Heart,
   Users,
+  ExternalLink,
+  Gift
 } from "lucide-react";
 
 const DiscordLink = "https://discord.gg/wnkBUBbaRW";
@@ -33,7 +37,7 @@ const categories = [
   { href: "/wiki/cultivos", label: "Cultivos", icon: Sprout },
   { href: "/wiki/recolectables", label: "Recolectables", icon: TreeDeciduous },
   { href: "/wiki/logros", label: "Logros", icon: Trophy },
-  { href: "/wiki/codigos", label: "Códigos", icon: Trophy },
+  { href: "/wiki/codigos", label: "Códigos", icon: Gift },
   { href: "/wiki/habitantes", label: "Habitantes", icon: PawPrint },
   { href: "/wiki/recetas", label: "Recetas", icon: Sprout },
   { href: "/staff", label: "Nuestro Equipo", icon: Users },
@@ -91,12 +95,10 @@ export function Footer() {
 
           <div className="space-y-5">
             <div className="space-y-3">
-              <h3 className="font-semibold text-foreground">Acerca de</h3>
+              <h3 className="font-semibold text-foreground">Comunidad</h3>
               <p className="text-sm leading-relaxed text-muted-foreground">
-                Esta wiki fue creada utilizando los datos del bot de la
-                comunidad de <span className="font-bold">Heartopia Chile</span>.
-                Toda la información ha sido recopilada y esta página ha sido
-                hecha con mucho cariño para ayudarte en tu aventura.
+                Esta wiki fue creada por la comunidad de <span className="font-bold">Heartopia Chile</span>.
+                Toda la información ha sido recopilada con mucho cariño para ayudarte en tu aventura.
               </p>
             </div>
 
@@ -112,7 +114,30 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 text-sm text-muted-foreground sm:flex-row">
+        <div className="mt-12 rounded-2xl bg-secondary/50 p-6 border border-border/50">
+          <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+            <div className="space-y-2 max-w-2xl">
+              <h4 className="text-xs font-black uppercase tracking-widest text-muted-foreground">Aviso Legal</h4>
+              <p className="text-xs leading-relaxed text-muted-foreground/80 italic">
+                Este sitio es una iniciativa de fans y <span className="font-bold">no estamos afiliados</span> a Heartopia ni a XD Interactive Entertainment Co., Ltd. 
+                Heartopia es una marca registrada de XD Interactive. Todos los recursos visuales, nombres y datos del juego son propiedad de sus respectivos dueños.
+              </p>
+            </div>
+            <div className="flex flex-col gap-2 shrink-0">
+               <a 
+                href="https://heartopia.xd.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-xs font-bold text-primary hover:underline"
+              >
+                Sitio Oficial de Heartopia
+                <ExternalLink className="h-3 w-3" />
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-8 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 text-sm text-muted-foreground sm:flex-row">
           <p>
             Hecho con{" "}
             <Heart className="inline h-4 w-4 text-destructive fill-destructive" />{" "}
