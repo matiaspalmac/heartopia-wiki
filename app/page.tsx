@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import Script from "next/script";
 import Image from "next/image";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
@@ -16,8 +15,6 @@ import {
   TreeDeciduous,
   Trophy,
   ArrowRight,
-  MapPin,
-  Clock,
   Sparkles,
   Users,
   ChefHat,
@@ -88,7 +85,7 @@ export default function HomePage() {
                     <Sparkles className="mr-2 h-4 w-4" />
                     Proyecto de la Comunidad Heartopia Chile
                   </Badge>
-                  
+
                   <div className="flex items-center justify-center lg:justify-start gap-2 text-[10px] uppercase tracking-widest font-black text-muted-foreground/60">
                     <ShieldCheck className="h-3 w-3" />
                     Sitio no oficial hecho por fans
@@ -124,7 +121,11 @@ export default function HomePage() {
                     className="h-14 px-8 rounded-2xl gap-2 text-base font-bold border-2 bg-background/50 backdrop-blur-sm"
                     asChild
                   >
-                    <a href="https://discord.gg/wnkBUBbaRW" target="_blank" rel="noopener noreferrer">
+                    <a
+                      href="https://discord.gg/wnkBUBbaRW"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       Unirse al Discord
                     </a>
                   </Button>
@@ -144,7 +145,10 @@ export default function HomePage() {
                     </div>
                     <div className="flex flex-col items-center sm:items-start">
                       <p className="text-sm md:text-base text-muted-foreground">
-                        Hecho con ❤️ por <span className="text-foreground font-black text-lg bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">Dei</span>
+                        Hecho con ❤️ por{" "}
+                        <span className="text-foreground font-black text-lg bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">
+                          Dei
+                        </span>
                       </p>
                     </div>
                     <div className="absolute -right-2 -top-2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -255,63 +259,6 @@ export default function HomePage() {
             </div>
           </div>
         </section>
-        <section className="py-24 bg-secondary/30 dark:bg-secondary/10">
-          <div className="mx-auto max-w-7xl px-4">
-            <div className="flex flex-col md:flex-row items-end justify-between mb-12 gap-4">
-              <div className="space-y-4 text-center md:text-left">
-                <Badge className="bg-primary/10 text-primary border-primary/20 px-4 py-1">
-                  Actualizaciones oficiales
-                </Badge>
-                <h2 className="text-3xl md:text-5xl font-black tracking-tight text-foreground">
-                  Novedades de <span className="text-primary">Heartopia</span>
-                </h2>
-              </div>
-
-              <Button
-                variant="outline"
-                className="rounded-xl gap-2 border-primary/20 hover:bg-primary/5"
-                asChild
-              >
-                <a
-                  href="https://x.com/MyHeartopia"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Seguir en X.com
-                </a>
-              </Button>
-            </div>
-
-            <div className="relative rounded-[2.5rem] border-4 border-white dark:border-zinc-900 shadow-2xl overflow-hidden bg-white dark:bg-zinc-950 min-h-[600px]">
-              <div className="p-4 md:p-8">
-                {isLoaded ? (
-                  <>
-                    <a
-                      className="twitter-timeline"
-                      data-height="600"
-                      data-theme="light"
-                      data-chrome="nofooter noborders transparent"
-                      href="https://twitter.com/MyHeartopia?ref_src=twsrc%5Etfw"
-                    >
-                      Cargando noticias mágicas...
-                    </a>
-                    <Script
-                      src="https://platform.twitter.com/widgets.js"
-                      strategy="lazyOnload"
-                    />
-                  </>
-                ) : (
-                  <div className="h-[600px] flex flex-col items-center justify-center text-muted-foreground gap-4">
-                    <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-                    <p className="italic font-medium">
-                      Conectando con Heartopia...
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </section>
         <section className="py-20">
           <div className="mx-auto max-w-5xl px-4">
             <div className="rounded-[3rem] bg-primary p-8 md:p-16 text-primary-foreground text-center relative overflow-hidden shadow-2xl shadow-primary/20">
@@ -332,7 +279,11 @@ export default function HomePage() {
                 className="h-14 px-10 rounded-2xl font-black text-lg hover:scale-110 transition-transform shadow-xl"
                 asChild
               >
-                <a href="https://discord.gg/wnkBUBbaRW" target="_blank" rel="noopener noreferrer">
+                <a
+                  href="https://discord.gg/wnkBUBbaRW"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   ¡Quiero Colaborar!
                 </a>
               </Button>
@@ -344,26 +295,30 @@ export default function HomePage() {
           <div className="mx-auto max-w-7xl px-4">
             <div className="flex flex-col items-center p-8 rounded-[2.5rem] bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 text-center">
               <ShieldCheck className="h-8 w-8 text-muted-foreground mb-4" />
-              <h3 className="text-sm font-black uppercase tracking-widest mb-2">Información Legal y Afiliación</h3>
+              <h3 className="text-sm font-black uppercase tracking-widest mb-2">
+                Información Legal y Afiliación
+              </h3>
               <p className="text-sm text-muted-foreground max-w-3xl leading-relaxed">
-                Heartopia Chile Wiki es un sitio web independiente operado por fans. <br className="hidden md:block" />
-                No estamos afiliados, asociados, autorizados ni respaldados por <strong>XD Interactive Entertainment Co., Ltd.</strong> o sus socios. 
-                Heartopia es una marca registrada de XD Interactive.
+                Heartopia Chile Wiki es un sitio web independiente operado por
+                fans. <br className="hidden md:block" />
+                No estamos afiliados, asociados, autorizados ni respaldados por{" "}
+                <strong>XD Interactive Entertainment Co., Ltd.</strong> o sus
+                socios. Heartopia es una marca registrada de XD Interactive.
               </p>
               <div className="mt-4 flex gap-4">
-                <a 
-                  href="https://heartopia.xd.com" 
-                  target="_blank" 
+                <a
+                  href="https://heartopia.xd.com"
+                  target="_blank"
                   className="text-xs font-bold text-primary flex items-center gap-1 hover:underline"
                 >
-                  Visitar sitio oficial de Heartopia <ExternalLink className="h-3 w-3" />
+                  Visitar sitio oficial de Heartopia{" "}
+                  <ExternalLink className="h-3 w-3" />
                 </a>
               </div>
             </div>
           </div>
         </section>
       </main>
-
       <Footer />
     </div>
   );

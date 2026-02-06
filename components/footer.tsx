@@ -13,21 +13,12 @@ import {
   Heart,
   Users,
   ExternalLink,
-  Gift
+  Gift,
+  Users2,
+  MessageSquare,
 } from "lucide-react";
 
 const DiscordLink = "https://discord.gg/wnkBUBbaRW";
-const DiscordSVG = (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="20"
-    height="20"
-    fill="currentColor"
-    viewBox="0 0 16 16"
-  >
-    <path d="M13.545 2.907a13.2 13.2 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.577-.406.833a12.2 12.2 0 0 0-3.658 0 8 8 0 0 0-.412-.833.05.05 0 0 0-.052-.025c-1.125.194-2.22.534-3.257 1.011a.04.04 0 0 0-.021.018C.356 6.024-.213 9.047.066 12.032q.003.022.021.037a13.3 13.3 0 0 0 3.995 2.02.05.05 0 0 0 .056-.019q.463-.63.818-1.329a.05.05 0 0 0-.01-.059l-.018-.011a9 9 0 0 1-1.248-.595.05.05 0 0 1-.02-.066l.015-.019q.127-.095.248-.195a.05.05 0 0 1 .051-.007c2.619 1.196 5.454 1.196 8.041 0a.05.05 0 0 1 .053.007q.121.1.248.195a.05.05 0 0 1-.004.085 8 8 0 0 1-1.249.594.05.05 0 0 0-.03.03.05.05 0 0 0 .003.041c.24.465.515.909.817 1.329a.05.05 0 0 0 .056.019 13.2 13.2 0 0 0 4.001-2.02.05.05 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.03.03 0 0 0-.02-.019m-8.198 7.307c-.789 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.45.73 1.438 1.613 0 .888-.637 1.612-1.438 1.612m5.316 0c-.788 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.451.73 1.438 1.613 0 .888-.631 1.612-1.438 1.612" />
-  </svg>
-);
 
 const categories = [
   { href: "/wiki/peces", label: "Peces", icon: Fish },
@@ -38,67 +29,89 @@ const categories = [
   { href: "/wiki/recolectables", label: "Recolectables", icon: TreeDeciduous },
   { href: "/wiki/logros", label: "Logros", icon: Trophy },
   { href: "/wiki/codigos", label: "Códigos", icon: Gift },
-  { href: "/wiki/habitantes", label: "Habitantes", icon: PawPrint },
+  { href: "/wiki/habitantes", label: "Habitantes", icon: Users },
   { href: "/wiki/recetas", label: "Recetas", icon: Sprout },
   { href: "/staff", label: "Nuestro Equipo", icon: Users },
   { href: "/eventos", label: "Eventos", icon: Heart },
+  { href: "/nuestracomunidad", label: "Nuestra Comunidad", icon: Users2 },
 ];
 
 export function Footer() {
   return (
-    <footer className="border-t border-border bg-secondary/30">
-      <div className="mx-auto max-w-7xl px-4 py-12">
-        <div className="grid gap-8 md:grid-cols-3">
-          <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <Link href="/" className="flex items-center gap-3 group">
-                <div className="relative h-10 w-10 overflow-hidden rounded-xl border-2 border-primary/20 shadow-sm transition-transform group-hover:scale-105 group-hover:border-primary">
-                  <Image
-                    src="/annie.jpg"
-                    alt="Heartopia Logo"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <div className="hidden sm:block text-left leading-tight">
-                  <h1 className="text-base font-black tracking-tight text-foreground">
-                    Heartopia Wiki
-                  </h1>
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-primary">
-                    Chile
-                  </p>
-                </div>
-              </Link>
-            </div>
+    <footer className="border-t border-border/50 bg-gradient-to-b from-secondary/20 to-background">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+        <div className="grid gap-10 md:grid-cols-3 lg:gap-12">
+          <div className="space-y-6">
+            <Link href="/" className="flex items-center gap-3 group">
+              <div className="relative h-12 w-12 overflow-hidden rounded-xl border-2 border-primary/30 shadow-md transition-all duration-300 group-hover:scale-105 group-hover:border-primary group-hover:shadow-primary/30">
+                <Image
+                  src="/annie.jpg"
+                  alt="Heartopia Logo"
+                  fill
+                  className="object-cover object-center"
+                />
+              </div>
+              <div className="text-left leading-tight">
+                <h1 className="text-xl font-black tracking-tight text-foreground">
+                  Heartopia Wiki
+                </h1>
+                <p className="text-xs font-bold uppercase tracking-widest text-primary">
+                  Chile
+                </p>
+              </div>
+            </Link>
+
             <p className="text-sm leading-relaxed text-muted-foreground">
-              La guía más completa para explorar todos los secretos del mundo de
-              Heartopia. Encuentra información sobre peces, insectos, aves,
-              animales, cultivos y más.
+              La guía más completa y hecha con cariño para explorar todos los secretos del mundo de{" "}
+              <span className="font-medium text-primary">Heartopia</span>. Peces, insectos, aves, animales, cultivos, eventos y más.
             </p>
+            <div className="flex items-center gap-5">
+              <a
+                href="https://x.com/MyHeartopia"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-primary transition-colors"
+                aria-label="Twitter / X"
+              >
+                <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                </svg>
+              </a>
+              <a
+                href={DiscordLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-[#5865F2] transition-colors"
+                aria-label="Discord"
+              >
+                <MessageSquare className="h-5 w-5" />
+              </a>
+            </div>
           </div>
 
-          <div className="space-y-4">
-            <h3 className="font-semibold text-foreground">Categorías</h3>
-            <div className="grid grid-cols-2 gap-2">
+          <div className="space-y-6">
+            <h3 className="text-lg font-semibold text-foreground">Explorar</h3>
+            <div className="grid grid-cols-2 gap-3">
               {categories.map((cat) => (
                 <Link
                   key={cat.href}
                   href={cat.href}
-                  className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+                  className="group flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-all hover:bg-primary/10 hover:text-primary hover:shadow-sm"
                 >
-                  <cat.icon className="h-4 w-4" />
-                  {cat.label}
+                  <cat.icon className="h-4 w-4 transition-transform group-hover:scale-110" />
+                  <span>{cat.label}</span>
                 </Link>
               ))}
             </div>
           </div>
 
-          <div className="space-y-5">
+          <div className="space-y-6">
             <div className="space-y-3">
-              <h3 className="font-semibold text-foreground">Comunidad</h3>
+              <h3 className="text-lg font-semibold text-foreground">Comunidad</h3>
               <p className="text-sm leading-relaxed text-muted-foreground">
-                Esta wiki fue creada por la comunidad de <span className="font-bold">Heartopia Chile</span>.
-                Toda la información ha sido recopilada con mucho cariño para ayudarte en tu aventura.
+                Esta wiki nació del amor y esfuerzo de la comunidad{" "}
+                <span className="font-medium text-primary">Heartopia Chile</span>. 
+                Toda la información está recopilada con mucho cariño para que ningún vecino se pierda de nada.
               </p>
             </div>
 
@@ -106,47 +119,51 @@ export function Footer() {
               href={DiscordLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-3 rounded-lg bg-[#5865F2] px-4 py-2.5 text-sm font-bold text-white transition-all hover:bg-[#4752C4] hover:shadow-md active:scale-95"
+              className="group flex w-full items-center justify-center gap-3 rounded-xl bg-gradient-to-r from-[#5865F2] to-[#7289DA] px-6 py-3.5 text-base font-bold text-white shadow-lg shadow-[#5865F2]/20 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-[#5865F2]/30 active:scale-95"
             >
-              {DiscordSVG}
-              ¡Únete a nuestro Discord!
+              <MessageSquare className="h-5 w-5" />
+              ¡Únete al Discord!
             </a>
           </div>
         </div>
 
-        <div className="mt-12 rounded-2xl bg-secondary/50 p-6 border border-border/50">
-          <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-            <div className="space-y-2 max-w-2xl">
-              <h4 className="text-xs font-black uppercase tracking-widest text-muted-foreground">Aviso Legal</h4>
+        <div className="mt-12 border-t border-border/50 pt-8">
+          <div className="flex flex-col items-center gap-6 text-center md:flex-row md:justify-between md:text-left">
+            <div className="max-w-xl space-y-3">
+              <h4 className="text-xs font-black uppercase tracking-widest text-muted-foreground">
+                Aviso Legal
+              </h4>
               <p className="text-xs leading-relaxed text-muted-foreground/80 italic">
-                Este sitio es una iniciativa de fans y <span className="font-bold">no estamos afiliados</span> a Heartopia ni a XD Interactive Entertainment Co., Ltd. 
-                Heartopia es una marca registrada de XD Interactive. Todos los recursos visuales, nombres y datos del juego son propiedad de sus respectivos dueños.
+                Este sitio es una iniciativa independiente creada por fans y{" "}
+                <span className="font-medium">no estamos afiliados</span>, asociados ni respaldados por XD Interactive Entertainment Co., Ltd. 
+                Heartopia es una marca registrada de XD Interactive. Todos los recursos, nombres y datos del juego pertenecen a sus respectivos dueños.
               </p>
-            </div>
-            <div className="flex flex-col gap-2 shrink-0">
-               <a 
-                href="https://heartopia.xd.com" 
-                target="_blank" 
+              <a
+                href="https://heartopia.xd.com"
+                target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-xs font-bold text-primary hover:underline"
+                className="inline-flex items-center gap-1.5 text-xs font-medium text-primary hover:underline"
               >
-                Sitio Oficial de Heartopia
+                Visitar sitio oficial de Heartopia
                 <ExternalLink className="h-3 w-3" />
               </a>
             </div>
-          </div>
-        </div>
 
-        <div className="mt-8 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 text-sm text-muted-foreground sm:flex-row">
-          <p>
-            Hecho con{" "}
-            <Heart className="inline h-4 w-4 text-destructive fill-destructive" />{" "}
-            para la comunidad de Heartopia Chile por{" "}
-            <span className="font-medium text-foreground">Dei</span>
-          </p>
-          <p className="text-xs opacity-60">
-            © {new Date().getFullYear()} Heartopia Chile Wiki
-          </p>
+            <div className="flex flex-col sm:flex-row gap-6 sm:gap-8 text-sm text-muted-foreground">
+              <Link href="/about" className="hover:text-primary transition-colors">
+                Sobre Nosotros
+              </Link>
+              <Link href="/privacy" className="hover:text-primary transition-colors">
+                Privacidad
+              </Link>
+            </div>
+
+            <div className="text-sm text-muted-foreground text-center md:text-right">
+              Hecho con{" "}
+              <Heart className="inline h-4 w-4 text-rose-500 fill-rose-500 animate-pulse" />{" "}
+              por <span className="font-medium text-foreground">Dei</span> • © {new Date().getFullYear()} Heartopia Chile Wiki
+            </div>
+          </div>
         </div>
       </div>
     </footer>
