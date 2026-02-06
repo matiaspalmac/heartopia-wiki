@@ -130,7 +130,6 @@ export default function HomePage() {
                   </Button>
                 </div>
 
-                {/* Crédito Dei */}
                 <div className="flex items-center justify-center lg:justify-start gap-3 pt-4">
                   <div className="flex items-center gap-3 px-4 py-2 rounded-2xl bg-secondary/50 border border-border">
                     <div className="h-10 w-10 rounded-full border-2 border-primary overflow-hidden bg-primary/20 flex items-center justify-center shadow-sm">
@@ -155,7 +154,7 @@ export default function HomePage() {
                   <div className="absolute -inset-1 rounded-[2rem] bg-gradient-to-tr from-primary to-accent opacity-30 blur-2xl group-hover:opacity-50 transition-opacity" />
                   <div className="relative overflow-hidden rounded-[2rem] border-4 md:border-8 border-background shadow-2xl transition-all duration-500 group-hover:rotate-1 aspect-video">
                     <Image
-                      src="https://i.imgur.com/ABOqdM6.jpeg"
+                      src="/hero.png"
                       alt="Comunidad Heartopia Chile"
                       fill
                       className="object-cover transition-transform duration-700 group-hover:scale-105"

@@ -83,7 +83,7 @@ export function Header() {
         <Link href="/" className="flex items-center gap-3 group">
           <div className="relative h-10 w-10 overflow-hidden rounded-xl border-2 border-primary/20 shadow-sm transition-transform group-hover:scale-105 group-hover:border-primary">
             <Image 
-              src="https://cdn-www.bluestacks.com/bs-images/8506cfa0f03c4102fbe47e1853889c4a.png"
+              src="/annie.jpg"
               alt="Heartopia Logo"
               fill
               className="object-cover"

@@ -90,7 +90,6 @@ export default function EventoForestbell() {
                 <Bell className="h-6 w-6 fill-current animate-ring" />
               </p>
               
-              {/* Contador Forestal */}
               <ForestCountdown />
             </div>
 
