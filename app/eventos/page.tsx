@@ -10,43 +10,85 @@ import {
   Clock, 
   History, 
   PlayCircle,
-  Hourglass
+  Timer
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { useState, useEffect } from "react";
+
+const EventCounter = ({ targetDate, type }: { targetDate: string, type: 'active' | 'upcoming' }) => {
+  const [timeLeft, setTimeLeft] = useState({ dias: 0, horas: 0, minutos: 0, segundos: 0 });
+
+  useEffect(() => {
+    const target = new Date(targetDate).getTime();
+    const interval = setInterval(() => {
+      const now = new Date().getTime();
+      const difference = target - now;
+
+      if (difference > 0) {
+        setTimeLeft({
+          dias: Math.floor(difference / (1000 * 60 * 60 * 24)),
+          horas: Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+          minutos: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
+          segundos: Math.floor((difference % (1000 * 60)) / 1000),
+        });
+      } else {
+        clearInterval(interval);
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [targetDate]);
+
+  const colorClass = type === 'active' ? 'text-red-500' : 'text-primary';
+
+  return (
+    <div className="flex gap-2 items-center mt-2">
+      <Timer className={`h-4 w-4 ${type === 'active' ? 'animate-pulse' : ''} ${colorClass}`} />
+      <div className="flex gap-1.5 font-black text-xs md:text-sm">
+        <span className={colorClass}>{timeLeft.dias}d</span>
+        <span className={colorClass}>{timeLeft.horas}h</span>
+        <span className={colorClass}>{timeLeft.minutos}m</span>
+        <span className={colorClass}>{timeLeft.segundos}s</span>
+        <span className="text-zinc-400 font-medium lowercase">
+          {type === 'active' ? 'para terminar' : 'para iniciar'}
+        </span>
+      </div>
+    </div>
+  );
+};
 
 const EVENTOS = [
   {
     id: "festival-invierno",
     title: "Festival de Invierno 2026",
     status: "En Curso",
-    date: "Quedan 36 días",
-    image: "/eventos/invierno.jpg", 
+    targetDate: "March 13, 2026 15:00:00", 
+    image: "/eventos/invierno/invierno.jpg", 
     color: "bg-blue-500",
     description: "¡La nieve cubrió Heartopia! Aprovecha las últimas semanas para coleccionar tickets de nieve y canjear la colección completa de pingüinos.",
     href: "/eventos/eventoinvierno",
     type: "active"
   },
   {
-    id: "mlp-collab",
-    title: "Colaboración: My Little Pony",
-    status: "Próximamente",
-    date: "Inicia el 14 de Febrero",
-    image: "/eventos/mlp.jpg",
-    color: "bg-pink-400",
-    description: "¡La magia de la amistad llega a Heartopia! Empuña los Elementos de la Armonía y despierta el Árbol de la Armonía en este evento limitado con exhibiciones y objetos exclusivos.",
-    href: "/eventos/eventomlp",
-    type: "upcoming"
-  },
-  {
     id: "gilded-acorn-forestbell",
-    title: "Exhibición Bellota Dorada: Hechizo Forestbell",
+    title: "Bellota Dorada: Hechizo Forestbell",
     status: "Próximamente",
-    date: "Lanzamiento: 7 de Febrero",
-    image: "/eventos/forestbell.jpg",
+    targetDate: "February 7, 2026 00:00:00",
+    image: "/eventos/forestbell/forestbell.jpg",
     color: "bg-amber-600",
     description: "Susurra el encantamiento en tu corazón y viaja a nuestra tierra de ensueño prometida. No te pierdas la nueva Exhibición de la Bellota Dorada.",
     href: "/eventos/eventoforestbell",
+    type: "upcoming"
+  },
+  {
+    id: "mlp-collab",
+    title: "Colaboración: My Little Pony",
+    status: "Próximamente",
+    targetDate: "February 14, 2026 00:00:00",
+    image: "/eventos/mlp/mlp.jpg",
+    color: "bg-pink-400",
+    description: "¡La magia de la amistad llega a Heartopia! Empuña los Elementos de la Armonía y despierta el Árbol de la Armonía en este evento limitado.",
+    href: "/eventos/eventomlp",
     type: "upcoming"
   }
 ];
@@ -88,10 +130,16 @@ export default function EventosPage() {
 
                     <div className="flex-1 p-6 md:p-8 flex flex-col justify-between bg-white dark:bg-zinc-900/50">
                       <div>
-                        <div className="flex items-center gap-2 text-primary mb-2">
-                          <Hourglass className="h-4 w-4 animate-spin-slow" />
-                          <span className="text-sm font-bold uppercase tracking-tighter">{evento.date}</span>
+                        <div className="flex flex-col mb-4">
+                           <div className="flex items-center gap-2 text-zinc-500 mb-1">
+                             <Calendar className="h-4 w-4" />
+                             <span className="text-xs font-bold uppercase tracking-widest">
+                               {evento.type === 'active' ? 'Evento Activo' : 'Fecha de Inicio'}
+                             </span>
+                           </div>
+                           <EventCounter targetDate={evento.targetDate} type={evento.type as any} />
                         </div>
+
                         <h3 className="text-2xl md:text-3xl font-black mb-3 group-hover:text-primary transition-colors">
                           {evento.title}
                         </h3>
@@ -101,7 +149,7 @@ export default function EventosPage() {
                       </div>
 
                       <div className="mt-6 flex items-center gap-2 font-bold text-sm text-primary group-hover:gap-4 transition-all">
-                        {evento.type === 'upcoming' ? 'Más información próximamente' : 'Explorar detalles del evento'} 
+                        Ver detalles completos
                         <ArrowRight className="h-4 w-4" />
                       </div>
                     </div>
