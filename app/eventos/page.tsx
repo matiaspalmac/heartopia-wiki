@@ -181,7 +181,7 @@ export default function EventosPage() {
             Calendario de Eventos
           </h1>
           <p className="text-muted-foreground text-lg max-w-2xl">
-            Sigue de cerca las festividades de Heartopia Chile. No te pierdas las recompensas temporales.
+            Sigue de cerca las festividades de Heartopia. No te pierdas las recompensas temporales.
           </p>
         </section>
 
