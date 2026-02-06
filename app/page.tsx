@@ -130,25 +130,29 @@ export default function HomePage() {
                   </Button>
                 </div>
 
-                <div className="flex items-center justify-center lg:justify-start gap-3 pt-4">
-                  <div className="flex items-center gap-3 px-4 py-2 rounded-2xl bg-secondary/50 border border-border">
-                    <div className="h-10 w-10 rounded-full border-2 border-primary overflow-hidden bg-primary/20 flex items-center justify-center shadow-sm">
+                <div className="flex items-center justify-center lg:justify-start pt-6">
+                  <div className="group relative flex flex-col sm:flex-row items-center gap-4 p-2 pr-6 rounded-[2rem] bg-background/40 backdrop-blur-md border border-primary/20 shadow-lg hover:shadow-primary/10 transition-all duration-300">
+                    <div className="relative h-20 w-32 sm:h-16 sm:w-28 shrink-0 overflow-hidden rounded-2xl border-2 border-primary/30 shadow-inner">
                       <Image
-                        src="https://imgur.com/7fGFJuW.png"
-                        alt="Dei Avatar"
-                        width={40}
-                        height={40}
-                        className="object-cover"
+                        src="/dei.jpg"
+                        alt="Dei"
+                        fill
+                        className="object-cover object-center transition-transform duration-500 group-hover:scale-110"
+                        priority
                       />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                     </div>
-                    <p className="text-sm text-muted-foreground">
-                      Creado con ❤️ por{" "}
-                      <span className="text-foreground font-bold">Dei</span>
-                    </p>
+                    <div className="flex flex-col items-center sm:items-start">
+                      <p className="text-sm md:text-base text-muted-foreground">
+                        Hecho con ❤️ por <span className="text-foreground font-black text-lg bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">Dei</span>
+                      </p>
+                    </div>
+                    <div className="absolute -right-2 -top-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="bg-primary h-4 w-4 rounded-full blur-lg" />
+                    </div>
                   </div>
                 </div>
               </div>
-
               <div className="relative flex justify-center lg:justify-end">
                 <div className="relative group w-full max-w-[600px]">
                   <div className="absolute -inset-1 rounded-[2rem] bg-gradient-to-tr from-primary to-accent opacity-30 blur-2xl group-hover:opacity-50 transition-opacity" />

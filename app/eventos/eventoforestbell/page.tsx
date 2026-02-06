@@ -7,7 +7,6 @@ import { Bell, TreePine, Leaf, Map, Compass, Clock } from "lucide-react";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 
-// Componente del Contador para Forestbell
 const ForestCountdown = () => {
   const [timeLeft, setTimeLeft] = useState({
     dias: 0,
@@ -17,7 +16,6 @@ const ForestCountdown = () => {
   });
 
   useEffect(() => {
-    // Fecha objetivo: 7 de Febrero de 2026
     const targetDate = new Date("February 7, 2026 00:00:00").getTime();
 
     const interval = setInterval(() => {
