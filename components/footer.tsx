@@ -150,10 +150,10 @@ export function Footer() {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-6 sm:gap-8 text-sm text-muted-foreground">
-              <Link href="/about" className="hover:text-primary transition-colors">
+              <Link href="/sobrenosotros" className="hover:text-primary transition-colors">
                 Sobre Nosotros
               </Link>
-              <Link href="/privacy" className="hover:text-primary transition-colors">
+              <Link href="/privacidad" className="hover:text-primary transition-colors">
                 Privacidad
               </Link>
             </div>
