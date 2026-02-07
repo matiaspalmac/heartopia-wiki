@@ -20,13 +20,15 @@ import {
   Moon,
   Users2,
   Heart,
-  BookOpen,
+  Gift
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetContent,
   SheetTrigger,
+  SheetHeader,
+  SheetTitle,
 } from "@/components/ui/sheet";
 import {
   DropdownMenu,
@@ -53,8 +55,7 @@ const mainNav = [
   { href: "/wiki/aves", label: "Aves", icon: Bird },
   { href: "/wiki/animales", label: "Animales", icon: PawPrint },
   { href: "/eventos", label: "Eventos", icon: Sprout },
-  { href: "/wiki/codigos", label: "Códigos", icon: Trophy },
-  { href: "/guias", label: "Guías", icon: BookOpen },
+  { href: "/guias", label: "Guias", icon: ChefHat },
 ];
 
 const moreNav = [
@@ -63,13 +64,13 @@ const moreNav = [
   { href: "/wiki/recetas", label: "Recetas", icon: ChefHat },
   { href: "/wiki/recolectables", label: "Recolectables", icon: Calculator },
   { href: "/wiki/logros", label: "Logros", icon: Trophy },
+  { href: "/wiki/codigos", label: "Códigos", icon: Gift },
 ];
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [theme, setTheme] = useState("light");
-
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", handleScroll);
@@ -122,6 +123,7 @@ export function Header() {
             </p>
           </div>
         </Link>
+
         <nav className="hidden items-center gap-1 lg:flex bg-secondary/30 p-1 rounded-full border border-border/40">
           {mainNav.map((item) => (
             <Link
@@ -192,6 +194,18 @@ export function Header() {
             </Button>
           </Link>
 
+          <Link href="/staff" className="hidden md:flex">
+            <Button
+              variant="default"
+              size="sm"
+              className="h-10 px-5 rounded-xl font-bold gap-2 bg-gradient-to-r from-primary/90 to-purple-600/90 hover:from-primary hover:to-purple-600 text-white shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 transition-all duration-300 border-none"
+            >
+              <Users2 className="h-4 w-4" />
+              <span className="hidden lg:inline">Nuestro Equipo</span>
+              <span className="lg:hidden">Staff</span>
+            </Button>
+          </Link>
+
           <Link href="/nuestracomunidad" className="hidden md:flex">
             <Button
               variant="default"
@@ -214,31 +228,27 @@ export function Header() {
                 <Menu className="h-6 w-6" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-full sm:w-[350px] p-0 border-l-0">
-              <div className="flex flex-col gap-8 py-8 px-6 h-full overflow-y-auto bg-background">
-                <div className="space-y-1">
-                  <h3 className="text-xs font-black uppercase tracking-widest text-muted-foreground ml-2 mb-4">Explorar Wiki</h3>
-                  <nav className="grid grid-cols-2 gap-3">
-                    {[...mainNav, ...moreNav].map((item) => (
-                      <Link
-                        key={item.href}
-                        href={item.href}
-                        onClick={() => setIsOpen(false)}
-                        className="flex flex-col gap-2 items-center justify-center rounded-2xl border border-border/50 bg-secondary/10 p-4 transition-all active:scale-95 hover:bg-primary/5 hover:border-primary/20"
-                      >
-                        <item.icon className="h-6 w-6 text-primary" />
-                        <span className="text-xs font-bold">{item.label}</span>
-                      </Link>
-                    ))}
-                  </nav>
-                </div>
+            <SheetContent side="right" className="w-full sm:w-[350px]">
+              <div className="flex flex-col gap-8 py-8 h-[calc(100vh-120px)] overflow-y-auto">
+                <nav className="grid grid-cols-2 gap-3">
+                  {[...mainNav, ...moreNav].map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={() => setIsOpen(false)}
+                      className="flex flex-col gap-2 items-center justify-center rounded-2xl border border-border/50 bg-secondary/10 p-4 transition-all active:scale-95"
+                    >
+                      <item.icon className="h-6 w-6 text-primary" />
+                      <span className="text-sm font-bold">{item.label}</span>
+                    </Link>
+                  ))}
+                </nav>
 
-                <div className="space-y-3">
-                  <h3 className="text-xs font-black uppercase tracking-widest text-muted-foreground ml-2 mb-4">Social & Staff</h3>
+                <div className="grid grid-cols-1 gap-4">
                   <Link
                     href="/staff"
                     onClick={() => setIsOpen(false)}
-                    className="flex items-center justify-center gap-3 w-full py-4 rounded-2xl bg-gradient-to-r from-primary/80 to-purple-600/80 text-white font-black shadow-lg shadow-primary/20 active:scale-95 transition-all"
+                    className="flex items-center justify-center gap-3 w-full py-4 rounded-2xl bg-gradient-to-r from-primary/80 to-purple-600/80 text-white font-black shadow-lg shadow-primary/20 active:scale-95 transition-all hover:brightness-110"
                   >
                     <Users2 className="h-5 w-5" />
                     Nuestro Equipo
@@ -247,14 +257,14 @@ export function Header() {
                   <Link
                     href="/nuestracomunidad"
                     onClick={() => setIsOpen(false)}
-                    className="flex items-center justify-center gap-3 w-full py-4 rounded-2xl bg-gradient-to-r from-pink-500/80 to-rose-500/80 text-white font-black shadow-lg shadow-pink-500/20 active:scale-95 transition-all"
+                    className="flex items-center justify-center gap-3 w-full py-4 rounded-2xl bg-gradient-to-r from-pink-500/80 to-rose-500/80 text-white font-black shadow-lg shadow-pink-500/20 active:scale-95 transition-all hover:brightness-110"
                   >
                     <Heart className="h-5 w-5 fill-white" />
                     Nuestra Comunidad
                   </Link>
                 </div>
 
-                <div className="mt-auto pt-6 border-t">
+                <div className="mt-auto">
                   <a
                     href="https://discord.gg/wnkBUBbaRW"
                     target="_blank"
