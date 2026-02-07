@@ -51,7 +51,7 @@ export default function NuestraComunidad() {
               </div>
             </div>
 
-            <div className="relative group col-span-1 row-span-1 lg:row-span-2 overflow-hidden rounded-[2.5rem] border-4 border-white dark:border-zinc-900 shadow-xl h-[400px] lg:h-full">
+            <div className="relative group col-span-1 row-span-1 lg:row-span-2 overflow-hidden rounded-[2.5rem] shadow-xl h-[400px] lg:h-full">
               <Image 
                 src="/comunidad/deiama.png" 
                 alt="Dei y Ama" 
