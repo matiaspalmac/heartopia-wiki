@@ -245,7 +245,7 @@ export function Header() {
                   </Link>
 
                   <Link
-                    href="/nuestra-comunidad"
+                    href="/nuestracomunidad"
                     onClick={() => setIsOpen(false)}
                     className="flex items-center justify-center gap-3 w-full py-4 rounded-2xl bg-gradient-to-r from-pink-500/80 to-rose-500/80 text-white font-black shadow-lg shadow-pink-500/20 active:scale-95 transition-all"
                   >

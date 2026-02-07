@@ -1,16 +1,18 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { 
-  Users, 
-  Sparkles,
   MessageSquare,
-  Heart
+  Crown,
+  Star,
+  Music,
+  Palette,
+  Fish,
+  Camera
 } from "lucide-react";
 
 export default function NuestraComunidad() {
@@ -19,154 +21,135 @@ export default function NuestraComunidad() {
       <Header />
 
       <main className="pt-16 pb-20 md:pt-20">
-        <section className="relative px-4 sm:px-6 pt-12 pb-16 md:pt-16 md:pb-20 overflow-hidden">
-          <div className="absolute inset-0 -z-10 bg-gradient-to-b from-primary/10 via-transparent to-transparent" />
+        <section className="relative px-4 sm:px-6 pt-12 pb-16 text-center overflow-hidden">
+          <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent" />
           
-          <div className="mx-auto max-w-4xl text-center space-y-6">
-            <Badge 
-              variant="outline" 
-              className="px-5 py-1.5 rounded-full border-primary/30 bg-primary/5 text-primary font-bold tracking-wider uppercase text-xs"
-            >
-              Álbum de Recuerdos
+          <div className="mx-auto max-w-4xl space-y-4">
+            <Badge variant="outline" className="px-4 py-1 rounded-full border-primary/20 bg-primary/5 text-primary font-bold uppercase text-[10px] tracking-widest">
+              Comunidad Heartopia Chile
             </Badge>
-            
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight">
-              Nuestra <span className="bg-gradient-to-r from-primary via-purple-500 to-accent bg-clip-text text-transparent">Comunidad</span>
+            <h1 className="text-5xl md:text-7xl font-black tracking-tighter italic">
+              NUESTRO <span className="text-primary">ÁLBUM</span>
             </h1>
-            
-            <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed max-w-3xl mx-auto">
-              Esta página está dedicada a todos los vecinos que hacen de <strong>Heartopia Chile</strong> un lugar especial. 
-              Aquí celebramos nuestras juntas, eventos y el cariño de nuestra gente.
-            </p>
           </div>
         </section>
 
         <section className="mx-auto max-w-7xl px-4 sm:px-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 auto-rows-[minmax(220px,auto)] sm:auto-rows-[minmax(260px,auto)] lg:auto-rows-[minmax(280px,auto)]">
-            <div className="relative group col-span-1 sm:col-span-2 lg:col-span-2 lg:row-span-2 overflow-hidden rounded-3xl border border-primary/20 shadow-xl hover:shadow-2xl transition-all duration-500">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-start">
+            
+            <div className="relative group col-span-1 sm:col-span-2 lg:col-span-3 overflow-hidden rounded-[2.5rem] border border-white/10 shadow-2xl h-[300px] lg:h-[400px]">
               <Image 
-                src="/comunidad/lluviaestrellas.png" 
-                alt="Primera Lluvia de Estrellas 2026" 
+                src="/comunidad/ultimacena.png" 
+                alt="Recreación de la Última Cena" 
                 fill 
-                className="object-cover object-top brightness-105 transition-transform duration-1000 group-hover:scale-[1.06]"
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 50vw"
-                priority
+                className="object-cover transition-transform duration-700 group-hover:scale-105"
               />
-            </div>
-
-            <div className="relative group col-span-1 sm:col-span-2 lg:col-span-2 overflow-hidden rounded-3xl border border-primary/20 shadow-xl hover:shadow-2xl transition-all duration-500">
-              <Image 
-                src="/comunidad/pescanocturna.jpg" 
-                alt="Pesca Nocturna" 
-                fill 
-                className="object-cover object-center brightness-110 transition-transform duration-1000 group-hover:scale-105"
-                sizes="(max-width: 640px) 100vw, 50vw"
-              />
-              <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors duration-500 pointer-events-none" />
-            </div>
-
-            <div className="relative group col-span-1 overflow-hidden rounded-3xl bg-gradient-to-br from-secondary/60 to-background/80 border border-primary/20 flex flex-col justify-center items-center text-center p-6 sm:p-8 hover:border-primary/50 transition-all duration-500 shadow-xl hover:shadow-2xl">
-              <Users className="h-10 w-10 sm:h-12 sm:w-12 text-primary mb-4" />
-              <h4 className="text-xl sm:text-2xl font-black leading-tight mb-3">
-                Muestra tu orgullo
-              </h4>
-              <p className="text-sm text-muted-foreground">
-                ¿Tienes fotos de tu vecino o de una junta?<br className="hidden sm:block" />
-                ¡Compártelas en Discord!
-              </p>
-            </div>
-
-            <div className="relative group col-span-1 overflow-hidden rounded-3xl border-4 border-pink-400/40 shadow-2xl hover:shadow-pink-500/40 hover:border-pink-400/70 transition-all duration-500 bg-gradient-to-b from-pink-500/5 to-transparent">
-              <Image 
-                src="/comunidad/mimi.jpg" 
-                alt="Vecino destacado - Mimi" 
-                fill 
-                className="object-cover object-center brightness-110 contrast-105 transition-all duration-700 group-hover:scale-110 group-hover:rotate-[0.5deg]"
-                sizes="(max-width: 640px) 100vw, 25vw"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent/20 pointer-events-none" />
-              <div className="absolute inset-x-0 bottom-0 p-5 sm:p-6 flex flex-col items-center pointer-events-auto">
-                <div className="mb-3 relative">
-                  <Heart className="h-10 w-10 text-red-500 animate-pulse" />
-                  <Heart className="h-10 w-10 text-pink-300 absolute inset-0 blur-sm opacity-70 animate-pulse" />
-                </div>
-                <Badge 
-                  className="bg-pink-600/85 text-white border-none px-4 py-1.5 text-base sm:text-lg font-bold mb-2 shadow-md"
-                >
-                  Vecino Destacado
+              <div className="absolute top-6 left-6">
+                <Badge className="bg-black/70 backdrop-blur-md border-white/20 text-white font-bold px-4 py-1">
+                  La Última Cena
                 </Badge>
               </div>
             </div>
 
-            <div className="relative group col-span-1 sm:col-span-2 lg:col-span-2 overflow-hidden rounded-3xl border border-primary/20 shadow-xl hover:shadow-2xl transition-all duration-500">
+            <div className="relative group col-span-1 row-span-1 lg:row-span-2 overflow-hidden rounded-[2.5rem] border-4 border-white dark:border-zinc-900 shadow-xl h-[400px] lg:h-full">
               <Image 
-                src="/comunidad/dibujo.png" 
-                alt="Dibujo pixel art comunitario" 
+                src="/comunidad/deiama.png" 
+                alt="Dei y Ama" 
                 fill 
-                className="object-cover object-center brightness-105 transition-transform duration-1000 group-hover:scale-105"
-                sizes="(max-width: 640px) 100vw, 50vw"
+                className="object-cover transition-all duration-500"
               />
-              <div className="absolute inset-0 bg-black/5 group-hover:bg-black/0 transition-colors duration-500 pointer-events-none" />
             </div>
 
-            <div className="relative group col-span-1 sm:col-span-2 lg:col-span-2 overflow-hidden rounded-3xl border border-primary/20 shadow-xl hover:shadow-2xl transition-all duration-500">
+            <div className="relative group col-span-1 sm:col-span-2 overflow-hidden rounded-[2.5rem] border border-primary/10 shadow-lg h-[300px]">
               <Image 
-                src="/comunidad/pescanose.jpg" 
-                alt="Pesca" 
+                src="/comunidad/mods.png" 
+                alt="Staff Heartopia" 
                 fill 
-                className="object-cover object-center brightness-105 transition-transform duration-1000 group-hover:scale-105"
-                sizes="(max-width: 640px) 100vw, 50vw"
+                className="object-cover transition-transform group-hover:scale-110 duration-700"
               />
-              <div className="absolute inset-0 bg-black/5 group-hover:bg-black/0 transition-colors duration-500 pointer-events-none" />
+              <div className="absolute top-6 left-6">
+                <div className="flex items-center gap-2 bg-yellow-500 text-black px-4 py-1 rounded-full font-black text-[10px] uppercase">
+                  <Crown className="h-3 w-3 fill-current" /> Team Staff
+                </div>
+              </div>
             </div>
 
-            <div className="relative group col-span-1 sm:col-span-2 lg:col-span-4 overflow-hidden rounded-3xl border border-primary/20 shadow-xl hover:shadow-2xl transition-all duration-500">
-              <Image 
-                src="/comunidad/pescadestacada.jpg" 
-                alt="Pesca destacada" 
-                fill 
-                className="object-cover object-center brightness-105 transition-transform duration-1000 group-hover:scale-105"
-                sizes="100vw"
-              />
+            <div className="relative group col-span-1 overflow-hidden rounded-[2.5rem] border border-white/10 h-[300px]">
+              <Image src="/comunidad/perreo.png" alt="Momento Perreo" fill className="object-cover" />
+              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                <Music className="text-white h-10 w-10 animate-bounce" />
+              </div>
             </div>
+
+            <div className="col-span-1 sm:col-span-2 lg:col-span-4 flex flex-col items-center gap-4">
+              <div className="relative w-full overflow-hidden rounded-[3rem] border border-white/10 shadow-xl">
+                <img 
+                  src="/comunidad/todos.png" 
+                  alt="Toda la comunidad" 
+                  className="w-full h-auto object-contain transition-transform duration-1000 group-hover:scale-[1.02]"
+                />
+                <div className="absolute bottom-6 right-6">
+                  <Badge className="bg-primary text-primary-foreground font-black px-6 py-2 rounded-2xl text-lg shadow-2xl">
+                    <Camera className="mr-2 h-5 w-5 inline" /> JUNTA COMUNIDAD
+                  </Badge>
+                </div>
+              </div>
+            </div>
+
+            <div className="relative group col-span-1 overflow-hidden rounded-[2.5rem] border border-white/10 h-[300px]">
+              <Image src="/comunidad/dibujo.png" alt="Fan Art" fill className="object-cover" />
+              <div className="absolute top-4 right-4 bg-white/90 dark:bg-zinc-900 p-2 rounded-full">
+                <Palette className="h-5 w-5 text-primary" />
+              </div>
+            </div>
+
+            <div className="relative group col-span-1 sm:col-span-2 overflow-hidden rounded-[2.5rem] border border-white/10 h-[300px]">
+              <Image src="/comunidad/juntaisla.png" alt="Junta en la Isla" fill className="object-cover" />
+            </div>
+
+            <div className="relative group col-span-1 overflow-hidden rounded-[2.5rem] border border-white/10 h-[300px]">
+              <Image src="/comunidad/pescadestacada.jpg" alt="Pesca" fill className="object-cover" />
+              <div className="absolute bottom-4 left-4">
+                <Fish className="text-blue-400 h-6 w-6" />
+              </div>
+            </div>
+
+            <div className="relative group col-span-1 sm:col-span-2 overflow-hidden rounded-[2.5rem] border border-white/10 h-[300px]">
+              <Image src="/comunidad/lluviaestrellas.png" alt="Lluvia de estrellas" fill className="object-cover" />
+              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/10">
+                <Star className="text-yellow-400 h-12 w-12 fill-current animate-pulse" />
+              </div>
+            </div>
+
+            <div className="relative group col-span-1 overflow-hidden rounded-[2.5rem] border border-white/10 h-[300px]">
+              <Image src="/comunidad/pescanocturna.jpg" alt="Pesca Nocturna" fill className="object-cover" />
+            </div>
+
+            <div className="col-span-1 sm:col-span-2 lg:col-span-1 flex justify-center">
+              <div className="relative w-full overflow-hidden rounded-[2.5rem] border border-white/10">
+                <img 
+                  src="/comunidad/pescanose.jpg" 
+                  alt="Pesca mas" 
+                  className="w-full h-auto object-contain"
+                />
+              </div>
+            </div>
+
           </div>
         </section>
 
-        <section className="mt-16 sm:mt-20 px-4 sm:px-6">
-          <div className="mx-auto max-w-5xl">
-            <div className="group relative flex flex-col sm:flex-row items-center justify-between gap-6 sm:gap-8 w-full p-4 sm:p-2 rounded-[2.5rem] bg-gradient-to-r from-secondary/50 via-secondary/20 to-transparent backdrop-blur-lg border border-primary/15 hover:border-primary/40 transition-all duration-500 shadow-2xl">
-              
-              <div className="flex flex-col sm:flex-row items-center gap-5 sm:gap-6 w-full sm:w-auto">
-                <div className="relative h-20 w-20 sm:h-24 sm:w-24 shrink-0 overflow-hidden rounded-2xl border-2 border-background/60 shadow-xl">
-                  <Image 
-                    src="/dei.jpg" 
-                    alt="Dei" 
-                    fill 
-                    className="object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-br from-black/30 to-transparent/0 pointer-events-none" />
-                </div>
-
-                <div className="text-center sm:text-left space-y-1">
-                  <div className="flex items-center justify-center sm:justify-start gap-2 text-xs uppercase tracking-wider font-bold text-primary/80">
-                    <Sparkles className="h-3.5 w-3.5" />
-                    <span>Comunidad Activa</span>
-                  </div>
-                  <p className="text-muted-foreground text-base sm:text-lg">
-                    Esta wiki crece gracias a <span className="font-black text-transparent bg-gradient-to-r from-primary via-purple-500 to-accent bg-clip-text">ustedes</span>
-                  </p>
-                </div>
-              </div>
-              <Button 
-                className="rounded-full gap-2 px-6 sm:px-7 py-5 sm:py-6 bg-[#5865F2] hover:bg-[#4752c4] text-white font-medium shadow-lg hover:shadow-xl transition-all"
-                asChild
-              >
-                <a href="https://discord.gg/wnkBUBbaRW" target="_blank" rel="noopener noreferrer">
-                  <MessageSquare className="h-4 w-4" /> Compartir fotos
-                </a>
-              </Button>
-              <div className="absolute inset-0 -z-10 bg-primary/5 blur-3xl rounded-[2.5rem] opacity-0 group-hover:opacity-70 transition-opacity duration-700 pointer-events-none" />
-            </div>
+        <section className="mt-20 px-4">
+          <div className="max-w-3xl mx-auto text-center space-y-8 bg-zinc-50 dark:bg-zinc-900/50 p-12 rounded-[3.5rem] border border-primary/5">
+            <h2 className="text-3xl font-black tracking-tight">¡Sigamos creando recuerdos!</h2>
+            <Button 
+              size="lg" 
+              className="rounded-full px-8 py-7 bg-[#5865F2] hover:bg-[#4752c4] text-white font-black transition-transform hover:scale-105 shadow-xl shadow-[#5865F2]/20"
+              asChild
+            >
+              <a href="https://discord.gg/wnkBUBbaRW" target="_blank" rel="noopener noreferrer">
+                <MessageSquare className="mr-2 h-5 w-5" /> SUBIR FOTOS AL DISCORD
+              </a>
+            </Button>
           </div>
         </section>
       </main>
