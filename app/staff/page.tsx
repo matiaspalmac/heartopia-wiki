@@ -12,6 +12,8 @@ import {
   Users,
   Star,
   MessageSquare,
+  Sparkles,
+  Heart
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -20,46 +22,57 @@ const STAFF = [
   {
     name: "Dei",
     image: "/staff/dei.png",
-    role: "Owner & Developer",
+    role: "Founder & Owner",
     color: "text-rose-500",
     bgColor: "bg-rose-50",
     borderColor: "border-rose-100",
     icon: <Crown className="h-4 w-4" />,
     description:
-      "Fundador y desarrollador principal de la Wiki y Bot de Discord.",
+      "Fundador original y dueño de la comunidad. Desarrollador principal de la Wiki y el sistema del Bot de Discord.",
   },
   {
     name: "Frop0n",
     image: "/staff/frop0n.png",
-    role: "Owner & Developer",
-    color: "text-rose-500",
-    bgColor: "bg-rose-50",
-    borderColor: "border-rose-100",
-    icon: <Crown className="h-4 w-4" />,
+    role: "Co-Founder",
+    color: "text-amber-500",
+    bgColor: "bg-amber-50",
+    borderColor: "border-amber-100",
+    icon: <Star className="h-4 w-4" />,
     description:
-      "Fundador y ayudante en el desarrollo de la Wiki y Bot de Discord.",
-  },
-  {
-    name: "Amastiasta",
-    image: "/staff/amastiasta.png",
-    role: "Moderadora",
-    color: "text-blue-500",
-    bgColor: "bg-blue-50",
-    borderColor: "border-blue-100",
-    icon: <ShieldCheck className="h-4 w-4" />,
-    description:
-      "Ayuda con la recopilación de datos y la gestión del servidor de Discord.",
+      "Cofundador de Heartopia Chile. Formó parte esencial del inicio del proyecto y el desarrollo temprano de la guía.",
   },
   {
     name: "Mimi",
     image: "/staff/mimi.png",
-    role: "Moderadora",
+    role: "Moderadora Senior",
+    color: "text-purple-500",
+    bgColor: "bg-purple-50",
+    borderColor: "border-purple-100",
+    icon: <ShieldCheck className="h-4 w-4" />,
+    description:
+      "Encargada de mantener la armonía en la comunidad. Gestiona el servidor de Discord y vela por el bienestar de todos los vecinos.",
+  },
+  {
+    name: "Amastiasta",
+    image: "/staff/amastiasta.png",
+    role: "Moderadora Senior",
     color: "text-blue-500",
     bgColor: "bg-blue-50",
     borderColor: "border-blue-100",
     icon: <ShieldCheck className="h-4 w-4" />,
     description:
-      "Ayuda con la recopilación de datos y la gestión del servidor de Discord.",
+      "Pieza clave en la gestión comunitaria. Apoya en la organización de datos y supervisa la convivencia en la comunidad.",
+  },
+  {
+    name: "Fenice",
+    image: "/staff/fenice.png",
+    role: "Helper & Guide Creator",
+    color: "text-emerald-500",
+    bgColor: "bg-emerald-50",
+    borderColor: "border-emerald-100",
+    icon: <Sparkles className="h-4 w-4" />,
+    description:
+      "Nuestra experta en contenido. Crea guías detalladas para el juego y está siempre dispuesta a resolver las dudas de los nuevos ciudadanos.",
   },
 ];
 
@@ -68,45 +81,39 @@ export default function StaffPage() {
     <div className="min-h-screen bg-background">
       <Header />
 
-      <main className="mx-auto max-w-5xl px-4 py-12">
-        <div className="text-center mb-16">
+      <main className="mx-auto max-w-5xl px-4 py-12 md:py-20">
+        <div className="text-center mb-16 space-y-4">
           <Badge
             variant="outline"
-            className="mb-4 px-4 py-1 border-primary/20 text-primary bg-primary/5 dark:bg-primary/10"
+            className="px-4 py-1 border-primary/20 text-primary bg-primary/5 dark:bg-primary/10 font-bold tracking-widest uppercase text-[10px]"
           >
-            Comunidad Heartopia Chile
+            Heartopia Chile Staff
           </Badge>
-          <h1 className="text-4xl font-black text-foreground md:text-5xl mb-4 tracking-tight">
-            Nuestro Equipo
+          <h1 className="text-4xl font-black text-foreground md:text-6xl mb-4 tracking-tight italic">
+            NUESTRO <span className="text-primary text-stroke">EQUIPO</span>
           </h1>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Conoce a las personas que mantienen esta guía actualizada y
-            acompañanos en nuestro servidor de Discord.
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto font-medium">
+            Las mentes y corazones detrás de la comunidad más grande de Heartopia en Chile.
           </p>
         </div>
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-2 mb-20">
+
+        <div className="grid gap-6 md:grid-cols-2 mb-24">
           {STAFF.map((member) => (
             <Card
               key={member.name}
-              className={`overflow-hidden border-2 ${member.borderColor} dark:bg-zinc-900/50 transition-all hover:shadow-xl group`}
+              className={`overflow-hidden border-none shadow-sm dark:bg-zinc-900/40 transition-all hover:shadow-xl hover:-translate-y-1 group relative`}
             >
               <CardContent className="p-0">
-                <div
-                  className={`p-6 relative overflow-hidden border-b ${member.borderColor} 
-    ${member.bgColor} dark:bg-zinc-950`}
-                >
+                <div className={`p-8 relative overflow-hidden ${member.bgColor} dark:bg-zinc-950/50`}>
+                  
+                  <div className={`absolute -right-8 -top-8 h-32 w-32 ${member.color} opacity-5 transition-transform group-hover:scale-125 group-hover:rotate-12`}>
+                    {member.icon}
+                  </div>
 
-                  <Star
-                    className={`absolute -right-4 -top-4 h-24 w-24 ${member.color} 
-      opacity-10 dark:opacity-20 transition-transform group-hover:scale-110 group-hover:rotate-12`}
-                  />
-
-                  <div className="flex items-center gap-5 relative z-10">
+                  <div className="flex items-center gap-6 relative z-10">
                     <div className="relative">
-                      <div
-                        className={`absolute inset-0 rounded-full blur-xl opacity-20 dark:opacity-50 ${member.color.replace("text", "bg")}`}
-                      />
-                      <div className="relative h-20 w-20 rounded-full border-4 border-white dark:border-zinc-800 shadow-lg overflow-hidden">
+                      <div className={`absolute inset-0 rounded-3xl blur-2xl opacity-30 ${member.color.replace("text", "bg")}`} />
+                      <div className="relative h-24 w-24 rounded-3xl border-4 border-white dark:border-zinc-800 shadow-2xl overflow-hidden rotate-3 group-hover:rotate-0 transition-transform duration-500">
                         <Image
                           src={member.image}
                           alt={member.name}
@@ -114,22 +121,18 @@ export default function StaffPage() {
                           className="object-cover"
                         />
                       </div>
-                      <div
-                        className={`absolute -bottom-1 -right-1 p-1.5 rounded-full bg-white dark:bg-zinc-900 shadow-sm border ${member.borderColor} ${member.color}`}
-                      >
+                      <div className={`absolute -bottom-2 -right-2 p-2 rounded-xl bg-white dark:bg-zinc-900 shadow-lg border border-zinc-100 dark:border-zinc-700 ${member.color}`}>
                         {member.icon}
                       </div>
                     </div>
 
-                    <div>
-                      <h3 className="font-black text-foreground dark:text-white text-2xl tracking-tight leading-tight">
+                    <div className="space-y-1">
+                      <h3 className="font-black text-zinc-900 dark:text-white text-3xl tracking-tighter">
                         {member.name}
                       </h3>
-
                       <Badge
                         variant="secondary"
-                        className={`mt-1 text-[10px] font-bold uppercase tracking-[0.15em] px-2 py-0 
-          ${member.color} bg-white/80 dark:bg-zinc-800/80 backdrop-blur-sm border-current/10`}
+                        className={`text-[9px] font-black uppercase tracking-wider px-3 py-0.5 rounded-full ${member.color} bg-white dark:bg-zinc-800 shadow-sm border-current/5`}
                       >
                         {member.role}
                       </Badge>
@@ -137,9 +140,9 @@ export default function StaffPage() {
                   </div>
                 </div>
 
-                <div className="p-6 bg-white dark:bg-transparent">
-                  <p className="text-sm text-muted-foreground dark:text-zinc-400 leading-relaxed italic">
-                    "{member.description}"
+                <div className="p-8 bg-white dark:bg-zinc-900/20">
+                  <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed font-medium">
+                    {member.description}
                   </p>
                 </div>
               </CardContent>
@@ -147,68 +150,51 @@ export default function StaffPage() {
           ))}
         </div>
 
-        <section className="relative overflow-hidden rounded-[2.5rem] bg-[#5865F2] p-8 md:p-14 text-white shadow-2xl shadow-blue-500/20">
-          <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-10">
-            <div className="text-center md:text-left">
-              <div className="flex items-center justify-center md:justify-start gap-2 mb-4">
-                <Users className="h-6 w-6 text-blue-200" />
-                <span className="font-bold uppercase tracking-[0.2em] text-xs text-blue-100">
-                  Comunidad Activa
+        <section className="relative overflow-hidden rounded-[3.5rem] bg-gradient-to-br from-[#5865F2] to-[#4752C4] p-10 md:p-16 text-white shadow-2xl">
+          <div className="relative z-10 grid md:grid-cols-2 gap-12 items-center">
+            <div className="space-y-6 text-center md:text-left">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20">
+                <Heart className="h-4 w-4 text-pink-300 fill-pink-300" />
+                <span className="font-bold uppercase tracking-[0.2em] text-[10px] text-white">
+                  Únete a la familia
                 </span>
               </div>
-              <h2 className="text-4xl md:text-5xl font-black mb-6 leading-tight">
-                Servidor de
-                <br />
-                Discord
+              <h2 className="text-4xl md:text-6xl font-black leading-[0.9] tracking-tighter">
+                NUESTRO <br /> DISCORD
               </h2>
-              <p className="text-blue-100 text-lg max-w-md font-medium opacity-90">
-                ¿Tienes dudas sobre el juego? ¿Encontraste un nuevo código? ¡Ven
-                a compartir con otros ciudadanos de Heartopia!
+              <p className="text-blue-50 text-lg font-medium opacity-90 max-w-sm">
+                ¿Dudas con un código o una misión? Ven a compartir con +140 ciudadanos activos.
               </p>
-            </div>
-
-            <div className="flex flex-col gap-6 w-full md:w-auto">
+              
               <Button
                 asChild
                 size="lg"
-                className="bg-white text-[#5865F2] hover:bg-blue-50 font-black text-xl px-10 py-9 rounded-3xl shadow-2xl transition-all hover:scale-105 active:scale-95"
+                className="bg-white text-[#5865F2] hover:bg-zinc-100 font-black text-xl px-12 py-8 rounded-[2rem] shadow-xl transition-all hover:scale-105 active:scale-95"
               >
                 <Link href="https://discord.gg/wnkBUBbaRW" target="_blank">
-                  <MessageSquare className="mr-3 h-7 w-7 fill-current" />
-                  ENTRAR AHORA
-                  <ExternalLink className="ml-3 h-5 w-5 opacity-40" />
+                  <MessageSquare className="mr-3 h-6 w-6 fill-current" />
+                  ¡QUIERO ENTRAR!
                 </Link>
               </Button>
+            </div>
 
-              <div className="flex items-center justify-center gap-3">
-                <div className="flex -space-x-3">
-                  {STAFF.map((member, i) => (
-                    <div
-                      key={i}
-                      className="relative h-10 w-10 rounded-full border-2 border-[#5865F2] overflow-hidden bg-blue-400 ring-2 ring-white/10"
-                      style={{ zIndex: STAFF.length - i }}
-                    >
-                      <Image
-                        src={member.image}
-                        alt={member.name}
-                        fill
-                        className="object-cover"
-                      />
+            <div className="hidden md:flex flex-col items-center justify-center gap-6">
+               <div className="grid grid-cols-3 gap-4">
+                  {STAFF.slice(0, 5).map((m, i) => (
+                    <div key={i} className="h-20 w-20 rounded-2xl border-2 border-white/20 overflow-hidden bg-white/10 p-1">
+                       <Image src={m.image} alt={m.name} width={80} height={80} className="rounded-xl object-cover h-full w-full" />
                     </div>
                   ))}
-                  <div className="relative h-10 w-10 rounded-full border-2 border-[#5865F2] bg-blue-600 flex items-center justify-center text-[10px] font-bold ring-2 ring-white/10 z-0">
+                  <div className="h-20 w-20 rounded-2xl border-2 border-dashed border-white/40 flex items-center justify-center font-black text-xl bg-white/5">
                     +
                   </div>
-                </div>
-                <p className="text-xs text-blue-100 font-bold tracking-wide uppercase">
-                  +114 Usuarios
-                </p>
-              </div>
+               </div>
+               <p className="font-black tracking-widest uppercase text-xs opacity-60">Staff & Comunidad</p>
             </div>
           </div>
 
-          <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-96 h-96 bg-white/10 rounded-full blur-[100px]" />
-          <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-96 h-96 bg-black/20 rounded-full blur-[100px]" />
+          <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-black/20 rounded-full blur-[100px]" />
+          <div className="absolute -top-20 -right-20 w-80 h-80 bg-white/20 rounded-full blur-[100px]" />
         </section>
       </main>
 
