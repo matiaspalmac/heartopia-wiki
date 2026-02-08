@@ -40,7 +40,7 @@ export default function PrivacyPage() {
               </p>
               <ul className="list-disc pl-6 mt-4 space-y-2 text-muted-foreground">
                 <li>Solo datos anónimos de uso (visitas a páginas) vía herramientas básicas como Vercel Analytics (sin identificación personal).</li>
-                <li>Si envías un mensaje por Discord, solo guardamos lo que compartas voluntariamente (y solo mientras sea necesario).</li>
+                <li>Si envías un mensaje por formulario o Discord, solo guardamos lo que compartas voluntariamente (y solo mientras sea necesario).</li>
               </ul>
             </div>
 
@@ -74,6 +74,10 @@ export default function PrivacyPage() {
               <p>
                 Podemos actualizar esta página ocasionalmente. Te recomendamos revisarla de vez en cuando. El uso continuado del sitio implica aceptación de los cambios.
               </p>
+            </div>
+
+            <div className="text-center text-sm text-muted-foreground mt-12">
+              <p>Hecho con ❤️ por la comunidad • Si tienes dudas, escríbenos en Discord</p>
             </div>
           </div>
         </section>

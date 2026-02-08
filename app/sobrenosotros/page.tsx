@@ -2,7 +2,7 @@
 
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
-import { Heart, Users, Sparkles, MessageSquare, Copy } from "lucide-react";
+import { Heart, Users, Sparkles, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -76,33 +76,18 @@ export default function AboutPage() {
               ¿Quieres ser parte?
             </h2>
             <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Esta wiki crece gracias a ti. Si tienes fotos, datos nuevos, correcciones o simplemente quieres charlar sobre Heartopia, ¡Contactame en Discord!
+              Esta wiki crece gracias a ti. Si tienes fotos, datos nuevos, correcciones o simplemente quieres charlar sobre Heartopia, ¡ven al Discord!
             </p>
-            <div className="relative z-10 flex justify-center">
-                <button
-                  onClick={() => {
-                    navigator.clipboard.writeText("iimwtiti");
-                    alert("¡Usuario copiado!");
-                  }}
-                  className="flex items-center gap-4 bg-white/10 hover:bg-white/20 backdrop-blur-md px-6 py-3 rounded-2xl border border-white/20 transition-all active:scale-95 group/btn"
-                  title="Click para copiar usuario"
-                >
-                  <div className="h-10 w-10 bg-[#5865F2] rounded-full flex items-center justify-center shadow-lg group-hover/btn:scale-110 transition-transform">
-                    <MessageSquare className="h-5 w-5 text-white" />
-                  </div>
-                  <div className="flex flex-col items-start text-left">
-                    <span className="text-[10px] uppercase font-black opacity-60 tracking-[0.2em] leading-none mb-1">
-                      Discord
-                    </span>
-                    <div className="flex items-center gap-2">
-                      <span className="font-mono text-xl font-bold tracking-wider leading-none">
-                        @iimwtiti
-                      </span>
-                      <Copy className="h-3 w-3 opacity-0 group-hover/btn:opacity-100 transition-opacity text-black" />
-                    </div>
-                  </div>
-                </button>
-              </div>
+            <Button 
+              size="lg" 
+              className="gap-2 bg-[#5865F2] hover:bg-[#4752c4] text-white shadow-lg shadow-[#5865F2]/20"
+              asChild
+            >
+              <a href="https://discord.gg/wnkBUBbaRW" target="_blank" rel="noopener noreferrer">
+                <MessageSquare className="h-5 w-5" />
+                Unirse a la comunidad
+              </a>
+            </Button>
           </div>
         </section>
       </main>

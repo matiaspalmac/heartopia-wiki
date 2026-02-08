@@ -16,9 +16,9 @@ import {
   Gift,
   Users2,
   MessageSquare,
-  Copy    
 } from "lucide-react";
 
+const DiscordLink = "https://discord.gg/wnkBUBbaRW";
 
 const categories = [
   { href: "/wiki/peces", label: "Peces", icon: Fish },
@@ -92,27 +92,16 @@ export function Footer() {
                 Toda la información está recopilada con mucho cariño para que ningún vecino se pierda de nada.
               </p>
             </div>
-            <div className="flex flex-col items-start gap-4">
-              <button 
-                onClick={() => {
-                  navigator.clipboard.writeText("iimwtiti");
-                  alert("¡Usuario de Discord copiado!"); 
-                }}
-                className="flex items-center gap-4 bg-white/5 dark:bg-white/5 hover:bg-white/10 backdrop-blur-md px-5 py-3 rounded-2xl border border-border transition-all active:scale-95 group/btn w-full sm:w-auto shadow-sm"
-                title="Click para copiar usuario"
-              >
-                <div className="h-10 w-10 bg-[#5865F2] rounded-xl flex items-center justify-center shadow-lg group-hover/btn:rotate-[10deg] transition-transform">
-                  <MessageSquare className="h-5 w-5 text-white fill-current" />
-                </div>
-                <div className="flex flex-col items-start text-left">
-                  <span className="text-[10px] uppercase font-black opacity-50 tracking-widest leading-none mb-1">Contacto Discord</span>
-                  <div className="flex items-center gap-2">
-                    <span className="font-mono text-lg font-bold tracking-tight text-foreground">@iimwtiti</span>
-                    <Copy className="h-3 w-3 opacity-0 group-hover/btn:opacity-100 transition-opacity text-primary" />
-                  </div>
-                </div>
-              </button>
-            </div>
+
+            <a
+              href={DiscordLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex w-full items-center justify-center gap-3 rounded-xl bg-gradient-to-r from-[#5865F2] to-[#7289DA] px-6 py-3.5 text-base font-bold text-white shadow-lg shadow-[#5865F2]/20 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-[#5865F2]/30 active:scale-95"
+            >
+              <MessageSquare className="h-5 w-5" />
+              ¡Únete al Discord!
+            </a>
           </div>
         </div>
 
@@ -150,7 +139,7 @@ export function Footer() {
             <div className="text-sm text-muted-foreground text-center md:text-right">
               Hecho con{" "}
               <Heart className="inline h-4 w-4 text-rose-500 fill-rose-500 animate-pulse" />{" "}
-              por <span className="font-medium text-foreground">Dei @iimwtiti</span> • © {new Date().getFullYear()} Heartopia Chile Wiki
+              por <span className="font-medium text-foreground">Dei</span> • © {new Date().getFullYear()} Heartopia Chile Wiki
             </div>
           </div>
         </div>
