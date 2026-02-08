@@ -6,8 +6,10 @@ import { Footer } from "@/components/footer";
 import { getCategoryData, CATEGORIES, type CategoryId } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Map } from "lucide-react";
+import { Map } from "lucide-react";
 import { ItemGrid } from "@/components/item-grid";
+import { WikiBreadcrumbs } from "@/components/wiki-breadcrumbs";
+import { RelatedContent } from "@/components/related-content";
 
 const categoryTitles: Record<CategoryId, { title: string; subtitle: string }> = {
   peces: { title: "Peces", subtitle: "Guia completa de pesca - Encuentra todos los peces del pueblito" },
@@ -44,15 +46,12 @@ export default async function CategoryPage({ params }: PageProps) {
       <Header />
       
       <main className="mx-auto max-w-7xl px-4 py-8">
-        <div className="mb-6">
-          <Link 
-            href="/" 
-            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Volver al inicio
-          </Link>
-        </div>
+        <WikiBreadcrumbs
+          items={[
+            { label: "Wiki", href: "/buscar" },
+            { label: categoryInfo.title },
+          ]}
+        />
 
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
@@ -69,6 +68,8 @@ export default async function CategoryPage({ params }: PageProps) {
         </div>
 
         <ItemGrid items={items} categoryId={categoryId} />
+
+        <RelatedContent currentCategory={categoryId} />
 
         {categoryId === "animales" && (
           <section className="mt-16">

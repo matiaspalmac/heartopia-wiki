@@ -2,6 +2,7 @@
 
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+import { WikiBreadcrumbs } from "@/components/wiki-breadcrumbs";
 import { Badge } from "@/components/ui/badge";
 import { Snowflake, Calendar, Coins, ExternalLink, Timer } from "lucide-react";
 import Image from "next/image";
@@ -80,6 +81,7 @@ export default function FestivalInvierno() {
       <Header />
 
       <main className="mx-auto max-w-6xl px-4 py-12">
+        <WikiBreadcrumbs items={[{ label: "Eventos", href: "/eventos" }, { label: "Festival de Invierno" }]} />
         <div className="relative rounded-[3rem] overflow-hidden bg-[#e0f2fe] dark:bg-blue-950/30 p-8 md:p-16 mb-12 border-2 border-blue-100 dark:border-blue-900 shadow-inner">
           <div className="relative z-10 flex flex-col md:flex-row items-center gap-10">
             <div className="flex-1 text-center md:text-left">

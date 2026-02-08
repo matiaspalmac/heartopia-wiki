@@ -2,6 +2,7 @@
 
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+import { WikiBreadcrumbs } from "@/components/wiki-breadcrumbs";
 import { Badge } from "@/components/ui/badge";
 import { Bell, TreePine, Leaf, Map, Compass, Clock } from "lucide-react";
 import Image from "next/image";
@@ -66,6 +67,7 @@ export default function EventoForestbell() {
       <Header />
 
       <main className="mx-auto max-w-6xl px-4 py-16 md:py-24">
+        <WikiBreadcrumbs items={[{ label: "Eventos", href: "/eventos" }, { label: "Bellota Dorada: Forestbell" }]} />
         <div className="relative rounded-[4rem] overflow-hidden bg-gradient-to-br from-[#dcfce7] via-[#f0fdf4] to-[#fefce8] dark:from-[#06200e] dark:via-[#05150a] dark:to-[#1a1a05] p-8 md:p-20 mb-12 border-4 border-[#86efac] dark:border-[#1e3a1e] shadow-[0_0_40px_rgba(34,197,94,0.15)]">
           
           <div className="absolute top-10 right-10 animate-bounce-slow opacity-30 dark:opacity-20">

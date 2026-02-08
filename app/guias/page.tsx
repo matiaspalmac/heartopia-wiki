@@ -2,6 +2,7 @@
 
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+import { WikiBreadcrumbs } from "@/components/wiki-breadcrumbs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { 
@@ -25,7 +26,7 @@ const GUIAS_CATEGORIES = [
     icon: Flower2,
     color: "from-green-500/20 to-emerald-500/5",
     borderColor: "hover:border-green-500/50",
-    iconColor: "text-green-600",
+    iconColor: "text-green-600",    
     image: "/guias/flores/portada.avif"
   },
 ];
@@ -36,6 +37,9 @@ export default function CentroGuias() {
       <Header />
 
       <main className="pt-24 pb-32">
+        <div className="mx-auto max-w-7xl px-4">
+          <WikiBreadcrumbs items={[{ label: "Guias" }]} />
+        </div>
         <section className="mx-auto max-w-7xl px-4 mb-16 text-center">
           <Badge className="bg-primary/10 text-primary border-primary/20 px-4 py-1 mb-6 rounded-full">
             <BookOpen className="mr-2 h-4 w-4" /> Academia Heartopia

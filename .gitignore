@@ -20,7 +20,7 @@ npm-debug.log*
 .vercel
 
 #vscode
-.vscode/
+/.vscode/
 
 # typescript
 *.tsbuildinfo

@@ -2,6 +2,7 @@
 
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+import { WikiBreadcrumbs } from "@/components/wiki-breadcrumbs";
 import { Badge } from "@/components/ui/badge";
 import { Sparkles, Calendar, Heart, Star, Car, Shirt, CheckCircle2 } from "lucide-react";
 import Image from "next/image";
@@ -117,6 +118,7 @@ export default function EventoMLP() {
       <Header />
 
       <main className="mx-auto max-w-6xl px-4 py-12">
+        <WikiBreadcrumbs items={[{ label: "Eventos", href: "/eventos" }, { label: "My Little Pony" }]} />
         <section className="relative rounded-[3rem] overflow-hidden bg-gradient-to-r from-[#fdf4ff] to-[#fae8ff] dark:from-[#2e102e] dark:to-[#0a020a] p-12 mb-8 border-2 border-[#f0abfc] shadow-xl text-center">
           <Badge className="bg-[#d946ef] text-white mb-6 px-6 py-1 rounded-full uppercase font-black tracking-widest border-2 border-white/30 shadow-md">
             Especial de San Valentín

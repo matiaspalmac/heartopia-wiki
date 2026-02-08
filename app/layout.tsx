@@ -2,8 +2,8 @@ import React from "react"
 import type { Metadata } from 'next'
 import { Nunito, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { AnnieTooltip } from '@/components/annie-tooltip'
 import './globals.css'
-import { url } from "inspector/promises"
 
 const nunito = Nunito({ 
   subsets: ["latin"], 
@@ -36,6 +36,7 @@ export default function RootLayout({
     <html lang="es" className={`${nunito.variable} ${geistMono.variable}`}>
       <body className="font-sans antialiased bg-background m-0 p-0 min-h-screen">
         {children}
+        <AnnieTooltip />
         <Analytics />
       </body>
     </html>

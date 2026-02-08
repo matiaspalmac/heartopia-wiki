@@ -2,6 +2,7 @@
 
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+import { WikiBreadcrumbs } from "@/components/wiki-breadcrumbs";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { 
@@ -173,6 +174,7 @@ export default function EventosPage() {
       <Header />
 
       <main className="mx-auto max-w-5xl px-4 py-16">
+        <WikiBreadcrumbs items={[{ label: "Eventos" }]} />
         <section className="mb-16">
           <Badge variant="outline" className="mb-4 border-primary-500 text-primary bg-primary/5 px-4 py-1">
             Centro de Actividades

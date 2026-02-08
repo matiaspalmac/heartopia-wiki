@@ -2,6 +2,7 @@
 
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+import { WikiBreadcrumbs } from "@/components/wiki-breadcrumbs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { 
@@ -52,12 +53,7 @@ export default function GuiaFloresPage() {
 
       <main className="pt-24 pb-32">
         <div className="mx-auto max-w-4xl px-4 mb-12">
-          <Link 
-            href="/guias" 
-            className="inline-flex items-center gap-2 text-sm font-bold text-muted-foreground hover:text-primary transition-colors mb-8"
-          >
-            <ArrowLeft className="h-4 w-4" /> Volver al Centro de Guías
-          </Link>
+          <WikiBreadcrumbs items={[{ label: "Guias", href: "/guias" }, { label: "Hibridacion de Flores" }]} />
 
           <div className="space-y-4">
             <Badge className="bg-green-500/10 text-green-600 border-green-200 px-4 py-1">
