@@ -74,7 +74,7 @@ const EVENTOS = [
     id: "gilded-acorn-forestbell",
     title: "Bellota Dorada: Hechizo Forestbell",
     status: "En Curso",
-    targetDate: "March 28, 2026 15:00:00",
+    targetDate: "April 03, 2026 15:00:00",
     image: "/eventos/forestbell/forestbell.jpg",
     color: "bg-amber-600",
     description: "El encantamiento ha despertado. Viaja a la tierra de ensueño y descubre los secretos del bosque. ¡La Exhibición de la Bellota Dorada ya está disponible!",

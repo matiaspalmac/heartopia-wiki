@@ -17,7 +17,7 @@ const ActiveCounter = () => {
   });
 
   useEffect(() => {
-    const targetDate = new Date("March 28, 2026 00:00:00").getTime();
+    const targetDate = new Date("April 03, 2026 00:00:00").getTime();
 
     const interval = setInterval(() => {
       const now = new Date().getTime();
