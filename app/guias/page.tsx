@@ -27,7 +27,7 @@ const GUIAS_CATEGORIES = [
     color: "from-green-500/20 to-emerald-500/5",
     borderColor: "hover:border-green-500/50",
     iconColor: "text-green-600",    
-    image: "/guias/flores/portada.avif"
+    image: "/guias/flores/portada.webp"
   },
 ];
 
