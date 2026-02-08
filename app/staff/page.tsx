@@ -28,7 +28,7 @@ const STAFF = [
     borderColor: "border-rose-100",
     icon: <Crown className="h-4 w-4" />,
     description:
-      "Fundador original y dueño de la comunidad. Desarrollador principal de la Wiki y el sistema del Bot de Discord.",
+      "Fundador original. Desarrollador principal de la Wiki y el sistema del Bot de Discord.",
   },
   {
     name: "Frop0n",
@@ -39,7 +39,7 @@ const STAFF = [
     borderColor: "border-amber-100",
     icon: <Star className="h-4 w-4" />,
     description:
-      "Cofundador de Heartopia Chile. Formó parte esencial del inicio del proyecto y el desarrollo temprano de la guía.",
+      "Cofundador. Formó parte esencial del inicio del proyecto y el desarrollo temprano de la guía.",
   },
   {
     name: "Mimi",
@@ -50,7 +50,7 @@ const STAFF = [
     borderColor: "border-purple-100",
     icon: <ShieldCheck className="h-4 w-4" />,
     description:
-      "Encargada de mantener la armonía en la comunidad. Gestiona el servidor de Discord y vela por el bienestar de todos los vecinos.",
+      "Encargada de mantener la armonía en la comunidad.",
   },
   {
     name: "Amastiasta",
@@ -61,7 +61,7 @@ const STAFF = [
     borderColor: "border-blue-100",
     icon: <ShieldCheck className="h-4 w-4" />,
     description:
-      "Pieza clave en la gestión comunitaria. Apoya en la organización de datos y supervisa la convivencia en la comunidad.",
+      "Pieza clave en la gestión comunitaria. Apoya en la organización de datos.",
   },
   {
     name: "Fenice",
@@ -72,7 +72,7 @@ const STAFF = [
     borderColor: "border-emerald-100",
     icon: <Sparkles className="h-4 w-4" />,
     description:
-      "Nuestra experta en contenido. Crea guías detalladas para el juego y está siempre dispuesta a resolver las dudas de los nuevos ciudadanos.",
+      "Nuestra experta en contenido. Crea guías detalladas para el juego.",
   },
 ];
 
@@ -149,53 +149,6 @@ export default function StaffPage() {
             </Card>
           ))}
         </div>
-
-        <section className="relative overflow-hidden rounded-[3.5rem] bg-gradient-to-br from-[#5865F2] to-[#4752C4] p-10 md:p-16 text-white shadow-2xl">
-          <div className="relative z-10 grid md:grid-cols-2 gap-12 items-center">
-            <div className="space-y-6 text-center md:text-left">
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20">
-                <Heart className="h-4 w-4 text-pink-300 fill-pink-300" />
-                <span className="font-bold uppercase tracking-[0.2em] text-[10px] text-white">
-                  Únete a la familia
-                </span>
-              </div>
-              <h2 className="text-4xl md:text-6xl font-black leading-[0.9] tracking-tighter">
-                NUESTRO <br /> DISCORD
-              </h2>
-              <p className="text-blue-50 text-lg font-medium opacity-90 max-w-sm">
-                ¿Dudas con un código o una misión? Ven a compartir con +140 ciudadanos activos.
-              </p>
-              
-              <Button
-                asChild
-                size="lg"
-                className="bg-white text-[#5865F2] hover:bg-zinc-100 font-black text-xl px-12 py-8 rounded-[2rem] shadow-xl transition-all hover:scale-105 active:scale-95"
-              >
-                <Link href="https://discord.gg/wnkBUBbaRW" target="_blank">
-                  <MessageSquare className="mr-3 h-6 w-6 fill-current" />
-                  ¡QUIERO ENTRAR!
-                </Link>
-              </Button>
-            </div>
-
-            <div className="hidden md:flex flex-col items-center justify-center gap-6">
-               <div className="grid grid-cols-3 gap-4">
-                  {STAFF.slice(0, 5).map((m, i) => (
-                    <div key={i} className="h-20 w-20 rounded-2xl border-2 border-white/20 overflow-hidden bg-white/10 p-1">
-                       <Image src={m.image} alt={m.name} width={80} height={80} className="rounded-xl object-cover h-full w-full" />
-                    </div>
-                  ))}
-                  <div className="h-20 w-20 rounded-2xl border-2 border-dashed border-white/40 flex items-center justify-center font-black text-xl bg-white/5">
-                    +
-                  </div>
-               </div>
-               <p className="font-black tracking-widest uppercase text-xs opacity-60">Staff & Comunidad</p>
-            </div>
-          </div>
-
-          <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-black/20 rounded-full blur-[100px]" />
-          <div className="absolute -top-20 -right-20 w-80 h-80 bg-white/20 rounded-full blur-[100px]" />
-        </section>
       </main>
 
       <Footer />

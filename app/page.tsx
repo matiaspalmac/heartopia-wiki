@@ -22,6 +22,8 @@ import {
   Gift,
   ShieldCheck,
   ExternalLink,
+  MessageSquare,
+  Copy,
 } from "lucide-react";
 import {
   Card,
@@ -115,20 +117,6 @@ export default function HomePage() {
                       Explorar la Wiki <ArrowRight className="h-5 w-5" />
                     </Link>
                   </Button>
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    className="h-14 px-8 rounded-2xl gap-2 text-base font-bold border-2 bg-background/50 backdrop-blur-sm"
-                    asChild
-                  >
-                    <a
-                      href="https://discord.gg/wnkBUBbaRW"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Unirse al Discord
-                    </a>
-                  </Button>
                 </div>
 
                 <div className="flex items-center justify-center lg:justify-start pt-6">
@@ -147,7 +135,7 @@ export default function HomePage() {
                       <p className="text-sm md:text-base text-muted-foreground">
                         Hecho con ❤️ por{" "}
                         <span className="text-foreground font-black text-lg bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">
-                          Dei
+                          Dei @iimwtiti
                         </span>
                       </p>
                     </div>
@@ -261,32 +249,45 @@ export default function HomePage() {
         </section>
         <section className="py-20">
           <div className="mx-auto max-w-5xl px-4">
-            <div className="rounded-[3rem] bg-primary p-8 md:p-16 text-primary-foreground text-center relative overflow-hidden shadow-2xl shadow-primary/20">
+            <div className="rounded-[3rem] bg-primary p-8 md:p-16 text-primary-foreground text-center relative overflow-hidden shadow-2xl shadow-primary/20 group">
               <div className="absolute top-0 right-0 p-8 opacity-20 rotate-12">
                 <Users className="h-40 w-40" />
               </div>
-              <h2 className="text-3xl md:text-5xl font-black mb-6 relative z-10">
+
+              <h2 className="text-3xl md:text-5xl font-black mb-6 relative z-10 tracking-tighter uppercase italic">
                 ¿Falta información?
               </h2>
-              <p className="text-xl opacity-90 mb-10 max-w-2xl mx-auto relative z-10">
-                Esta wiki crece gracias a ti. Si encontraste un pez nuevo o un
-                horario diferente, únete a nuestro Discord y ayúdanos a
-                completar la guía más grande de Chile.
+
+              <p className="text-xl opacity-90 mb-10 max-w-2xl mx-auto relative z-10 font-medium italic">
+                "Esta wiki crece gracias a ti. Si encontraste un pez nuevo o un
+                horario diferente, ayúdanos a completar la guía."
               </p>
-              <Button
-                size="lg"
-                variant="secondary"
-                className="h-14 px-10 rounded-2xl font-black text-lg hover:scale-110 transition-transform shadow-xl"
-                asChild
-              >
-                <a
-                  href="https://discord.gg/wnkBUBbaRW"
-                  target="_blank"
-                  rel="noopener noreferrer"
+
+              <div className="relative z-10 flex justify-center">
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText("iimwtiti");
+                    alert("¡Usuario copiado!");
+                  }}
+                  className="flex items-center gap-4 bg-white/10 hover:bg-white/20 backdrop-blur-md px-6 py-3 rounded-2xl border border-white/20 transition-all active:scale-95 group/btn"
+                  title="Click para copiar usuario"
                 >
-                  ¡Quiero Colaborar!
-                </a>
-              </Button>
+                  <div className="h-10 w-10 bg-[#5865F2] rounded-full flex items-center justify-center shadow-lg group-hover/btn:scale-110 transition-transform">
+                    <MessageSquare className="h-5 w-5 text-white" />
+                  </div>
+                  <div className="flex flex-col items-start text-left">
+                    <span className="text-[10px] uppercase font-black opacity-60 tracking-[0.2em] leading-none mb-1">
+                      Discord
+                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono text-xl font-bold tracking-wider leading-none">
+                        @iimwtiti
+                      </span>
+                      <Copy className="h-3 w-3 opacity-0 group-hover/btn:opacity-100 transition-opacity text-white" />
+                    </div>
+                  </div>
+                </button>
+              </div>
             </div>
           </div>
         </section>

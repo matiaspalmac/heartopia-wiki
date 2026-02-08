@@ -263,18 +263,6 @@ export function Header() {
                     Nuestra Comunidad
                   </Link>
                 </div>
-
-                <div className="mt-auto">
-                  <a
-                    href="https://discord.gg/wnkBUBbaRW"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-3 w-full py-4 rounded-2xl bg-[#5865F2] text-white font-black shadow-lg shadow-[#5865F2]/20 active:scale-95 transition-all"
-                  >
-                    <DiscordIcon />
-                    ¡Únete al Discord!
-                  </a>
-                </div>
               </div>
             </SheetContent>
           </Sheet>

@@ -137,21 +137,6 @@ export default function NuestraComunidad() {
 
           </div>
         </section>
-
-        <section className="mt-20 px-4">
-          <div className="max-w-3xl mx-auto text-center space-y-8 bg-zinc-50 dark:bg-zinc-900/50 p-12 rounded-[3.5rem] border border-primary/5">
-            <h2 className="text-3xl font-black tracking-tight">¡Sigamos creando recuerdos!</h2>
-            <Button 
-              size="lg" 
-              className="rounded-full px-8 py-7 bg-[#5865F2] hover:bg-[#4752c4] text-white font-black transition-transform hover:scale-105 shadow-xl shadow-[#5865F2]/20"
-              asChild
-            >
-              <a href="https://discord.gg/wnkBUBbaRW" target="_blank" rel="noopener noreferrer">
-                <MessageSquare className="mr-2 h-5 w-5" /> SUBIR FOTOS AL DISCORD
-              </a>
-            </Button>
-          </div>
-        </section>
       </main>
 
       <Footer />

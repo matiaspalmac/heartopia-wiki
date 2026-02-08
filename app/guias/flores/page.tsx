@@ -144,22 +144,6 @@ export default function GuiaFloresPage() {
             </div>
           ))}
         </section>
-
-        <section className="mx-auto max-w-4xl px-4 mt-24">
-          <div className="p-12 rounded-[3rem] bg-green-600 text-white text-center relative overflow-hidden shadow-2xl shadow-green-600/20">
-            <div className="absolute top-0 right-0 p-8 opacity-10 rotate-12">
-              <Sparkles className="h-40 w-40" />
-            </div>
-            <h2 className="text-3xl font-black mb-4 relative z-10">¿Te sirvió esta guía?</h2>
-            <p className="text-green-50 mb-8 max-w-xl mx-auto opacity-90 relative z-10 font-medium">
-              Estamos constantemente actualizando los datos. Si descubres un cruce nuevo, 
-              avísanos en el canal de jardinería de nuestro Discord.
-            </p>
-            <Button size="lg" variant="secondary" className="rounded-2xl font-black px-10 h-14 hover:scale-105 transition-transform" asChild>
-              <a href="https://discord.gg/wnkBUBbaRW" target="_blank">¡Unirse a la Comunidad!</a>
-            </Button>
-          </div>
-        </section>
       </main>
 
       <Footer />
