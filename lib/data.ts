@@ -846,23 +846,7 @@ export const LOGROS = {
     "imagen": null
   }
 };
-
 export const CODIGOS = {
-  "specialgift0103": {
-    status: "active",
-    rewards: ["100x Cristales de Luz de Luna"],
-    expirationDate: "2026-02-07",
-  },
-  "heartopia0108": {
-    status: "active",
-    rewards: ["100x Cristales de Luz de Luna"],
-    expirationDate: "2026-02-07",
-  },
-  "mylittlepony": {
-    status: "active",
-    rewards: ["100x Cristales de Luz de Luna"],
-    expirationDate: "2026-02-07",
-  },
   "dcthx4u": {
     status: "active",
     rewards: ["10x Estrellas de Deseo"],
@@ -958,21 +942,6 @@ export const CODIGOS = {
     rewards: ["10x Madera de Calidad", "2x Ensalada Especial del Chef", "20x Ramas"],
     expirationDate: "2026-03-31"
   },
-  "Crystals": {
-    status: "expired",
-    rewards: ["100x Cristales de Luz de Luna"],
-    expirationDate: "Expirado"
-  },
-  "officialstream": {
-    status: "expired",
-    rewards: ["Desconocido"],
-    expirationDate: "Expirado"
-  },
-  "finaltest": {
-    status: "expired",
-    rewards: ["Desconocido"],
-    expirationDate: "Expirado"
-  }
 };
 
 export const CATEGORIES = [
