@@ -70,10 +70,10 @@ export default async function HomePage() {
 
   const eventoActivo = resEvento.length > 0 ? resEvento[0] : null;
 
-  let topDonadores: { user_id: string; cantidad: number }[] = [];
+  let topDonadores: { user_id: string; cantidad: number; username: string | null; avatar: string | null }[] = [];
   if (eventoActivo) {
-    topDonadores = await query<{ user_id: string; cantidad: number }>(
-      "SELECT user_id, cantidad FROM evento_donaciones WHERE evento_id = ? ORDER BY cantidad DESC LIMIT 5",
+    topDonadores = await query<{ user_id: string; cantidad: number; username: string | null; avatar: string | null }>(
+      "SELECT c.user_id, c.cantidad, u.username, u.avatar FROM evento_donaciones c LEFT JOIN usuarios u ON c.user_id = u.id WHERE c.evento_id = ? ORDER BY c.cantidad DESC LIMIT 5",
       [eventoActivo.id]
     );
   }
@@ -235,13 +235,27 @@ export default async function HomePage() {
                     </p>
                     <div className="flex flex-wrap justify-center gap-3">
                       {topDonadores.map((donador, idx) => (
-                        <div key={donador.user_id} className="bg-background border shadow-sm rounded-xl px-4 py-2 flex items-center gap-2 hover:scale-105 transition-transform cursor-default">
-                          <span className="text-lg">{idx === 0 ? '👑' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : '⭐'}</span>
-                          <div className="flex flex-col">
-                            <span className="text-xs font-bold truncate max-w-[100px] hover:max-w-none transition-all">{donador.user_id}</span>
-                            <span className="text-[10px] text-amber-600 font-bold">{donador.cantidad.toLocaleString()} 💰</span>
+                        <Link href={`/perfil/${donador.user_id}`} key={donador.user_id} className="bg-background border shadow-sm rounded-xl px-4 py-2 flex items-center gap-3 hover:scale-105 transition-transform cursor-pointer group hover:border-amber-300">
+                          <span className="text-xl -mt-1">{idx === 0 ? '👑' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : '⭐'}</span>
+                          <div className="relative w-8 h-8 rounded-full overflow-hidden border-2 border-amber-100 group-hover:border-amber-300 transition-colors bg-neutral-100 shrink-0">
+                            {donador.avatar ? (
+                              <img src={donador.avatar} alt="Avatar" className="w-full h-full object-cover" />
+                            ) : (
+                              <Image
+                                src={`https://api.dicebear.com/7.x/identicon/svg?seed=${donador.username || donador.user_id}&backgroundColor=fce4ec&rowColor=ec407a`}
+                                alt="Vecino Avatar Placeholder"
+                                fill
+                                className="object-cover"
+                              />
+                            )}
                           </div>
-                        </div>
+                          <div className="flex flex-col">
+                            <span className="text-sm font-bold truncate max-w-[120px] transition-all group-hover:text-amber-600">
+                              {donador.username ? `@${donador.username}` : `#${donador.user_id.slice(-4)}`}
+                            </span>
+                            <span className="text-[10px] text-amber-600 font-bold tracking-tight">{donador.cantidad.toLocaleString()} 💰</span>
+                          </div>
+                        </Link>
                       ))}
                     </div>
                   </div>
