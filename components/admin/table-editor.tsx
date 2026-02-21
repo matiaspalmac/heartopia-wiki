@@ -1,10 +1,14 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
+import { Search, Plus, RefreshCw, Pencil, Trash2, X, Save } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface TableEditorProps {
     table: string;
 }
+
+const ROWS_PER_PAGE = 50;
 
 export function TableEditor({ table }: TableEditorProps) {
     const [rows, setRows] = useState<Record<string, unknown>[]>([]);
@@ -17,6 +21,7 @@ export function TableEditor({ table }: TableEditorProps) {
     const [showModal, setShowModal] = useState(false);
     const [saving, setSaving] = useState(false);
     const [deleteConfirm, setDeleteConfirm] = useState<string | number | null>(null);
+    const [page, setPage] = useState(0);
 
     const fetchData = useCallback(async () => {
         setLoading(true);
@@ -38,16 +43,25 @@ export function TableEditor({ table }: TableEditorProps) {
 
     const pkField = table === "configuracion" ? "clave" : "id";
 
-    const filtered = rows.filter((row) =>
-        Object.values(row).some((v) =>
-            String(v ?? "").toLowerCase().includes(search.toLowerCase())
-        )
-    );
+    const filtered = useMemo(() =>
+        rows.filter((row) =>
+            Object.values(row).some((v) =>
+                String(v ?? "").toLowerCase().includes(search.toLowerCase())
+            )
+        ), [rows, search]);
+
+    const totalPages = Math.ceil(filtered.length / ROWS_PER_PAGE);
+    const paginatedRows = useMemo(() =>
+        filtered.slice(page * ROWS_PER_PAGE, (page + 1) * ROWS_PER_PAGE),
+        [filtered, page]);
+
+    useEffect(() => { setPage(0); }, [search]);
 
     function openNew() {
         const empty: Record<string, unknown> = {};
         columns.forEach((c) => { empty[c] = ""; });
         delete empty[pkField];
+        setOriginalId(null);
         setEditingRow(empty);
         setShowModal(true);
     }
@@ -99,14 +113,14 @@ export function TableEditor({ table }: TableEditorProps) {
     if (loading) {
         return (
             <div className="flex items-center justify-center h-64">
-                <div className="animate-spin h-8 w-8 border-2 border-pink-400 border-t-transparent rounded-full" />
+                <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent rounded-full" />
             </div>
         );
     }
 
     if (error) {
         return (
-            <div className="rounded-2xl bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 p-6 text-red-700 dark:text-red-300">
+            <div className="rounded-2xl bg-destructive/10 border border-destructive/20 p-6 text-destructive">
                 <strong>Error:</strong> {error}
                 <br />
                 <button onClick={fetchData} className="mt-2 text-sm underline">
@@ -122,128 +136,141 @@ export function TableEditor({ table }: TableEditorProps) {
         <div>
             {/* Toolbar */}
             <div className="flex flex-col sm:flex-row gap-3 mb-4">
-                <input
-                    type="text"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    placeholder="Buscar en la tabla..."
-                    className="flex-1 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-pink-400 dark:focus:ring-pink-600"
-                />
-                <button
-                    onClick={openNew}
-                    className="rounded-xl bg-gradient-to-r from-pink-500 to-rose-500 text-white text-sm font-bold px-5 py-2.5 hover:from-pink-600 hover:to-rose-600 transition-all shadow-lg shadow-pink-200 dark:shadow-pink-950 whitespace-nowrap"
-                >
-                    + Agregar
-                </button>
-                <button
+                <div className="relative flex-1">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <input
+                        type="text"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        placeholder="Buscar en la tabla..."
+                        className="w-full rounded-xl border border-input bg-background pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                    />
+                </div>
+                <Button onClick={openNew} className="rounded-xl gap-2 shadow-md shadow-primary/20">
+                    <Plus className="h-4 w-4" />
+                    Agregar
+                </Button>
+                <Button
+                    variant="outline"
                     onClick={fetchData}
-                    className="rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-sm font-semibold px-4 py-2.5 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition"
+                    className="rounded-xl gap-2"
                 >
-                    ↻ Actualizar
-                </button>
+                    <RefreshCw className="h-4 w-4" />
+                    Actualizar
+                </Button>
             </div>
 
-            <p className="text-xs text-neutral-400 mb-3">
+            <p className="text-xs text-muted-foreground mb-3">
                 {filtered.length} de {rows.length} items
+                {totalPages > 1 && ` - Pagina ${page + 1} de ${totalPages}`}
             </p>
 
             {/* Table */}
-            <div className="bg-white dark:bg-neutral-900 rounded-2xl border border-neutral-200 dark:border-neutral-800 overflow-hidden">
+            <div className="bg-card rounded-2xl border border-border overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="w-full text-sm">
                         <thead>
-                            <tr className="border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-950">
+                            <tr className="border-b border-border bg-secondary/50">
                                 {columns.includes(pkField) && (
-                                    <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-widest text-neutral-400 w-16">
+                                    <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-widest text-muted-foreground w-16">
                                         {pkField.toUpperCase()}
                                     </th>
                                 )}
                                 {displayCols.map((col) => (
                                     <th
                                         key={col}
-                                        className="px-4 py-3 text-left text-xs font-bold uppercase tracking-widest text-neutral-400"
+                                        className="px-4 py-3 text-left text-xs font-bold uppercase tracking-widest text-muted-foreground"
                                     >
                                         {col.replace(/_/g, " ")}
                                     </th>
                                 ))}
                                 {columns.length > displayCols.length + 1 && (
-                                    <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-widest text-neutral-400">
-                                        +{columns.length - displayCols.length - 1} más
+                                    <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-widest text-muted-foreground">
+                                        +{columns.length - displayCols.length - 1} mas
                                     </th>
                                 )}
-                                <th className="px-4 py-3 text-right text-xs font-bold uppercase tracking-widest text-neutral-400">
+                                <th className="px-4 py-3 text-right text-xs font-bold uppercase tracking-widest text-muted-foreground">
                                     Acciones
                                 </th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-neutral-100 dark:divide-neutral-800">
-                            {filtered.length === 0 ? (
+                        <tbody className="divide-y divide-border">
+                            {paginatedRows.length === 0 ? (
                                 <tr>
                                     <td
                                         colSpan={displayCols.length + 3}
-                                        className="px-4 py-12 text-center text-neutral-400 text-sm"
+                                        className="px-4 py-12 text-center text-muted-foreground text-sm"
                                     >
                                         No hay resultados
                                     </td>
                                 </tr>
                             ) : (
-                                filtered.map((row, i) => (
+                                paginatedRows.map((row, i) => (
                                     <tr
                                         key={i}
-                                        className="hover:bg-pink-50/30 dark:hover:bg-pink-950/10 transition-colors"
+                                        className="hover:bg-secondary/30 transition-colors"
                                     >
                                         {columns.includes(pkField) && (
-                                            <td className="px-4 py-3 text-neutral-400 text-xs font-mono">
-                                                {String(row[pkField] ?? "—")}
+                                            <td className="px-4 py-3 text-muted-foreground text-xs font-mono">
+                                                {String(row[pkField] ?? "")}
                                             </td>
                                         )}
                                         {displayCols.map((col) => (
                                             <td key={col} className="px-4 py-3 max-w-[200px]">
                                                 <span
-                                                    className="block truncate text-neutral-700 dark:text-neutral-300"
+                                                    className="block truncate text-foreground"
                                                     title={String(row[col] ?? "")}
                                                 >
                                                     {Array.isArray(row[col])
                                                         ? (row[col] as unknown[]).join(", ")
                                                         : typeof row[col] === "object" && row[col] !== null
                                                             ? JSON.stringify(row[col]).slice(0, 50)
-                                                            : String(row[col] ?? "—")}
+                                                            : String(row[col] ?? "")}
                                                 </span>
                                             </td>
                                         ))}
                                         {columns.length > displayCols.length + 1 && (
-                                            <td className="px-4 py-3 text-neutral-400 text-xs">…</td>
+                                            <td className="px-4 py-3 text-muted-foreground text-xs">...</td>
                                         )}
                                         <td className="px-4 py-3 text-right">
                                             <div className="flex items-center justify-end gap-2">
-                                                <button
+                                                <Button
+                                                    variant="outline"
+                                                    size="sm"
                                                     onClick={() => openEdit(row)}
-                                                    className="rounded-lg border border-neutral-200 dark:border-neutral-700 text-xs font-bold px-3 py-1.5 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition"
+                                                    className="rounded-lg gap-1.5 h-8"
                                                 >
-                                                    ✏️ Editar
-                                                </button>
+                                                    <Pencil className="h-3 w-3" />
+                                                    Editar
+                                                </Button>
                                                 {deleteConfirm === row[pkField] ? (
                                                     <span className="flex gap-1">
-                                                        <button
+                                                        <Button
+                                                            size="sm"
+                                                            variant="destructive"
                                                             onClick={() => handleDelete(row[pkField] as string)}
-                                                            className="rounded-lg bg-red-500 text-white text-xs font-bold px-3 py-1.5"
+                                                            className="rounded-lg h-8"
                                                         >
                                                             Confirmar
-                                                        </button>
-                                                        <button
+                                                        </Button>
+                                                        <Button
+                                                            size="sm"
+                                                            variant="outline"
                                                             onClick={() => setDeleteConfirm(null)}
-                                                            className="rounded-lg border text-xs font-bold px-2 py-1.5"
+                                                            className="rounded-lg h-8"
                                                         >
                                                             No
-                                                        </button>
+                                                        </Button>
                                                     </span>
                                                 ) : (
-                                                    <button
+                                                    <Button
+                                                        variant="outline"
+                                                        size="sm"
                                                         onClick={() => setDeleteConfirm(row[pkField] as string)}
-                                                        className="rounded-lg border border-red-200 dark:border-red-900 text-xs font-bold px-3 py-1.5 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 transition"
+                                                        className="rounded-lg h-8 text-destructive border-destructive/30 hover:bg-destructive/10"
                                                     >
-                                                        🗑️
-                                                    </button>
+                                                        <Trash2 className="h-3 w-3" />
+                                                    </Button>
                                                 )}
                                             </div>
                                         </td>
@@ -255,24 +282,61 @@ export function TableEditor({ table }: TableEditorProps) {
                 </div>
             </div>
 
+            {/* Pagination */}
+            {totalPages > 1 && (
+                <div className="flex items-center justify-center gap-2 mt-4">
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setPage(p => Math.max(0, p - 1))}
+                        disabled={page === 0}
+                        className="rounded-lg"
+                    >
+                        Anterior
+                    </Button>
+                    <span className="text-sm text-muted-foreground px-3">
+                        {page + 1} / {totalPages}
+                    </span>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))}
+                        disabled={page >= totalPages - 1}
+                        className="rounded-lg"
+                    >
+                        Siguiente
+                    </Button>
+                </div>
+            )}
+
             {/* Edit Modal */}
             {showModal && editingRow && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-                    <div className="bg-white dark:bg-neutral-900 rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-                        <div className="px-6 py-5 border-b border-neutral-200 dark:border-neutral-800">
-                            <h3 className="text-lg font-extrabold text-neutral-900 dark:text-white">
-                                {editingRow[pkField] ? "Editar item" : "Agregar item"}
-                            </h3>
-                            <p className="text-sm text-neutral-400 mt-0.5">Tabla: {table}</p>
+                    <div className="bg-card rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-border">
+                        <div className="px-6 py-5 border-b border-border flex items-center justify-between">
+                            <div>
+                                <h3 className="text-lg font-black text-foreground">
+                                    {editingRow[pkField] ? "Editar item" : "Agregar item"}
+                                </h3>
+                                <p className="text-sm text-muted-foreground mt-0.5">Tabla: {table}</p>
+                            </div>
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => { setShowModal(false); setEditingRow(null); }}
+                                className="rounded-xl"
+                            >
+                                <X className="h-4 w-4" />
+                            </Button>
                         </div>
 
                         <div className="px-6 py-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
                             {Object.entries(editingRow).map(([key, val]) => (
                                 <div key={key} className="flex flex-col gap-1.5">
-                                    <label className="text-xs font-bold uppercase tracking-widest text-neutral-500">
+                                    <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
                                         {key.replace(/_/g, " ")}
                                         {key === pkField && originalId !== null && (
-                                            <span className="ml-1 normal-case font-normal text-neutral-400">(renombrable)</span>
+                                            <span className="ml-1 normal-case font-normal text-muted-foreground/60">(renombrable)</span>
                                         )}
                                     </label>
                                     <textarea
@@ -285,26 +349,28 @@ export function TableEditor({ table }: TableEditorProps) {
                                         onChange={(e) =>
                                             setEditingRow({ ...editingRow, [key]: e.target.value })
                                         }
-                                        className="w-full rounded-xl border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 px-3 py-2 text-sm font-mono text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-pink-400 resize-none"
+                                        className="w-full rounded-xl border border-input bg-background px-3 py-2 text-sm font-mono text-foreground focus:outline-none focus:ring-2 focus:ring-primary resize-none"
                                     />
                                 </div>
                             ))}
                         </div>
 
-                        <div className="px-6 py-4 border-t border-neutral-200 dark:border-neutral-800 flex justify-end gap-3">
-                            <button
+                        <div className="px-6 py-4 border-t border-border flex justify-end gap-3">
+                            <Button
+                                variant="outline"
                                 onClick={() => { setShowModal(false); setEditingRow(null); }}
-                                className="rounded-xl border border-neutral-200 dark:border-neutral-700 text-sm font-bold px-5 py-2.5 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition"
+                                className="rounded-xl"
                             >
                                 Cancelar
-                            </button>
-                            <button
+                            </Button>
+                            <Button
                                 onClick={handleSave}
                                 disabled={saving}
-                                className="rounded-xl bg-gradient-to-r from-pink-500 to-rose-500 text-white text-sm font-bold px-6 py-2.5 hover:from-pink-600 hover:to-rose-600 transition disabled:opacity-60"
+                                className="rounded-xl gap-2 shadow-md shadow-primary/20"
                             >
+                                <Save className="h-4 w-4" />
                                 {saving ? "Guardando..." : "Guardar cambios"}
-                            </button>
+                            </Button>
                         </div>
                     </div>
                 </div>

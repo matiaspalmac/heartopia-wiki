@@ -2,7 +2,9 @@
 
 import { useState, useTransition } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { loginAction } from "./actions";
+import { ArrowLeft, Lock, User, AlertCircle } from "lucide-react";
 
 export default function LoginPage() {
     const [error, setError] = useState<string | null>(null);
@@ -19,72 +21,93 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 via-rose-50 to-purple-50 dark:from-neutral-950 dark:via-neutral-900 dark:to-neutral-950 p-4">
-            <div className="w-full max-w-sm">
+        <div className="min-h-screen flex flex-col items-center justify-center bg-background p-4 relative">
+            {/* Subtle background decoration */}
+            <div className="absolute inset-0 -z-10 bg-[radial-gradient(45%_45%_at_50%_40%,var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent" />
+
+            {/* Back to home */}
+            <Link
+                href="/"
+                className="absolute top-6 left-6 flex items-center gap-2 text-sm font-bold text-muted-foreground hover:text-primary transition-colors rounded-xl px-4 py-2 bg-card border border-border shadow-sm hover:shadow-md"
+            >
+                <ArrowLeft className="h-4 w-4" />
+                Volver al inicio
+            </Link>
+
+            <div className="w-full max-w-md">
                 {/* Card */}
-                <div className="bg-white dark:bg-neutral-900 rounded-3xl shadow-2xl shadow-pink-200/40 dark:shadow-neutral-950 border border-pink-100 dark:border-neutral-800 p-8">
+                <div className="bg-card rounded-3xl shadow-2xl shadow-primary/10 border border-border p-8 md:p-10">
                     {/* Logo */}
-                    <div className="flex flex-col items-center gap-3 mb-8">
-                        <div className="relative h-20 w-20 rounded-full overflow-hidden border-4 border-pink-200 dark:border-pink-900 shadow-lg">
-                            <Image src="/annie.jpg" alt="Annie" fill priority className="object-cover" />
+                    <div className="flex flex-col items-center gap-4 mb-10">
+                        <div className="relative h-24 w-24 rounded-full overflow-hidden border-4 border-primary/20 shadow-lg ring-4 ring-primary/5">
+                            <Image src="/annie.jpg" alt="Annie - Heartopia" fill priority className="object-cover" sizes="96px" />
                         </div>
                         <div className="text-center">
-                            <h1 className="text-2xl font-extrabold text-neutral-900 dark:text-white">
+                            <h1 className="text-2xl font-black text-foreground tracking-tight">
                                 Heartopia Admin
                             </h1>
-                            <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-0.5">
-                                Panel de administración
+                            <p className="text-sm text-muted-foreground mt-1">
+                                Panel de administracion
                             </p>
                         </div>
                     </div>
 
-                    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                        <div className="flex flex-col gap-1.5">
-                            <label className="text-xs font-bold uppercase tracking-widest text-neutral-500 dark:text-neutral-400">
+                    <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+                        <div className="flex flex-col gap-2">
+                            <label htmlFor="username" className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
                                 Usuario
                             </label>
-                            <input
-                                name="username"
-                                type="text"
-                                autoComplete="username"
-                                required
-                                className="w-full rounded-xl border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 px-4 py-3 text-sm font-medium text-neutral-900 dark:text-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-pink-400 dark:focus:ring-pink-600 transition"
-                                placeholder="admin"
-                            />
+                            <div className="relative">
+                                <User className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                <input
+                                    id="username"
+                                    name="username"
+                                    type="text"
+                                    autoComplete="username"
+                                    required
+                                    className="w-full rounded-xl border border-input bg-background pl-11 pr-4 py-3.5 text-sm font-medium text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition"
+                                    placeholder="admin"
+                                />
+                            </div>
                         </div>
 
-                        <div className="flex flex-col gap-1.5">
-                            <label className="text-xs font-bold uppercase tracking-widest text-neutral-500 dark:text-neutral-400">
-                                Contraseña
+                        <div className="flex flex-col gap-2">
+                            <label htmlFor="password" className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
+                                Contrasena
                             </label>
-                            <input
-                                name="password"
-                                type="password"
-                                autoComplete="current-password"
-                                required
-                                className="w-full rounded-xl border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 px-4 py-3 text-sm font-medium text-neutral-900 dark:text-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-pink-400 dark:focus:ring-pink-600 transition"
-                                placeholder="••••••••"
-                            />
+                            <div className="relative">
+                                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                <input
+                                    id="password"
+                                    name="password"
+                                    type="password"
+                                    autoComplete="current-password"
+                                    required
+                                    className="w-full rounded-xl border border-input bg-background pl-11 pr-4 py-3.5 text-sm font-medium text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition"
+                                    placeholder="Ingresa tu contrasena"
+                                />
+                            </div>
                         </div>
 
                         {error && (
-                            <div className="rounded-xl bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 px-4 py-3 text-sm text-red-700 dark:text-red-300">
-                                ❌ {error}
+                            <div className="rounded-xl bg-destructive/10 border border-destructive/20 px-4 py-3 text-sm text-destructive flex items-center gap-2">
+                                <AlertCircle className="h-4 w-4 shrink-0" />
+                                {error}
                             </div>
                         )}
 
                         <button
                             type="submit"
                             disabled={isPending}
-                            className="w-full rounded-xl bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-bold py-3 text-sm shadow-lg shadow-pink-200 dark:shadow-pink-950 transition-all disabled:opacity-60 disabled:cursor-not-allowed mt-2"
+                            className="w-full rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3.5 text-sm shadow-lg shadow-primary/20 transition-all disabled:opacity-60 disabled:cursor-not-allowed mt-1 active:scale-[0.98]"
                         >
-                            {isPending ? "Iniciando sesión..." : "Entrar al panel"}
+                            {isPending ? "Iniciando sesion..." : "Entrar al panel"}
                         </button>
                     </form>
                 </div>
 
-                <p className="text-center text-xs text-neutral-400 dark:text-neutral-600 mt-6">
-                    Heartopia Chile Wiki · Panel Privado
+                <p className="text-center text-xs text-muted-foreground mt-8">
+                    Heartopia Chile Wiki - Panel Privado
                 </p>
             </div>
         </div>
