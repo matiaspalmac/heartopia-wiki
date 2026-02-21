@@ -71,7 +71,9 @@ const moreNav = [
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [theme, setTheme] = useState("light");
+  const [theme, setTheme] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
+
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", handleScroll);
@@ -84,6 +86,7 @@ export function Header() {
     if (savedTheme === "dark") {
       document.documentElement.classList.add("dark");
     }
+    setMounted(true);
   }, []);
 
   const toggleTheme = () => {
@@ -174,11 +177,16 @@ export function Header() {
             size="icon"
             onClick={toggleTheme}
             className="rounded-xl hover:bg-secondary transition-colors"
+            suppressHydrationWarning
           >
-            {theme === "light" ? (
-              <Moon className="h-5 w-5 text-muted-foreground" />
+            {mounted ? (
+              theme === "light" ? (
+                <Moon className="h-5 w-5 text-muted-foreground" />
+              ) : (
+                <Sun className="h-5 w-5 text-yellow-400" />
+              )
             ) : (
-              <Sun className="h-5 w-5 text-yellow-400" />
+              <span className="h-5 w-5" />
             )}
           </Button>
 
