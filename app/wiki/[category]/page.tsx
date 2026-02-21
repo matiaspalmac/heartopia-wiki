@@ -3,13 +3,15 @@ import Link from "next/link";
 import Image from "next/image";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
-import { getCategoryData, CATEGORIES, type CategoryId } from "@/lib/data";
+import { CATEGORIES, type CategoryId } from "@/lib/data";
+import { getCategoryDataAsync } from "@/lib/wiki-data";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Map } from "lucide-react";
 import { ItemGrid } from "@/components/item-grid";
 import { WikiBreadcrumbs } from "@/components/wiki-breadcrumbs";
 import { RelatedContent } from "@/components/related-content";
+
 
 const categoryTitles: Record<CategoryId, { title: string; subtitle: string }> = {
   peces: { title: "Peces", subtitle: "Guia completa de pesca - Encuentra todos los peces del pueblito" },
@@ -30,21 +32,24 @@ interface PageProps {
 
 export default async function CategoryPage({ params }: PageProps) {
   const { category } = await params;
-  
+
   if (!CATEGORIES.find(c => c.id === category)) {
     notFound();
   }
 
   const categoryId = category as CategoryId;
-  const data = getCategoryData(categoryId);
-  const items = Object.entries(data);
+  // Fetch from Turso DB (falls back to static data if table is empty)
+  const data = await getCategoryDataAsync(categoryId);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const items = Object.entries(data) as [string, any][];
+
   const categoryInfo = categoryTitles[categoryId];
   const categoryMeta = CATEGORIES.find(c => c.id === categoryId);
 
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
+
       <main className="mx-auto max-w-7xl px-4 py-8">
         <WikiBreadcrumbs
           items={[
@@ -118,7 +123,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps) {
   const { category } = await params;
   const categoryInfo = categoryTitles[category as CategoryId];
-  
+
   if (!categoryInfo) {
     return { title: "No encontrado - Heartopia Wiki" };
   }

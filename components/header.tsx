@@ -65,6 +65,7 @@ const moreNav = [
   { href: "/wiki/recolectables", label: "Recolectables", icon: Calculator },
   { href: "/wiki/logros", label: "Logros", icon: Trophy },
   { href: "/wiki/codigos", label: "Códigos", icon: Gift },
+  { href: "/admin", label: "Admin", icon: Users2 },
 ];
 
 export function Header() {
@@ -98,11 +99,10 @@ export function Header() {
 
   return (
     <header
-      className={`sticky top-0 z-50 w-full transition-all duration-300 ${
-        scrolled
+      className={`sticky top-0 z-50 w-full transition-all duration-300 ${scrolled
           ? "border-b bg-background/80 backdrop-blur-md py-2 shadow-sm"
           : "bg-background py-3"
-      }`}
+        }`}
     >
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-3 group">
