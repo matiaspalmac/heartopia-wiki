@@ -124,7 +124,7 @@ export default async function HomePage() {
                 <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
                   <Button
                     size="lg"
-                    className="h-13 px-8 rounded-2xl gap-2 text-base font-bold shadow-lg shadow-primary/20 transition-all hover:scale-105"
+                    className="h-13 px-8 rounded-2xl gap-2 text-base font-bold shadow-lg shadow-primary/20 transition-transform duration-200 hover:scale-105 will-change-transform"
                     asChild
                   >
                     <Link href="/buscar">
@@ -134,7 +134,7 @@ export default async function HomePage() {
                   <Button
                     size="lg"
                     variant="outline"
-                    className="h-13 px-8 rounded-2xl gap-2 text-base font-bold border-2 bg-background/50 backdrop-blur-sm"
+                    className="h-13 px-8 rounded-2xl gap-2 text-base font-bold border-2 bg-background/80"
                     asChild
                   >
                     <a
@@ -148,7 +148,7 @@ export default async function HomePage() {
                 </div>
 
                 <div className="flex items-center justify-center lg:justify-start pt-4">
-                  <div className="group relative flex flex-col sm:flex-row items-center gap-4 p-2 pr-6 rounded-[2rem] bg-background/40 backdrop-blur-md border border-primary/20 shadow-lg hover:shadow-primary/10 transition-all duration-300">
+                    <div className="group relative flex flex-col sm:flex-row items-center gap-4 p-2 pr-6 rounded-[2rem] bg-background/80 border border-primary/20 shadow-lg transition-shadow duration-200 hover:shadow-primary/10">
                     <div className="relative h-16 w-24 sm:h-14 sm:w-24 shrink-0 overflow-hidden rounded-2xl border-2 border-primary/30 shadow-inner">
                       <Image
                         src="/dei.jpg"
@@ -173,8 +173,8 @@ export default async function HomePage() {
 
               <div className="relative flex justify-center lg:justify-end">
                 <div className="relative group w-full max-w-[600px]">
-                  <div className="absolute -inset-1 rounded-[2rem] bg-gradient-to-tr from-primary to-accent opacity-20 blur-2xl group-hover:opacity-40 transition-opacity" />
-                  <div className="relative overflow-hidden rounded-[2rem] border-4 md:border-8 border-background shadow-2xl transition-all duration-500 group-hover:rotate-1 aspect-video">
+                  <div className="absolute -inset-1 rounded-[2rem] bg-gradient-to-tr from-primary to-accent opacity-20 blur-2xl transition-opacity duration-300 group-hover:opacity-40" />
+                  <div className="relative overflow-hidden rounded-[2rem] border-4 md:border-8 border-background shadow-2xl aspect-video">
                     <Image
                       src="/hero.png"
                       alt="Comunidad Heartopia Chile"
@@ -204,7 +204,7 @@ export default async function HomePage() {
                 {eventoActivo.descripcion}
               </p>
 
-              <div className="w-full bg-card backdrop-blur-md rounded-3xl p-6 md:p-8 shadow-xl border border-amber-200 dark:border-amber-900/50">
+              <div className="w-full bg-card rounded-3xl p-6 md:p-8 shadow-xl border border-amber-200 dark:border-amber-900/50">
                 <div className="flex justify-between items-end mb-4">
                   <div>
                     <p className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Progreso Actual</p>
@@ -220,7 +220,7 @@ export default async function HomePage() {
 
                 <div className="h-5 w-full bg-secondary rounded-full overflow-hidden border border-border shadow-inner">
                   <div
-                    className="h-full bg-gradient-to-r from-amber-400 to-yellow-300 transition-all duration-1000 relative rounded-full"
+                    className="h-full bg-gradient-to-r from-amber-400 to-yellow-300 rounded-full"
                     style={{ width: `${progressPercent}%` }}
                   />
                 </div>
@@ -232,23 +232,18 @@ export default async function HomePage() {
                     </p>
                     <div className="flex flex-wrap justify-center gap-3">
                       {topDonadores.map((donador, idx) => (
-                        <Link href={`/perfil/${donador.user_id}`} key={donador.user_id} className="bg-card border shadow-sm rounded-xl px-4 py-2 flex items-center gap-3 hover:scale-105 transition-transform cursor-pointer group hover:border-amber-300 dark:hover:border-amber-700">
+                        <Link href={`/perfil/${donador.user_id}`} key={donador.user_id} className="bg-card border shadow-sm rounded-xl px-4 py-2 flex items-center gap-3 hover:-translate-y-0.5 transition-transform duration-150 will-change-transform cursor-pointer group hover:border-amber-300 dark:hover:border-amber-700">
                           <span className="text-lg font-black text-muted-foreground">{idx + 1}.</span>
-                          <div className="relative w-8 h-8 rounded-full overflow-hidden border-2 border-amber-100 dark:border-amber-900 group-hover:border-amber-300 dark:group-hover:border-amber-700 transition-colors bg-secondary shrink-0">
-                            {donador.avatar ? (
-                              <img src={donador.avatar} alt="Avatar" className="w-full h-full object-cover" />
-                            ) : (
-                              <Image
-                                src={`https://api.dicebear.com/7.x/identicon/svg?seed=${donador.username || donador.user_id}&backgroundColor=fce4ec&rowColor=ec407a`}
-                                alt="Vecino Avatar Placeholder"
-                                fill
-                                sizes="32px"
-                                className="object-cover"
-                              />
-                            )}
+                          <div className="relative w-8 h-8 rounded-full overflow-hidden border-2 border-amber-100 dark:border-amber-900 group-hover:border-amber-300 dark:group-hover:border-amber-700 bg-secondary shrink-0">
+                            <img
+                              src={donador.avatar || `https://api.dicebear.com/7.x/identicon/svg?seed=${donador.username || donador.user_id}&backgroundColor=fce4ec&rowColor=ec407a`}
+                              alt="Avatar"
+                              className="w-full h-full object-cover"
+                              loading="lazy"
+                            />
                           </div>
                           <div className="flex flex-col">
-                            <span className="text-sm font-bold truncate max-w-[120px] transition-all group-hover:text-amber-600 dark:group-hover:text-amber-400">
+                            <span className="text-sm font-bold truncate max-w-[120px] transition-colors duration-150 group-hover:text-amber-600 dark:group-hover:text-amber-400">
                               {donador.username ? `@${donador.username}` : `#${donador.user_id.slice(-4)}`}
                             </span>
                             <span className="text-[10px] text-amber-600 dark:text-amber-400 font-bold tracking-tight">{donador.cantidad.toLocaleString()} monedas</span>
@@ -284,7 +279,7 @@ export default async function HomePage() {
                   <Link
                     key={cat.id}
                     href={`/wiki/${cat.id}`}
-                    className="flex items-center gap-3 px-4 py-2 rounded-full bg-card border border-border shadow-sm transition-all hover:border-primary hover:-translate-y-1"
+                    className="flex items-center gap-3 px-4 py-2 rounded-full bg-card border border-border shadow-sm transition-transform duration-150 hover:border-primary hover:-translate-y-1 will-change-transform"
                   >
                     <div
                       className={`p-1.5 rounded-full ${categoryColors[cat.id]?.split(" ")[0]}`}
@@ -317,7 +312,7 @@ export default async function HomePage() {
                 const Icon = iconMap[cat.icon];
                 return (
                   <Link key={cat.id} href={`/wiki/${cat.id}`}>
-                    <Card className="group h-full border-2 border-transparent bg-card/50 transition-all hover:border-primary/20 hover:bg-card hover:shadow-2xl overflow-hidden">
+                    <Card className="group h-full border-2 border-transparent bg-card/50 transition-colors duration-200 hover:border-primary/20 hover:bg-card overflow-hidden">
                       <CardHeader className="pb-4">
                         <div className="flex items-center justify-between">
                           <div
@@ -371,7 +366,7 @@ export default async function HomePage() {
               <Button
                 size="lg"
                 variant="secondary"
-                className="h-14 px-10 rounded-2xl font-black text-lg hover:scale-105 transition-transform shadow-xl"
+                className="h-14 px-10 rounded-2xl font-black text-lg hover:scale-105 transition-transform duration-200 will-change-transform shadow-xl"
                 asChild
               >
                 <a
