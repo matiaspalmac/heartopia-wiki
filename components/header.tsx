@@ -111,6 +111,7 @@ export function Header() {
               src="/annie.jpg"
               alt="Heartopia Logo"
               fill
+              priority
               className="object-cover"
             />
           </div>
