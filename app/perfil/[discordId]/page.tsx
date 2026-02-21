@@ -2,23 +2,35 @@ import { getDb, getTableCounts } from "@/lib/db";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import { ArrowLeft, Star, Sparkles, Coins } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
-export const revalidate = 60; // Revalidate every minute
+export const revalidate = 60;
 
 interface PageProps {
     params: Promise<{ discordId: string }>;
 }
 
-const CATEGORIAS_EMOJIS: Record<string, string> = {
-    peces: "🐟", insectos: "🦋", aves: "🕊️", animales: "🦊",
-    cultivos: "🌱", recolectables: "🌿", recetas: "🍳", logros: "🏆"
+const CATEGORIAS_ICONS: Record<string, string> = {
+    peces: "Fish", insectos: "Bug", aves: "Bird", animales: "PawPrint",
+    cultivos: "Sprout", recolectables: "TreeDeciduous", recetas: "ChefHat", logros: "Trophy"
+};
+
+const CATEGORIAS_COLORS: Record<string, string> = {
+    peces: "text-blue-600 dark:text-blue-400 bg-blue-500/10",
+    insectos: "text-amber-600 dark:text-amber-400 bg-amber-500/10",
+    aves: "text-sky-600 dark:text-sky-400 bg-sky-500/10",
+    animales: "text-orange-600 dark:text-orange-400 bg-orange-500/10",
+    cultivos: "text-green-600 dark:text-green-400 bg-green-500/10",
+    recolectables: "text-emerald-600 dark:text-emerald-400 bg-emerald-500/10",
+    recetas: "text-rose-600 dark:text-rose-400 bg-rose-500/10",
+    logros: "text-purple-600 dark:text-purple-400 bg-purple-500/10",
 };
 
 export default async function PerfilPublicoPage({ params }: PageProps) {
     const { discordId } = await params;
     const db = getDb();
 
-    // 1. Fetch user data
     const resUser = await db.execute({
         sql: "SELECT * FROM usuarios WHERE id = ?",
         args: [discordId]
@@ -37,24 +49,21 @@ export default async function PerfilPublicoPage({ params }: PageProps) {
     const username = user.username ? String(user.username) : null;
     const avatarData = user.avatar ? String(user.avatar) : null;
 
-    const MASCOTAS_INFO: Record<string, { emoji: string, nombre: string }> = {
-        mascota_kiltro: { emoji: "🐕", nombre: "Kiltro" },
-        mascota_gatito: { emoji: "🐈", nombre: "Gatito" },
-        mascota_pudu: { emoji: "🦌", nombre: "Pudú" }
+    const MASCOTAS_INFO: Record<string, { nombre: string }> = {
+        mascota_kiltro: { nombre: "Kiltro" },
+        mascota_gatito: { nombre: "Gatito" },
+        mascota_pudu: { nombre: "Pudu" }
     };
     const mascotaData = mascotaId ? MASCOTAS_INFO[mascotaId as string] : null;
 
-    // 2. Fetch total items counts (to show progress max limits)
     const totals = await getTableCounts();
 
-    // 3. Fetch user collections
     const resCol = await db.execute({
         sql: "SELECT categoria, COUNT(*) as total FROM colecciones WHERE user_id = ? GROUP BY categoria",
         args: [discordId]
     });
     const collectionsCount = resCol.rows as unknown as { categoria: string; total: number }[];
 
-    // 4. Fetch user destacados (Vitrina) F9
     const resDestacados = await db.execute({
         sql: "SELECT slot, categoria, item_id FROM destacados WHERE user_id = ? ORDER BY slot ASC",
         args: [discordId]
@@ -68,73 +77,50 @@ export default async function PerfilPublicoPage({ params }: PageProps) {
 
     const categorias = ["peces", "insectos", "aves", "animales", "cultivos", "recolectables", "recetas", "logros"];
 
-    // Calcular xp base de este nivel y del proximo
     const xpBaseNivelDesc = Math.pow((nivel - 1) * 10, 2);
     const xpSigNivel = Math.pow(nivel * 10, 2);
     const progress = Math.min(100, Math.max(0, ((xp - xpBaseNivelDesc) / (xpSigNivel - xpBaseNivelDesc)) * 100));
 
-    // Determinar mapeos de colores Tailwind según el Tema del usuario (F8)
-    const TEMA_COLORS = {
-        default: {
-            bg: "bg-pink-50/30",
-            headerBg: "bg-white border-pink-100",
-            headerGradient: "from-pink-300 to-amber-200 opacity-20",
-            buttonLink: "text-pink-600 bg-white hover:bg-pink-100",
-            progress: "from-pink-400 to-amber-300",
-            textLight: "text-pink-500",
-        },
-        tema_bosque: {
-            bg: "bg-green-50/40",
-            headerBg: "bg-green-50/80 border-green-200",
-            headerGradient: "from-emerald-400 to-lime-300 opacity-20",
-            buttonLink: "text-green-700 bg-white hover:bg-green-100",
-            progress: "from-emerald-500 to-green-400",
-            textLight: "text-emerald-600",
-        },
-        tema_playa: {
-            bg: "bg-cyan-50/50",
-            headerBg: "bg-white border-cyan-100",
-            headerGradient: "from-cyan-300 to-blue-200 opacity-20",
-            buttonLink: "text-cyan-700 bg-white hover:bg-cyan-100",
-            progress: "from-cyan-400 to-blue-400",
-            textLight: "text-cyan-600",
-        },
-        tema_noche: {
-            bg: "bg-indigo-950",
-            headerBg: "bg-slate-900 border-indigo-900",
-            headerGradient: "from-indigo-600 to-purple-800 opacity-30",
-            buttonLink: "text-indigo-200 bg-slate-800 hover:bg-slate-700",
-            progress: "from-indigo-500 to-purple-500",
-            textLight: "text-indigo-300",
-        }
+    // Theme-aware accent color mapping
+    const TEMA_ACCENT: Record<string, { progress: string; badge: string }> = {
+        default: { progress: "from-primary to-accent", badge: "bg-primary/10 text-primary" },
+        tema_bosque: { progress: "from-emerald-500 to-green-400", badge: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400" },
+        tema_playa: { progress: "from-cyan-400 to-blue-400", badge: "bg-cyan-500/10 text-cyan-600 dark:text-cyan-400" },
+        tema_noche: { progress: "from-indigo-500 to-purple-500", badge: "bg-indigo-500/10 text-indigo-400" },
     };
 
-    // Fallback asegurado
-    const theme = TEMA_COLORS[tema as keyof typeof TEMA_COLORS] || TEMA_COLORS.default;
-    const isDarkTheme = tema === 'tema_noche';
+    const accent = TEMA_ACCENT[tema] || TEMA_ACCENT.default;
 
     return (
-        <div className={`min-h-screen w-full flex flex-col pt-16 pb-24 items-center px-4 font-sans ${theme.bg}`}>
-            <Link href="/" className={`fixed top-6 left-6 shadow py-2 px-4 rounded-full font-bold transition z-10 ${theme.buttonLink}`}>
-                ← Volver a la wiki
-            </Link>
+        <div className="min-h-screen w-full flex flex-col items-center bg-background font-sans">
+            {/* Navigation */}
+            <div className="w-full max-w-3xl px-4 pt-6 mb-6">
+                <Link
+                    href="/"
+                    className="inline-flex items-center gap-2 text-sm font-bold text-muted-foreground hover:text-primary transition-colors rounded-xl px-4 py-2 bg-card border border-border shadow-sm hover:shadow-md"
+                >
+                    <ArrowLeft className="h-4 w-4" />
+                    Volver a la wiki
+                </Link>
+            </div>
 
-            <div className="w-full max-w-3xl space-y-8">
+            <div className="w-full max-w-3xl px-4 pb-20 space-y-6">
                 {/* Header Card */}
-                <div className={`rounded-3xl shadow-xl shadow-neutral-900/5 p-8 sm:p-12 border flex flex-col items-center relative overflow-hidden ${theme.headerBg}`}>
-                    <div className={`absolute top-0 w-full h-32 bg-gradient-to-br ${theme.headerGradient}`} />
+                <div className="bg-card rounded-3xl shadow-xl border border-border p-8 sm:p-10 flex flex-col items-center relative overflow-hidden">
+                    {/* Decorative gradient */}
+                    <div className={`absolute top-0 left-0 right-0 h-28 bg-gradient-to-br ${accent.progress} opacity-10`} />
 
-                    {/* Mascota Activa F15 */}
+                    {/* Pet companion */}
                     {mascotaData && (
-                        <div className="absolute top-6 right-6 sm:top-8 sm:right-8 flex flex-col items-center -rotate-6 hover:rotate-12 transition-transform cursor-help" title={`Acompañado por su fiel ${mascotaData.nombre}`}>
-                            <span className="text-4xl sm:text-5xl drop-shadow-lg filter hover:brightness-110">{mascotaData.emoji}</span>
-                            <span className={`text-[10px] font-black uppercase tracking-widest mt-1 bg-white/50 backdrop-blur-sm px-2 rounded-full ${theme.textLight}`}>
-                                {mascotaData.nombre}
-                            </span>
+                        <div className="absolute top-4 right-4 sm:top-6 sm:right-6">
+                            <Badge variant="outline" className="text-xs font-bold">
+                                Mascota: {mascotaData.nombre}
+                            </Badge>
                         </div>
                     )}
 
-                    <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-lg bg-neutral-100 mb-6 shrink-0 z-10 flex items-center justify-center">
+                    {/* Avatar */}
+                    <div className="relative w-28 h-28 rounded-full overflow-hidden border-4 border-background shadow-lg bg-secondary mb-5 shrink-0 z-10 flex items-center justify-center ring-4 ring-primary/10">
                         {avatarData ? (
                             <img
                                 src={avatarData}
@@ -146,75 +132,79 @@ export default async function PerfilPublicoPage({ params }: PageProps) {
                                 src={`https://api.dicebear.com/7.x/identicon/svg?seed=${username || discordId}&backgroundColor=fce4ec&rowColor=ec407a`}
                                 alt="Vecino Avatar Placeholder"
                                 fill
+                                sizes="112px"
                                 className="object-cover"
                             />
                         )}
                     </div>
 
-                    <div className="text-center relative">
-                        <p className={`text-xs font-bold uppercase tracking-widest mb-1 ${theme.textLight}`}>
+                    <div className="text-center relative z-10">
+                        <Badge variant="secondary" className={`${accent.badge} text-xs font-bold mb-2`}>
                             Vecinito del Pueblito
-                        </p>
-                        <h1 className={`text-4xl font-extrabold mb-2 ${isDarkTheme ? 'text-white' : 'text-neutral-800'}`}>
-                            {username ? username : `Invitado de Discord #${discordId.slice(-4)}`}
+                        </Badge>
+                        <h1 className="text-3xl sm:text-4xl font-black text-foreground text-balance">
+                            {username ? username : `Invitado #${discordId.slice(-4)}`}
                         </h1>
                     </div>
 
-                    <div className="flex gap-4 sm:gap-8 mt-8 mb-8 w-full justify-center">
-                        <div className={`rounded-2xl p-4 sm:p-6 w-32 border text-center ${isDarkTheme ? 'bg-amber-900/30 border-amber-800/50' : 'bg-amber-100/50 border-amber-200/50'}`}>
-                            <span className="block text-3xl mb-1">⭐</span>
-                            <span className="block text-2xl font-black text-amber-700">{nivel}</span>
-                            <span className="block text-xs font-bold text-amber-600/70 uppercase">Nivel</span>
+                    {/* Stats */}
+                    <div className="flex gap-4 sm:gap-6 mt-8 w-full justify-center flex-wrap">
+                        <div className="rounded-2xl p-4 sm:p-5 w-28 sm:w-32 border border-border bg-secondary/30 text-center">
+                            <Star className="h-6 w-6 mx-auto mb-1.5 text-amber-500" />
+                            <span className="block text-2xl font-black text-foreground">{nivel}</span>
+                            <span className="block text-xs font-bold text-muted-foreground uppercase">Nivel</span>
                         </div>
-                        <div className="bg-blue-100/50 rounded-2xl p-4 sm:p-6 w-32 border border-blue-200/50 text-center">
-                            <span className="block text-3xl mb-1">✨</span>
-                            <span className="block text-2xl font-black text-blue-700">{xp}</span>
-                            <span className="block text-xs font-bold text-blue-600/70 uppercase">XP Total</span>
+                        <div className="rounded-2xl p-4 sm:p-5 w-28 sm:w-32 border border-border bg-secondary/30 text-center">
+                            <Sparkles className="h-6 w-6 mx-auto mb-1.5 text-primary" />
+                            <span className="block text-2xl font-black text-foreground">{xp}</span>
+                            <span className="block text-xs font-bold text-muted-foreground uppercase">XP Total</span>
                         </div>
-                        <div className="bg-yellow-100/50 rounded-2xl p-4 sm:p-6 w-32 border border-yellow-200/50 text-center">
-                            <span className="block text-3xl mb-1">💰</span>
-                            <span className="block text-2xl font-black text-yellow-700">{monedas}</span>
-                            <span className="block text-xs font-bold text-yellow-600/70 uppercase">Moneditas</span>
+                        <div className="rounded-2xl p-4 sm:p-5 w-28 sm:w-32 border border-border bg-secondary/30 text-center">
+                            <Coins className="h-6 w-6 mx-auto mb-1.5 text-yellow-500" />
+                            <span className="block text-2xl font-black text-foreground">{monedas}</span>
+                            <span className="block text-xs font-bold text-muted-foreground uppercase">Moneditas</span>
                         </div>
                     </div>
 
-                    <div className="w-full max-w-lg mt-2 relative">
-                        <div className={`flex justify-between text-xs font-bold mb-2 ${isDarkTheme ? 'text-neutral-400' : 'text-neutral-500'}`}>
+                    {/* Progress bar */}
+                    <div className="w-full max-w-lg mt-8 relative z-10">
+                        <div className="flex justify-between text-xs font-bold mb-2 text-muted-foreground">
                             <span>Progreso Nivel {nivel}</span>
                             <span>{Math.floor(progress)}% hacia {nivel + 1}</span>
                         </div>
-                        <div className={`w-full h-4 rounded-full overflow-hidden shrink-0 border ${isDarkTheme ? 'bg-slate-800 border-slate-700' : 'bg-neutral-100 border-neutral-200/50'}`}>
+                        <div className="w-full h-3 rounded-full overflow-hidden shrink-0 border border-border bg-secondary">
                             <div
-                                className={`h-full transition-all duration-1000 ease-out rounded-full bg-gradient-to-r ${theme.progress}`}
+                                className={`h-full transition-all duration-1000 ease-out rounded-full bg-gradient-to-r ${accent.progress}`}
                                 style={{ width: `${progress}%` }}
                             />
                         </div>
                     </div>
                 </div>
 
-                {/* Vitrina de Destacados (F9) */}
+                {/* Showcase / Vitrina */}
                 {destacados.length > 0 && (
-                    <div className={`rounded-3xl shadow-xl shadow-neutral-900/5 p-6 sm:p-8 border ${theme.headerBg} flex flex-col items-center`}>
-                        <h3 className={`text-xl font-black mb-6 ${isDarkTheme ? 'text-amber-400' : 'text-amber-500'} flex items-center gap-2`}>
-                            ⭐ Mis Descubrimientos Favoritos
+                    <div className="bg-card rounded-3xl shadow-xl border border-border p-6 sm:p-8 flex flex-col items-center">
+                        <h3 className="text-xl font-black text-foreground mb-6 flex items-center gap-2">
+                            <Star className="h-5 w-5 text-amber-500" />
+                            Mis Descubrimientos Favoritos
                         </h3>
                         <div className="flex gap-4 sm:gap-6 justify-center flex-wrap">
                             {[1, 2, 3].map(slotNum => {
                                 const dest = destacados.find(d => d.slot === slotNum);
                                 return (
-                                    <div key={slotNum} className={`w-28 h-32 sm:w-32 sm:h-36 rounded-2xl flex flex-col items-center justify-center p-3 text-center border-2 border-dashed ${dest ? (isDarkTheme ? 'border-amber-700/50 bg-amber-900/20' : 'border-amber-300/50 bg-amber-50/50') : (isDarkTheme ? 'border-neutral-700 bg-neutral-800/50 opacity-50' : 'border-neutral-200 bg-neutral-50 opacity-50')}`}>
+                                    <div key={slotNum} className={`w-28 h-32 sm:w-32 sm:h-36 rounded-2xl flex flex-col items-center justify-center p-3 text-center border-2 border-dashed transition-colors ${dest ? 'border-amber-300 dark:border-amber-700 bg-amber-500/5' : 'border-border bg-secondary/20 opacity-50'}`}>
                                         {dest ? (
                                             <>
-                                                <div className="text-4xl sm:text-5xl mb-2 drop-shadow-md">
-                                                    {CATEGORIAS_EMOJIS[dest.categoria.toLowerCase()] || "✨"}
+                                                <div className={`text-2xl sm:text-3xl mb-2 p-2 rounded-xl ${CATEGORIAS_COLORS[dest.categoria.toLowerCase()] || 'bg-secondary'}`}>
+                                                    {CATEGORIAS_ICONS[dest.categoria.toLowerCase()] ? dest.categoria.charAt(0).toUpperCase() : "?"}
                                                 </div>
-                                                <div className={`text-xs font-bold leading-tight line-clamp-2 ${isDarkTheme ? 'text-amber-100' : 'text-amber-900'}`}>
+                                                <div className="text-xs font-bold leading-tight line-clamp-2 text-foreground">
                                                     {dest.item_id}
                                                 </div>
                                             </>
                                         ) : (
-                                            <div className="text-sm font-bold text-neutral-400">
-                                                Vacío
+                                            <div className="text-sm font-bold text-muted-foreground">
+                                                Vacio
                                             </div>
                                         )}
                                     </div>
@@ -224,12 +214,12 @@ export default async function PerfilPublicoPage({ params }: PageProps) {
                     </div>
                 )}
 
-                {/* Colecciones Libretita */}
-                <div className={`rounded-3xl shadow-xl shadow-neutral-900/5 p-8 sm:p-12 border ${theme.headerBg}`}>
-                    <h2 className={`text-2xl font-extrabold mb-2 flex items-center gap-2 ${isDarkTheme ? 'text-white' : 'text-neutral-800'}`}>
-                        <span>📔</span> Libretita de Colecciones
+                {/* Collections */}
+                <div className="bg-card rounded-3xl shadow-xl border border-border p-6 sm:p-10">
+                    <h2 className="text-2xl font-black text-foreground mb-2 flex items-center gap-2">
+                        Libretita de Colecciones
                     </h2>
-                    <p className={`mb-8 max-w-lg text-sm ${isDarkTheme ? 'text-neutral-400' : 'text-neutral-500'}`}>
+                    <p className="text-sm text-muted-foreground mb-8 max-w-lg">
                         Todo lo que este dulce habitante ha registrado explorando el pueblito.
                     </p>
 
@@ -238,14 +228,17 @@ export default async function PerfilPublicoPage({ params }: PageProps) {
                             const count = colCount[cat] || 0;
                             const total = totals[cat] || 1;
                             const percent = Math.min(100, (count / total) * 100);
+                            const colorClass = CATEGORIAS_COLORS[cat] || "text-muted-foreground bg-secondary/50";
 
                             return (
-                                <div key={cat} className={`flex flex-col p-4 rounded-2xl border transition duration-300 ${isDarkTheme ? 'bg-slate-800/50 border-slate-700 hover:border-indigo-500 hover:bg-slate-800' : 'bg-neutral-50/60 border-neutral-100 hover:border-pink-200 hover:bg-pink-50/50'}`}>
-                                    <div className="text-3xl mb-2">{CATEGORIAS_EMOJIS[cat] || "📌"}</div>
-                                    <span className={`font-bold capitalize text-sm ${isDarkTheme ? 'text-neutral-300' : 'text-neutral-700'}`}>{cat}</span>
-                                    <span className={`font-black text-xl my-1 ${isDarkTheme ? 'text-white' : 'text-neutral-900'}`}>{count} <span className={`text-sm font-normal ${isDarkTheme ? 'text-neutral-500' : 'text-neutral-400'}`}>/ {totals[cat] || 0}</span></span>
-                                    <div className={`w-full h-1.5 mt-2 rounded-full overflow-hidden shrink-0 ${isDarkTheme ? 'bg-slate-700' : 'bg-neutral-200'}`}>
-                                        <div className={`h-full rounded-full bg-gradient-to-r ${theme.progress}`} style={{ width: `${percent}%` }} />
+                                <div key={cat} className="flex flex-col p-4 rounded-2xl border border-border bg-secondary/20 transition duration-300 hover:border-primary/30 hover:bg-secondary/40">
+                                    <div className={`h-10 w-10 rounded-xl flex items-center justify-center text-sm font-black mb-2 ${colorClass}`}>
+                                        {cat.charAt(0).toUpperCase()}
+                                    </div>
+                                    <span className="font-bold capitalize text-sm text-foreground">{cat}</span>
+                                    <span className="font-black text-xl my-1 text-foreground">{count} <span className="text-sm font-normal text-muted-foreground">/ {totals[cat] || 0}</span></span>
+                                    <div className="w-full h-1.5 mt-2 rounded-full overflow-hidden shrink-0 bg-secondary">
+                                        <div className={`h-full rounded-full bg-gradient-to-r ${accent.progress}`} style={{ width: `${percent}%` }} />
                                     </div>
                                 </div>
                             );

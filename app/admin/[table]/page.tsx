@@ -6,21 +6,21 @@ const ALLOWED = [
 ];
 
 const TABLE_LABELS: Record<string, string> = {
-    peces: "🐟 Peces",
-    insectos: "🦋 Insectos",
-    aves: "🦅 Aves",
-    animales: "🦊 Animales",
-    cultivos: "🌾 Cultivos",
-    recolectables: "🌿 Recolectables",
-    habitantes: "👥 Habitantes",
-    recetas: "🍳 Recetas",
-    logros: "🏆 Logros",
-    codigos: "🎁 Códigos",
-    tienda_items: "🛒 Tienda",
-    clima: "🌦️ Clima",
-    configuracion: "⚙️ Configuración",
-    usuarios: "👥 Vecinos (Discord)",
-    eventos_globales: "🌍 Eventos Globales"
+    peces: "Peces",
+    insectos: "Insectos",
+    aves: "Aves",
+    animales: "Animales",
+    cultivos: "Cultivos",
+    recolectables: "Recolectables",
+    habitantes: "Habitantes",
+    recetas: "Recetas",
+    logros: "Logros",
+    codigos: "Codigos",
+    tienda_items: "Tienda",
+    clima: "Clima",
+    configuracion: "Configuracion",
+    usuarios: "Vecinos (Discord)",
+    eventos_globales: "Eventos Globales"
 };
 
 interface PageProps {
@@ -34,10 +34,10 @@ export default async function TablePage({ params }: PageProps) {
     return (
         <div>
             <div className="mb-6">
-                <p className="text-xs font-bold uppercase tracking-widest text-pink-500 mb-0.5">
+                <p className="text-xs font-black uppercase tracking-widest text-primary mb-0.5">
                     Base de datos
                 </p>
-                <h2 className="text-3xl font-extrabold text-neutral-900 dark:text-white">
+                <h2 className="text-3xl font-black text-foreground">
                     {TABLE_LABELS[table] ?? table}
                 </h2>
             </div>
