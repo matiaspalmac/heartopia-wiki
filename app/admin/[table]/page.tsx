@@ -2,22 +2,25 @@ import { redirect } from "next/navigation";
 import { TableEditor } from "@/components/admin/table-editor";
 
 const ALLOWED = [
-    "peces", "insectos", "aves", "animales", "cultivos",
-    "recolectables", "habitantes", "recetas", "logros", "codigos", "configuracion",
+    "peces", "insectos", "aves", "animales", "cultivos", "recolectables", "habitantes", "recetas", "logros", "codigos", "tienda_items", "clima", "configuracion", "usuarios", "eventos_globales"
 ];
 
 const TABLE_LABELS: Record<string, string> = {
-    peces: "Peces",
-    insectos: "Insectos",
-    aves: "Aves",
-    animales: "Animales",
-    cultivos: "Cultivos",
-    recolectables: "Recolectables",
-    habitantes: "Habitantes",
-    recetas: "Recetas",
-    logros: "Logros",
-    codigos: "Códigos",
-    configuracion: "Configuración",
+    peces: "🐟 Peces",
+    insectos: "🦋 Insectos",
+    aves: "🦅 Aves",
+    animales: "🦊 Animales",
+    cultivos: "🌾 Cultivos",
+    recolectables: "🌿 Recolectables",
+    habitantes: "👥 Habitantes",
+    recetas: "🍳 Recetas",
+    logros: "🏆 Logros",
+    codigos: "🎁 Códigos",
+    tienda_items: "🛒 Tienda",
+    clima: "🌦️ Clima",
+    configuracion: "⚙️ Configuración",
+    usuarios: "👥 Vecinos (Discord)",
+    eventos_globales: "🌍 Eventos Globales"
 };
 
 interface PageProps {

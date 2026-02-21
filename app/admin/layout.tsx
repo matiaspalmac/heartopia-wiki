@@ -5,18 +5,22 @@ import Link from "next/link";
 import { DarkModeToggle } from "@/components/admin/dark-mode-toggle";
 
 const NAV_ITEMS = [
-    { href: "/admin", label: "🏠 Inicio" },
+    { href: "/admin", label: "🏠 Dashboard" },
     { href: "/admin/peces", label: "🎣 Peces" },
     { href: "/admin/insectos", label: "🦋 Insectos" },
     { href: "/admin/aves", label: "🐦 Aves" },
     { href: "/admin/animales", label: "🦊 Animales" },
     { href: "/admin/cultivos", label: "🌱 Cultivos" },
     { href: "/admin/recolectables", label: "🌿 Recolectables" },
+    { href: "/admin/eventos_globales", label: "🌍 Eventos Globales" },
+    { href: "/admin/usuarios", label: "👥 Vecinos (Usuarios)" },
     { href: "/admin/habitantes", label: "👥 Habitantes" },
     { href: "/admin/recetas", label: "🍳 Recetas" },
     { href: "/admin/logros", label: "🏆 Logros" },
     { href: "/admin/codigos", label: "🎁 Códigos" },
+    { href: "/admin/clima", label: "🌦️ Clima" },
     { href: "/admin/configuracion", label: "⚙️ Configuración" },
+    { href: "/admin/estadisticas", label: "📊 Estadísticas" },
     { href: "/admin/actividad", label: "📋 Actividad" },
 ];
 

@@ -11,6 +11,7 @@ async function requireSession() {
 const ALLOWED_TABLES = [
     "peces", "insectos", "aves", "animales", "cultivos",
     "recolectables", "habitantes", "recetas", "logros", "codigos", "configuracion",
+    "clima", "eventos_globales", "usuarios", "tienda_items", "evento_donaciones"
 ];
 
 export async function GET(
@@ -47,14 +48,17 @@ export async function POST(
 
     try {
         const body = await req.json();
-        const isEdit = body.id !== undefined && body.id !== null && body.id !== "";
+        const pkField = table === "configuracion" ? "clave" : "id";
+        const pkValue = body.__originalId !== undefined ? body.__originalId : body[pkField];
+        const isEdit = pkValue !== undefined && pkValue !== null && pkValue !== "";
+
         await upsertRow(table, body);
         await logAction(
             session!.user?.name ?? "desconocido",
             isEdit ? "editar" : "agregar",
             table,
-            String(body.id ?? body.nombre ?? ""),
-            isEdit ? `Editó item ${body.id}` : `Agregó nuevo item`
+            String(pkValue ?? body.nombre ?? ""),
+            isEdit ? `Editó item ${pkValue}` : `Agregó nuevo item`
         );
         return NextResponse.json({ ok: true });
     } catch (e: unknown) {

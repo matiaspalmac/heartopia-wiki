@@ -1,11 +1,9 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { CATEGORIES } from "@/lib/data";
+import { query } from "@/lib/db";
 import {
   Fish,
   Bug,
@@ -58,12 +56,27 @@ const categoryColors: Record<string, string> = {
   logros: "bg-purple-500/10 text-purple-600 border-purple-200",
 };
 
-export default function HomePage() {
-  const [isLoaded, setIsLoaded] = useState(false);
+export const revalidate = 60;
 
-  useEffect(() => {
-    setIsLoaded(true);
-  }, []);
+export default async function HomePage() {
+  // Fetch F13 Active Event and Top Donators
+  const resEvento = await query<{
+    id: number;
+    titulo: string;
+    descripcion: string;
+    meta_monedas: number;
+    progreso_monedas: number;
+  }>("SELECT id, titulo, descripcion, meta_monedas, progreso_monedas FROM eventos_globales WHERE activo = 1 LIMIT 1");
+
+  const eventoActivo = resEvento.length > 0 ? resEvento[0] : null;
+
+  let topDonadores: { user_id: string; cantidad: number }[] = [];
+  if (eventoActivo) {
+    topDonadores = await query<{ user_id: string; cantidad: number }>(
+      "SELECT user_id, cantidad FROM evento_donaciones WHERE evento_id = ? ORDER BY cantidad DESC LIMIT 5",
+      [eventoActivo.id]
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background font-sans">
@@ -174,6 +187,72 @@ export default function HomePage() {
             </div>
           </div>
         </section>
+
+        {/* F13 - Widget Evento Global / Junta de Vecinos */}
+        {eventoActivo && (
+          <section className="py-8 bg-amber-500/10 border-y border-amber-500/20 backdrop-blur-sm relative overflow-hidden">
+            <div className="absolute inset-0 bg-[url('/pattern.png')] opacity-5 mix-blend-overlay" />
+            <div className="mx-auto max-w-4xl px-4 relative z-10 flex flex-col items-center">
+              <Badge variant="outline" className="bg-amber-500 text-white border-none mb-3 px-3 py-1 text-xs uppercase tracking-widest font-black shadow-lg">
+                📢 Proyecto de la Junta de Vecinos
+              </Badge>
+              <h2 className="text-3xl md:text-5xl font-black text-amber-600 dark:text-amber-500 text-center mb-2 drop-shadow-sm">
+                {eventoActivo.titulo}
+              </h2>
+              <p className="text-muted-foreground text-center mb-8 max-w-2xl text-lg">
+                {eventoActivo.descripcion}
+              </p>
+
+              <div className="w-full bg-background/80 backdrop-blur-md rounded-3xl p-6 md:p-8 shadow-xl border border-amber-200 dark:border-amber-900/50">
+                <div className="flex justify-between items-end mb-4">
+                  <div>
+                    <p className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Progreso Actual</p>
+                    <p className="text-4xl font-black text-foreground">
+                      {eventoActivo.progreso_monedas.toLocaleString()}{" "}
+                      <span className="text-xl text-amber-500">/ {eventoActivo.meta_monedas.toLocaleString()} 💰</span>
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-3xl font-black text-amber-500">
+                      {Math.min(100, Math.floor((eventoActivo.progreso_monedas / eventoActivo.meta_monedas) * 100))}%
+                    </p>
+                  </div>
+                </div>
+
+                <div className="h-6 w-full bg-neutral-200 dark:bg-neutral-800 rounded-full overflow-hidden border border-neutral-300 dark:border-neutral-700 shadow-inner">
+                  <div
+                    className="h-full bg-gradient-to-r from-amber-400 to-yellow-300 transition-all duration-1000 relative"
+                    style={{ width: `${Math.min(100, (eventoActivo.progreso_monedas / eventoActivo.meta_monedas) * 100)}%` }}
+                  >
+                    <div className="absolute inset-0 bg-white/20 w-full animate-pulse" />
+                  </div>
+                </div>
+
+                {topDonadores.length > 0 && (
+                  <div className="mt-8 pt-6 border-t border-border/50">
+                    <p className="text-center text-sm font-black uppercase tracking-widest text-muted-foreground mb-4">
+                      🏆 Salón de la Fama (Mayores Aportes)
+                    </p>
+                    <div className="flex flex-wrap justify-center gap-3">
+                      {topDonadores.map((donador, idx) => (
+                        <div key={donador.user_id} className="bg-background border shadow-sm rounded-xl px-4 py-2 flex items-center gap-2 hover:scale-105 transition-transform cursor-default">
+                          <span className="text-lg">{idx === 0 ? '👑' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : '⭐'}</span>
+                          <div className="flex flex-col">
+                            <span className="text-xs font-bold truncate max-w-[100px] hover:max-w-none transition-all">{donador.user_id}</span>
+                            <span className="text-[10px] text-amber-600 font-bold">{donador.cantidad.toLocaleString()} 💰</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                <div className="mt-6 text-center">
+                  <p className="text-xs text-muted-foreground font-medium">Usa <code className="bg-muted px-1 py-0.5 rounded text-amber-600">/aportar</code> en Discord para sumar tu granito de arena.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
 
         <section className="py-8 bg-secondary/10 border-y border-border/50 backdrop-blur-sm">
           <div className="mx-auto max-w-7xl px-4 flex flex-col md:flex-row items-center justify-between gap-6">

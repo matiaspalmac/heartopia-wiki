@@ -608,7 +608,7 @@ function ItemCard({
         );
 
       case "logros":
-        const getCategoryStyles = (cat) => {
+        const getCategoryStyles = (cat: string | undefined) => {
           if (cat?.includes("Oculto"))
             return "border-slate-200 bg-slate-50 text-slate-600";
           if (cat?.includes("Pesca"))
@@ -636,7 +636,7 @@ function ItemCard({
                     alt={name}
                     className="h-full w-full object-contain drop-shadow-md"
                     onError={(e) => {
-                      e.target.style.display = "none";
+                      (e.target as HTMLImageElement).style.display = "none";
                     }}
                   />
                 ) : (
@@ -758,42 +758,42 @@ export function ItemGrid({ items, categoryId }: ItemGridProps) {
         {(categoryId === "peces" ||
           categoryId === "insectos" ||
           categoryId === "aves") && (
-          <>
-            <Select value={levelFilter} onValueChange={setLevelFilter}>
-              <SelectTrigger
-                className="w-full sm:w-40"
-                aria-label="Filtro de nivel"
-              >
-                <SelectValue placeholder="Nivel" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Todos los niveles</SelectItem>
-                <SelectItem value="low">Nivel 1-3</SelectItem>
-                <SelectItem value="mid">Nivel 4-6</SelectItem>
-                <SelectItem value="high">Nivel 7-10</SelectItem>
-              </SelectContent>
-            </Select>
-
-            {types.length > 0 && (
-              <Select value={typeFilter} onValueChange={setTypeFilter}>
+            <>
+              <Select value={levelFilter} onValueChange={setLevelFilter}>
                 <SelectTrigger
                   className="w-full sm:w-40"
-                  aria-label="Filtro de tipo"
+                  aria-label="Filtro de nivel"
                 >
-                  <SelectValue placeholder="Tipo" />
+                  <SelectValue placeholder="Nivel" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">Todos los tipos</SelectItem>
-                  {types.map((type) => (
-                    <SelectItem key={type} value={type}>
-                      {type}
-                    </SelectItem>
-                  ))}
+                  <SelectItem value="all">Todos los niveles</SelectItem>
+                  <SelectItem value="low">Nivel 1-3</SelectItem>
+                  <SelectItem value="mid">Nivel 4-6</SelectItem>
+                  <SelectItem value="high">Nivel 7-10</SelectItem>
                 </SelectContent>
               </Select>
-            )}
-          </>
-        )}
+
+              {types.length > 0 && (
+                <Select value={typeFilter} onValueChange={setTypeFilter}>
+                  <SelectTrigger
+                    className="w-full sm:w-40"
+                    aria-label="Filtro de tipo"
+                  >
+                    <SelectValue placeholder="Tipo" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Todos los tipos</SelectItem>
+                    {types.map((type) => (
+                      <SelectItem key={type} value={type}>
+                        {type}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            </>
+          )}
 
         <Button
           variant="ghost"

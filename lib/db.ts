@@ -124,29 +124,30 @@ export async function upsertRow(
     row: Record<string, unknown>
 ): Promise<void> {
     const db = getDb();
-    // __originalId viene del cliente cuando se edita un item cuyo id pudo cambiar
+    const pkField = table === "configuracion" ? "clave" : "id";
+    // __originalId viene del cliente cuando se edita un item cuyo pk pudo cambiar
     const originalId = row.__originalId !== undefined ? row.__originalId : undefined;
-    const { id, __originalId: _drop, ...fields } = row;
+    const { [pkField]: pkValue, __originalId: _drop, ...fields } = row;
     const keys = Object.keys(fields);
     const values = Object.values(fields) as (string | number | null)[];
 
     // El id que usamos en WHERE: si hay originalId lo usamos, sino el id actual
-    const whereId = originalId ?? id;
+    const whereId = originalId ?? pkValue;
 
     if (whereId !== undefined && whereId !== null && whereId !== "") {
-        // UPDATE — incluye `id` en el SET (para poder renombrarlo)
-        const allKeys = id !== undefined ? ["id", ...keys] : keys;
-        const allValues = id !== undefined ? [id as string | number, ...values] : values;
+        // UPDATE — incluye el primary key en el SET (para poder renombrarlo)
+        const allKeys = pkValue !== undefined ? [pkField, ...keys] : keys;
+        const allValues = pkValue !== undefined ? [pkValue as string | number, ...values] : values;
         const setClause = allKeys.map((k) => `${k} = ?`).join(", ");
         await db.execute({
-            sql: `UPDATE ${table} SET ${setClause} WHERE id = ?`,
+            sql: `UPDATE ${table} SET ${setClause} WHERE ${pkField} = ?`,
             args: [...allValues, whereId as string | number],
         });
     } else {
         // INSERT
-        const insertKeys = id !== undefined ? ["id", ...keys] : keys;
-        const insertValues = id !== undefined
-            ? [id as string | number, ...values]
+        const insertKeys = pkValue !== undefined ? [pkField, ...keys] : keys;
+        const insertValues = pkValue !== undefined
+            ? [pkValue as string | number, ...values]
             : values;
         const placeholders = insertKeys.map(() => "?").join(", ");
         await db.execute({
@@ -157,7 +158,8 @@ export async function upsertRow(
 }
 
 export async function deleteRow(table: string, id: string | number) {
-    await query(`DELETE FROM ${table} WHERE id = ?`, [id as string]);
+    const pkField = table === "configuracion" ? "clave" : "id";
+    await query(`DELETE FROM ${table} WHERE ${pkField} = ?`, [id as string]);
 }
 
 export async function getTableCounts(): Promise<Record<string, number>> {
@@ -165,6 +167,7 @@ export async function getTableCounts(): Promise<Record<string, number>> {
         "peces", "insectos", "aves", "animales", "cultivos",
         "recolectables", "habitantes", "recetas", "logros",
         "codigos", "admins", "configuracion", "admin_logs",
+        "clima", "tienda_items",
     ];
     const counts: Record<string, number> = {};
     await Promise.all(
@@ -179,3 +182,42 @@ export async function getTableCounts(): Promise<Record<string, number>> {
     );
     return counts;
 }
+
+// ─── Analytics ───────────────────────────────────────────────────────────────
+
+export async function getTopUsers(limit = 10) {
+    return query<{ id: string; username: string | null; xp: number; nivel: number; monedas: number }>(
+        "SELECT id, username, xp, nivel, monedas FROM usuarios ORDER BY xp DESC LIMIT ?",
+        [limit]
+    );
+}
+
+export async function getTopCollectors(limit = 10) {
+    return query<{ user_id: string; username: string | null; total_items: number }>(
+        "SELECT c.user_id, u.username, COUNT(*) as total_items FROM colecciones c LEFT JOIN usuarios u ON c.user_id = u.id GROUP BY c.user_id ORDER BY total_items DESC LIMIT ?",
+        [limit]
+    );
+}
+
+export async function getTriviaStats() {
+    try {
+        const total = await query<{ c: number }>("SELECT COUNT(*) as c FROM trivia_stats");
+        const respondidas = await query<{ r: number }>("SELECT SUM(Math.min(fue_respondida, 1)) as r FROM trivia_stats"); // SQLite sum of boolean essentially
+
+        // Actually SQLite 1 is true, 0 is false, so sum(fue_respondida) works
+        const respondidasRaw = await query<{ r: number }>("SELECT SUM(fue_respondida) as r FROM trivia_stats");
+
+        const topHabitantes = await query<{ habitante: string; veces: number }>(
+            "SELECT habitante, COUNT(*) as veces FROM trivia_stats GROUP BY habitante ORDER BY veces DESC LIMIT 5"
+        );
+
+        return {
+            total: Number(total[0]?.c ?? 0),
+            respondidas: Number(respondidasRaw[0]?.r ?? 0),
+            topHabitantes
+        };
+    } catch {
+        return { total: 0, respondidas: 0, topHabitantes: [] };
+    }
+}
+

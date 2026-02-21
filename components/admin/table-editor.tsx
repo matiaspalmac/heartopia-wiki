@@ -36,6 +36,8 @@ export function TableEditor({ table }: TableEditorProps) {
 
     useEffect(() => { fetchData(); }, [fetchData]);
 
+    const pkField = table === "configuracion" ? "clave" : "id";
+
     const filtered = rows.filter((row) =>
         Object.values(row).some((v) =>
             String(v ?? "").toLowerCase().includes(search.toLowerCase())
@@ -45,13 +47,13 @@ export function TableEditor({ table }: TableEditorProps) {
     function openNew() {
         const empty: Record<string, unknown> = {};
         columns.forEach((c) => { empty[c] = ""; });
-        delete empty["id"];
+        delete empty[pkField];
         setEditingRow(empty);
         setShowModal(true);
     }
 
     function openEdit(row: Record<string, unknown>) {
-        setOriginalId(row.id !== undefined ? String(row.id) : null);
+        setOriginalId(row[pkField] !== undefined ? String(row[pkField]) : null);
         setEditingRow({ ...row });
         setShowModal(true);
     }
@@ -114,7 +116,7 @@ export function TableEditor({ table }: TableEditorProps) {
         );
     }
 
-    const displayCols = columns.filter((c) => c !== "id").slice(0, 5);
+    const displayCols = columns.filter((c) => c !== pkField).slice(0, 5);
 
     return (
         <div>
@@ -151,9 +153,9 @@ export function TableEditor({ table }: TableEditorProps) {
                     <table className="w-full text-sm">
                         <thead>
                             <tr className="border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-950">
-                                {columns.includes("id") && (
+                                {columns.includes(pkField) && (
                                     <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-widest text-neutral-400 w-16">
-                                        ID
+                                        {pkField.toUpperCase()}
                                     </th>
                                 )}
                                 {displayCols.map((col) => (
@@ -190,9 +192,9 @@ export function TableEditor({ table }: TableEditorProps) {
                                         key={i}
                                         className="hover:bg-pink-50/30 dark:hover:bg-pink-950/10 transition-colors"
                                     >
-                                        {columns.includes("id") && (
+                                        {columns.includes(pkField) && (
                                             <td className="px-4 py-3 text-neutral-400 text-xs font-mono">
-                                                {String(row.id ?? "—")}
+                                                {String(row[pkField] ?? "—")}
                                             </td>
                                         )}
                                         {displayCols.map((col) => (
@@ -220,10 +222,10 @@ export function TableEditor({ table }: TableEditorProps) {
                                                 >
                                                     ✏️ Editar
                                                 </button>
-                                                {deleteConfirm === row.id ? (
+                                                {deleteConfirm === row[pkField] ? (
                                                     <span className="flex gap-1">
                                                         <button
-                                                            onClick={() => handleDelete(row.id as string)}
+                                                            onClick={() => handleDelete(row[pkField] as string)}
                                                             className="rounded-lg bg-red-500 text-white text-xs font-bold px-3 py-1.5"
                                                         >
                                                             Confirmar
@@ -237,7 +239,7 @@ export function TableEditor({ table }: TableEditorProps) {
                                                     </span>
                                                 ) : (
                                                     <button
-                                                        onClick={() => setDeleteConfirm(row.id as string)}
+                                                        onClick={() => setDeleteConfirm(row[pkField] as string)}
                                                         className="rounded-lg border border-red-200 dark:border-red-900 text-xs font-bold px-3 py-1.5 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 transition"
                                                     >
                                                         🗑️
@@ -259,7 +261,7 @@ export function TableEditor({ table }: TableEditorProps) {
                     <div className="bg-white dark:bg-neutral-900 rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
                         <div className="px-6 py-5 border-b border-neutral-200 dark:border-neutral-800">
                             <h3 className="text-lg font-extrabold text-neutral-900 dark:text-white">
-                                {editingRow.id ? "Editar item" : "Agregar item"}
+                                {editingRow[pkField] ? "Editar item" : "Agregar item"}
                             </h3>
                             <p className="text-sm text-neutral-400 mt-0.5">Tabla: {table}</p>
                         </div>
@@ -269,7 +271,7 @@ export function TableEditor({ table }: TableEditorProps) {
                                 <div key={key} className="flex flex-col gap-1.5">
                                     <label className="text-xs font-bold uppercase tracking-widest text-neutral-500">
                                         {key.replace(/_/g, " ")}
-                                        {key === "id" && originalId !== null && (
+                                        {key === pkField && originalId !== null && (
                                             <span className="ml-1 normal-case font-normal text-neutral-400">(renombrable)</span>
                                         )}
                                     </label>

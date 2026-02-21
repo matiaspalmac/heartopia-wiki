@@ -2,6 +2,7 @@ import { getTableCounts } from "@/lib/db";
 import Link from "next/link";
 
 const TABLE_META: Record<string, { label: string; icon: string; href: string }> = {
+    usuarios: { label: "Vecinos (Usuarios)", icon: "👥", href: "/admin/usuarios" },
     peces: { label: "Peces", icon: "🎣", href: "/admin/peces" },
     insectos: { label: "Insectos", icon: "🦋", href: "/admin/insectos" },
     aves: { label: "Aves", icon: "🐦", href: "/admin/aves" },
@@ -12,6 +13,8 @@ const TABLE_META: Record<string, { label: string; icon: string; href: string }> 
     recetas: { label: "Recetas", icon: "🍳", href: "/admin/recetas" },
     logros: { label: "Logros", icon: "🏆", href: "/admin/logros" },
     codigos: { label: "Códigos", icon: "🎁", href: "/admin/codigos" },
+    tienda_items: { label: "Tienda", icon: "🛒", href: "/admin/tienda_items" },
+    clima: { label: "Clima", icon: "🌦️", href: "/admin/clima" },
     configuracion: { label: "Configuración", icon: "⚙️", href: "/admin/configuracion" },
     admins: { label: "Admins", icon: "👤", href: "/admin/usuarios" },
 };
