@@ -26,7 +26,7 @@ export default function LoginPage() {
                     {/* Logo */}
                     <div className="flex flex-col items-center gap-3 mb-8">
                         <div className="relative h-20 w-20 rounded-full overflow-hidden border-4 border-pink-200 dark:border-pink-900 shadow-lg">
-                            <Image src="/annie.jpg" alt="Annie" fill className="object-cover" />
+                            <Image src="/annie.jpg" alt="Annie" fill priority className="object-cover" />
                         </div>
                         <div className="text-center">
                             <h1 className="text-2xl font-extrabold text-neutral-900 dark:text-white">

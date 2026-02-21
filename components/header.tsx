@@ -229,7 +229,10 @@ export function Header() {
                 <Menu className="h-6 w-6" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-full sm:w-[350px]">
+            <SheetContent side="right" className="w-full sm:w-[350px]" aria-describedby={undefined}>
+              <SheetHeader className="sr-only">
+                <SheetTitle>Menu de navegacion</SheetTitle>
+              </SheetHeader>
               <div className="flex flex-col gap-8 py-8 h-[calc(100vh-120px)] overflow-y-auto">
                 <nav className="grid grid-cols-2 gap-3">
                   {[...mainNav, ...moreNav].map((item) => (
