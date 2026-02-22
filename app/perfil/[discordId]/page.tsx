@@ -136,6 +136,7 @@ export default async function PerfilPublicoPage({ params }: PageProps) {
     const monedas = Number(user.monedas);
     const tema = String(user.tema_perfil || 'default');
     const banner_url = String(user.banner_url || '');
+    const marcoPerfil = String(user.marco_perfil || 'default');
     const mascotaId = user.mascota_activa;
     const username = user.username ? String(user.username) : null;
     const avatarData = user.avatar ? String(user.avatar) : null;
@@ -211,6 +212,47 @@ export default async function PerfilPublicoPage({ params }: PageProps) {
         temasSet.add(tema.replace('tema_', ''));
     }
     const temasComprados = Array.from(temasSet);
+
+    // 7.6 Fetch Marcos Comprados
+    const resMarcos = await db.execute({
+        sql: "SELECT item_id FROM inventario_economia WHERE user_id = ? AND item_id LIKE 'marco_perfil_%' AND cantidad > 0",
+        args: [discordId]
+    });
+    const marcosSet = new Set(resMarcos.rows.map(r => String(r.item_id).replace('marco_perfil_', '')));
+    if (marcoPerfil.startsWith('marco_perfil_')) {
+        marcosSet.add(marcoPerfil.replace('marco_perfil_', ''));
+    }
+    const marcosComprados = Array.from(marcosSet);
+
+    // 7.7 Fetch consumibles/servicios comprados + boosts activos
+    const resConsumibles = await db.execute({
+        sql: "SELECT item_id, cantidad FROM inventario_economia WHERE user_id = ? AND item_id IN ('booster_xp_30m','amuleto_suerte_15m','reset_racha_perdon') AND cantidad > 0",
+        args: [discordId]
+    });
+    const consumiblesComprados = resConsumibles.rows.map(r => ({
+        item_id: String(r.item_id),
+        cantidad: Number(r.cantidad || 0),
+    }));
+
+    const boostsActivos: string[] = [];
+    try {
+        const resBoosts = await db.execute({
+            sql: "SELECT boost_id, fecha_expira FROM boosts_activos WHERE user_id = ?",
+            args: [discordId],
+        });
+        const ahora = Date.now();
+        for (const row of resBoosts.rows) {
+            const expira = Number(row.fecha_expira || 0);
+            if (expira <= ahora) continue;
+            const minutos = Math.max(1, Math.ceil((expira - ahora) / 60000));
+            const id = String(row.boost_id || "");
+            if (id === "booster_xp_30m") boostsActivos.push(`Booster XP (+25%) · ${minutos}m`);
+            else if (id === "amuleto_suerte_15m") boostsActivos.push(`Amuleto de Suerte · ${minutos}m`);
+            else boostsActivos.push(`${id} · ${minutos}m`);
+        }
+    } catch {
+        // tabla puede no existir aún en algunos entornos
+    }
 
     // 8. Fetch Bitacora
     const resBitacora = await db.execute({
@@ -419,6 +461,13 @@ const TEMA_ACCENT: Record<string, { progress: string; badge: string }> = {
     const accent = TEMA_ACCENT[tema] || TEMA_ACCENT.default;
     const profileThemeVars = PROFILE_THEME_VARS[tema] || PROFILE_THEME_VARS.default;
 
+    const marcoClassMap: Record<string, string> = {
+        marco_perfil_bronce: "border-amber-600 ring-4 ring-amber-400/40",
+        marco_perfil_cristal: "border-cyan-400 ring-4 ring-cyan-300/40",
+        marco_perfil_galaxia: "border-violet-500 ring-4 ring-fuchsia-500/40",
+    };
+    const marcoAvatarClass = marcoClassMap[marcoPerfil] || (monedas >= 10000 ? "border-amber-500" : "border-background");
+
     return (
         <div style={profileThemeVars} className="min-h-screen w-full flex flex-col items-center bg-background font-sans">
             <Header embedded />
@@ -449,7 +498,7 @@ const TEMA_ACCENT: Record<string, { progress: string; badge: string }> = {
                     )}
 
                     {/* Avatar */}
-                    <div className={`relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden border-4 shadow-lg bg-secondary mb-5 shrink-0 z-10 flex items-center justify-center ring-4 ring-primary/10 ${monedas >= 10000 ? 'border-amber-500' : 'border-background'}`}>
+                    <div className={`relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden border-4 shadow-lg bg-secondary mb-5 shrink-0 z-10 flex items-center justify-center ring-4 ring-primary/10 ${marcoAvatarClass}`}>
                         {avatarData ? (
                             <img src={avatarData} alt="Avatar de Discord" className="w-full h-full object-cover" />
                         ) : (
@@ -612,6 +661,55 @@ const TEMA_ACCENT: Record<string, { progress: string; badge: string }> = {
                                     {ins}
                                 </Badge>
                             ))}
+                        </div>
+                    </div>
+                )}
+
+                {(marcosComprados.length > 0 || consumiblesComprados.length > 0 || boostsActivos.length > 0) && (
+                    <div className="bg-card rounded-3xl shadow-xl border border-border p-6 sm:p-8">
+                        <h3 className="text-xl font-black text-foreground mb-6">🧪 Compras Especiales</h3>
+                        <div className="space-y-4 text-sm text-foreground">
+                            {boostsActivos.length > 0 && (
+                                <div className="rounded-xl border border-border bg-secondary/20 p-4">
+                                    <p className="text-xs font-black uppercase tracking-wider text-primary mb-2">Efectos activos</p>
+                                    <ul className="space-y-1">
+                                        {boostsActivos.map((b) => <li key={b}>• {b}</li>)}
+                                    </ul>
+                                </div>
+                            )}
+
+                            {consumiblesComprados.length > 0 && (
+                                <div className="rounded-xl border border-border bg-secondary/20 p-4">
+                                    <p className="text-xs font-black uppercase tracking-wider text-primary mb-2">Consumibles / servicios comprados</p>
+                                    <div className="flex flex-wrap gap-2">
+                                        {consumiblesComprados.map((c) => (
+                                            <Badge key={c.item_id} variant="secondary" className="text-xs font-bold px-3 py-1">
+                                                {c.item_id} x{c.cantidad}
+                                            </Badge>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {marcosComprados.length > 0 && (
+                                <div className="rounded-xl border border-border bg-secondary/20 p-4">
+                                    <p className="text-xs font-black uppercase tracking-wider text-primary mb-2">Marcos desbloqueados</p>
+                                    <div className="flex flex-wrap gap-2">
+                                        {marcosComprados.map((m) => {
+                                            const isActivo = marcoPerfil.replace('marco_perfil_', '') === m;
+                                            return (
+                                                <Badge
+                                                    key={m}
+                                                    variant={isActivo ? "default" : "secondary"}
+                                                    className={`text-xs font-bold px-3 py-1 ${isActivo ? 'bg-primary text-primary-foreground hover:bg-primary' : ''}`}
+                                                >
+                                                    {isActivo ? 'Activo · ' : ''}{m.replace('_', ' ')}
+                                                </Badge>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
                 )}
