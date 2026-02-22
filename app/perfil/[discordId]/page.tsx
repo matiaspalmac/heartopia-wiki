@@ -720,9 +720,11 @@ const TEMA_ACCENT: Record<string, { progress: string; badge: string }> = {
                                 </div>
                             )}
 
-                            {casinoStats.totalBetted > 0 && (
-                                <div className="rounded-xl border border-border bg-secondary/20 p-4">
-                                    <p className="text-xs font-black uppercase tracking-wider text-primary mb-2">🎰 Casino Stats</p>
+                            <div className="rounded-xl border border-border bg-secondary/20 p-4">
+                                <p className="text-xs font-black uppercase tracking-wider text-primary mb-2">🎰 Casino Stats</p>
+                                {casinoStats.totalBetted === 0 ? (
+                                    <p className="text-xs text-muted-foreground italic">Aún no has jugado en el casino. ¡Prueba tu suerte! 🍀</p>
+                                ) : (
                                     <div className="grid grid-cols-2 gap-2 text-xs">
                                         <div>
                                             <span className="font-bold text-muted-foreground">W-L:</span>{' '}
@@ -743,8 +745,8 @@ const TEMA_ACCENT: Record<string, { progress: string; badge: string }> = {
                                             </span>
                                         </div>
                                     </div>
-                                </div>
-                            )}
+                                )}
+                            </div>
 
                             {marcosComprados.length > 0 && (
                                 <div className="rounded-xl border border-border bg-secondary/20 p-4">
