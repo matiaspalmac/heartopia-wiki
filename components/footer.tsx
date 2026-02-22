@@ -36,9 +36,13 @@ const categories = [
   { href: "/nuestracomunidad", label: "Nuestra Comunidad", icon: Users2 },
 ];
 
-export function Footer() {
+interface FooterProps {
+  embedded?: boolean;
+}
+
+export function Footer({ embedded = false }: FooterProps) {
   return (
-    <footer className="border-t border-border/50 bg-gradient-to-b from-secondary/20 to-background">
+    <footer className={`border-t border-border/50 ${embedded ? "bg-transparent" : "bg-gradient-to-b from-secondary/20 to-background"}`}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 md:py-16">
         <div className="grid gap-10 md:grid-cols-3 lg:gap-12">
           <div className="space-y-6">

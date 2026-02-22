@@ -191,7 +191,7 @@ export default async function HomePage() {
         {/* F13 - Widget Evento Global / Junta de Vecinos */}
         {eventoActivo && (
           <section className="py-8 bg-amber-500/10 border-y border-amber-500/20 backdrop-blur-sm relative overflow-hidden">
-            <div className="absolute inset-0 bg-[url('/pattern.png')] opacity-5 mix-blend-overlay" />
+            <div className="absolute inset-0 opacity-5 mix-blend-overlay" />
             <div className="mx-auto max-w-4xl px-4 relative z-10 flex flex-col items-center">
               <Badge variant="outline" className="bg-amber-500 text-white border-none mb-3 px-3 py-1 text-xs uppercase tracking-widest font-black shadow-lg">
                 📢 Proyecto de la Junta de Vecinos

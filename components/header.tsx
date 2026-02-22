@@ -68,7 +68,11 @@ const moreNav = [
   { href: "/admin", label: "Admin", icon: Users2 },
 ];
 
-export function Header() {
+interface HeaderProps {
+  embedded?: boolean;
+}
+
+export function Header({ embedded = false }: HeaderProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [theme, setTheme] = useState("light");
@@ -79,14 +83,37 @@ export function Header() {
   }, []);
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem("theme") || "light";
-    setTheme(savedTheme);
-    if (savedTheme === "dark") {
-      document.documentElement.classList.add("dark");
+    if (embedded) {
+      return;
     }
-  }, []);
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const savedTheme = localStorage.getItem("theme");
+    const hasSavedTheme = savedTheme === "light" || savedTheme === "dark";
+    const initialTheme = hasSavedTheme ? savedTheme : mediaQuery.matches ? "dark" : "light";
+
+    setTheme(initialTheme);
+    document.documentElement.classList.toggle("dark", initialTheme === "dark");
+
+    const handleSystemThemeChange = (event: MediaQueryListEvent) => {
+      const currentSavedTheme = localStorage.getItem("theme");
+      const hasCurrentSavedTheme = currentSavedTheme === "light" || currentSavedTheme === "dark";
+      if (!hasCurrentSavedTheme) {
+        const nextTheme = event.matches ? "dark" : "light";
+        setTheme(nextTheme);
+        document.documentElement.classList.toggle("dark", nextTheme === "dark");
+      }
+    };
+
+    mediaQuery.addEventListener("change", handleSystemThemeChange);
+    return () => {
+      mediaQuery.removeEventListener("change", handleSystemThemeChange);
+    };
+  }, [embedded]);
 
   const toggleTheme = () => {
+    if (embedded) {
+      return;
+    }
     const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
     localStorage.setItem("theme", newTheme);
@@ -101,7 +128,9 @@ export function Header() {
     <header
       className={`sticky top-0 z-50 w-full transition-all duration-300 ${scrolled
           ? "border-b bg-background/80 backdrop-blur-md py-2 shadow-sm"
-          : "bg-background py-3"
+          : embedded
+            ? "bg-transparent py-3"
+            : "bg-background py-3"
         }`}
     >
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
@@ -168,18 +197,20 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2 md:gap-3">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={toggleTheme}
-            className="rounded-xl hover:bg-secondary transition-colors"
-          >
-            {theme === "light" ? (
-              <Moon className="h-5 w-5 text-muted-foreground" />
-            ) : (
-              <Sun className="h-5 w-5 text-yellow-400" />
-            )}
-          </Button>
+          {!embedded && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleTheme}
+              className="rounded-xl hover:bg-secondary transition-colors"
+            >
+              {theme === "light" ? (
+                <Moon className="h-5 w-5 text-muted-foreground" />
+              ) : (
+                <Sun className="h-5 w-5 text-yellow-400" />
+              )}
+            </Button>
+          )}
 
           <Link href="/buscar" className="hidden md:block">
             <Button
