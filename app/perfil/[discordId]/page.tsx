@@ -254,6 +254,35 @@ export default async function PerfilPublicoPage({ params }: PageProps) {
         // tabla puede no existir aún en algunos entornos
     }
 
+    // 7.8 Fetch Casino Stats
+    let casinoStats = {
+        wins: 0,
+        losses: 0,
+        totalBetted: 0,
+        netWinnings: 0,
+        winRate: 0,
+    };
+    try {
+        const resCasino = await db.execute({
+            sql: "SELECT wins, losses, total_betted, net_winnings FROM casino_stats WHERE user_id = ?",
+            args: [discordId],
+        });
+        if (resCasino.rows.length > 0) {
+            const wins = Number(resCasino.rows[0].wins || 0);
+            const losses = Number(resCasino.rows[0].losses || 0);
+            const totalGames = wins + losses;
+            casinoStats = {
+                wins,
+                losses,
+                totalBetted: Number(resCasino.rows[0].total_betted || 0),
+                netWinnings: Number(resCasino.rows[0].net_winnings || 0),
+                winRate: totalGames > 0 ? (wins / totalGames) * 100 : 0,
+            };
+        }
+    } catch {
+        // tabla puede no existir aún
+    }
+
     // 8. Fetch Bitacora
     const resBitacora = await db.execute({
         sql: "SELECT accion, fecha FROM bitacora WHERE user_id = ? ORDER BY id DESC LIMIT 5",
@@ -687,6 +716,32 @@ const TEMA_ACCENT: Record<string, { progress: string; badge: string }> = {
                                                 {c.item_id} x{c.cantidad}
                                             </Badge>
                                         ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {casinoStats.totalBetted > 0 && (
+                                <div className="rounded-xl border border-border bg-secondary/20 p-4">
+                                    <p className="text-xs font-black uppercase tracking-wider text-primary mb-2">🎰 Casino Stats</p>
+                                    <div className="grid grid-cols-2 gap-2 text-xs">
+                                        <div>
+                                            <span className="font-bold text-muted-foreground">W-L:</span>{' '}
+                                            <span className="font-black text-foreground">{casinoStats.wins}W-{casinoStats.losses}L</span>
+                                        </div>
+                                        <div>
+                                            <span className="font-bold text-muted-foreground">Win Rate:</span>{' '}
+                                            <span className="font-black text-foreground">{casinoStats.winRate.toFixed(1)}%</span>
+                                        </div>
+                                        <div>
+                                            <span className="font-bold text-muted-foreground">Apostado:</span>{' '}
+                                            <span className="font-black text-foreground">{formatCompactNumber(casinoStats.totalBetted)}</span>
+                                        </div>
+                                        <div>
+                                            <span className="font-bold text-muted-foreground">Ganancia neta:</span>{' '}
+                                            <span className={`font-black ${casinoStats.netWinnings >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                                                {casinoStats.netWinnings >= 0 ? '+' : ''}{formatCompactNumber(casinoStats.netWinnings)}
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             )}
