@@ -9,6 +9,7 @@ import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 
 export const revalidate = 60;
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://heartopiachile.vercel.app";
 
 interface PageProps {
     params: Promise<{ discordId: string }>;
@@ -814,6 +815,8 @@ const TEMA_ACCENT: Record<string, { progress: string; badge: string }> = {
 export async function generateMetadata({ params }: { params: Promise<{ discordId: string }> }) {
     const { discordId } = await params;
     const db = getDb();
+    const profileUrl = `${SITE_URL}/perfil/${discordId}`;
+    const profileOgImageUrl = `${SITE_URL}/perfil/${discordId}/opengraph-image`;
 
     let username: string | null = null;
     try {
@@ -831,12 +834,17 @@ export async function generateMetadata({ params }: { params: Promise<{ discordId
     return {
         title: username ? `Perfil de ${username}` : "Perfil usuario",
         description: "Revisa la libretita de este vecinito del pueblito de Heartopia.",
+        alternates: {
+            canonical: profileUrl,
+        },
         openGraph: {
+            type: "website",
+            url: profileUrl,
             title: username ? `Perfil de ${username}` : "Perfil usuario",
             description: "Revisa la libretita de este vecinito del pueblito de Heartopia.",
             images: [
                 {
-                    url: `/perfil/${discordId}/opengraph-image`,
+                    url: profileOgImageUrl,
                     width: 1200,
                     height: 630,
                     alt: username ? `Perfil de ${username}` : "Perfil usuario",
@@ -847,7 +855,7 @@ export async function generateMetadata({ params }: { params: Promise<{ discordId
             card: "summary_large_image",
             title: username ? `Perfil de ${username}` : "Perfil usuario",
             description: "Revisa la libretita de este vecinito del pueblito de Heartopia.",
-            images: [`/perfil/${discordId}/opengraph-image`],
+            images: [profileOgImageUrl],
         },
     };
 }
