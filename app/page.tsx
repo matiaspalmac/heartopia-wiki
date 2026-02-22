@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import type { Metadata } from "next";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { CATEGORIES } from "@/lib/data";
@@ -54,6 +55,36 @@ const categoryColors: Record<string, string> = {
   habitantes: "bg-pink-500/10 text-pink-600 border-pink-200",
   recetas: "bg-rose-500/10 text-rose-600 border-rose-200",
   logros: "bg-purple-500/10 text-purple-600 border-purple-200",
+};
+
+export const metadata: Metadata = {
+  title: "Inicio",
+  description:
+    "Bienvenido a Heartopia Chile Wiki: guía comunitaria con peces, insectos, aves, animales, cultivos, recetas, logros, eventos y herramientas para vecinos.",
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: "Heartopia Chile Wiki",
+    description:
+      "Explora la guía comunitaria más completa de Heartopia en español: colecciones, eventos, logros y más.",
+    url: "/",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "Heartopia Chile Wiki - Imagen de inicio",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Heartopia Chile Wiki",
+    description:
+      "Explora la guía comunitaria más completa de Heartopia en español: colecciones, eventos, logros y más.",
+    images: ["/opengraph-image"],
+  },
 };
 
 export const revalidate = 60;

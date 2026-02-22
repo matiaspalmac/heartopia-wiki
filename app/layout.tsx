@@ -17,8 +17,43 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Heartopia Chile Wiki',
-  description: 'Wiki completa de Heartopia con información sobre peces, insectos, aves, animales, cultivos, recolectables y logros.',
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://heartopiachile.vercel.app'),
+  title: {
+    default: 'Heartopia Chile Wiki',
+    template: '%s | Heartopia Chile Wiki',
+  },
+  description: 'Wiki completa de Heartopia hecha por la comunidad chilena: peces, insectos, aves, animales, cultivos, recetas, recolectables, logros y eventos.',
+  applicationName: 'Heartopia Chile Wiki',
+  keywords: [
+    'Heartopia',
+    'Heartopia Chile',
+    'Heartopia Wiki',
+    'guía Heartopia',
+    'peces Heartopia',
+    'insectos Heartopia',
+    'logros Heartopia',
+  ],
+  openGraph: {
+    type: 'website',
+    locale: 'es_CL',
+    siteName: 'Heartopia Chile Wiki',
+    title: 'Heartopia Chile Wiki',
+    description: 'Guía comunitaria de Heartopia con datos, colecciones, eventos y perfiles de vecinos.',
+    images: [
+      {
+        url: '/annie.jpg',
+        width: 1200,
+        height: 1200,
+        alt: 'Annie - Heartopia Chile Wiki',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Heartopia Chile Wiki',
+    description: 'Guía comunitaria de Heartopia con datos, colecciones, eventos y perfiles de vecinos.',
+    images: ['/annie.jpg'],
+  },
   icons: {
     icon: '/annie.jpg',
     shortcut: '/annie.jpg',

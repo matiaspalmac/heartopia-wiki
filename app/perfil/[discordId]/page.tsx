@@ -811,8 +811,41 @@ const TEMA_ACCENT: Record<string, { progress: string; badge: string }> = {
 
 export async function generateMetadata({ params }: { params: Promise<{ discordId: string }> }) {
     const { discordId } = await params;
+    const db = getDb();
+
+    let username: string | null = null;
+    try {
+        const resUser = await db.execute({
+            sql: "SELECT username FROM usuarios WHERE id = ? LIMIT 1",
+            args: [discordId]
+        });
+        if (resUser.rows.length > 0 && resUser.rows[0].username) {
+            username = String(resUser.rows[0].username);
+        }
+    } catch {
+        username = null;
+    }
+
     return {
-        title: `Perfil ${discordId} | Heartopia`,
+        title: username ? `Perfil de ${username}` : "Perfil usuario",
         description: "Revisa la libretita de este vecinito del pueblito de Heartopia.",
+        openGraph: {
+            title: username ? `Perfil de ${username}` : "Perfil usuario",
+            description: "Revisa la libretita de este vecinito del pueblito de Heartopia.",
+            images: [
+                {
+                    url: `/perfil/${discordId}/opengraph-image`,
+                    width: 1200,
+                    height: 630,
+                    alt: username ? `Perfil de ${username}` : "Perfil usuario",
+                },
+            ],
+        },
+        twitter: {
+            card: "summary_large_image",
+            title: username ? `Perfil de ${username}` : "Perfil usuario",
+            description: "Revisa la libretita de este vecinito del pueblito de Heartopia.",
+            images: [`/perfil/${discordId}/opengraph-image`],
+        },
     };
 }
