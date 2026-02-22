@@ -14,6 +14,8 @@ interface PageProps {
     params: Promise<{ discordId: string }>;
 }
 
+type CssVars = CSSProperties & Record<`--${string}`, string>;
+
 const CATEGORIAS_EMOJIS: Record<string, string> = {
     peces: "🐟", insectos: "🦋", aves: "🕊️", animales: "🦊",
     cultivos: "🌱", recolectables: "🌿", recetas: "🍳", logros: "🏆"
@@ -30,7 +32,7 @@ const CATEGORIAS_COLORS: Record<string, string> = {
     logros: "text-purple-600 bg-purple-500/10",
 };
 
-const PROFILE_THEME_VARS: Record<string, CSSProperties> = {
+const PROFILE_THEME_VARS: Record<string, CssVars> = {
     default: {
         "--background": "oklch(0.97 0.02 350)",
         "--foreground": "oklch(0.25 0.04 350)",

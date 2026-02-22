@@ -110,7 +110,7 @@ export default async function Image({ params }: { params: Promise<{ discordId: s
               Heartopia Chile Wiki
             </div>
 
-            <div style={{ fontSize: 64, fontWeight: 900, lineHeight: 1.05 }}>Perfil de {username}</div>
+            <div style={{ fontSize: 64, fontWeight: 900, lineHeight: 1.05 }}>{`Perfil de ${username}`}</div>
 
             <div style={{ display: "flex", gap: 16 }}>
               <div

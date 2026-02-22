@@ -43,6 +43,7 @@ export default async function Image() {
           style={{
             position: "absolute",
             inset: 0,
+            display: "flex",
             background:
               "radial-gradient(circle at 20% 20%, rgba(255,255,255,0.2), transparent 40%), radial-gradient(circle at 80% 0%, rgba(255,255,255,0.12), transparent 35%)",
           }}
@@ -68,10 +69,12 @@ export default async function Image() {
                 height={48}
                 style={{ borderRadius: 9999, border: "2px solid rgba(255,255,255,0.55)" }}
               />
-              <div style={{ fontSize: 30, fontWeight: 900, letterSpacing: 0.2 }}>Heartopia Chile Wiki</div>
+              <div style={{ display: "flex", fontSize: 30, fontWeight: 900, letterSpacing: 0.2 }}>
+                Heartopia Chile Wiki
+              </div>
             </div>
 
-            <div style={{ fontSize: 66, fontWeight: 900, lineHeight: 1.04 }}>
+            <div style={{ display: "flex", fontSize: 66, fontWeight: 900, lineHeight: 1.04 }}>
               La guía comunitaria más completa de Heartopia
             </div>
 
@@ -88,13 +91,14 @@ export default async function Image() {
                   gap: 8,
                 }}
               >
-                <div style={{ fontSize: 22, fontWeight: 800 }}>📢 {evento.titulo}</div>
-                <div style={{ fontSize: 16, opacity: 0.9, maxWidth: 680 }}>
+                <div style={{ display: "flex", fontSize: 22, fontWeight: 800 }}>{`📢 ${evento.titulo}`}</div>
+                <div style={{ display: "flex", fontSize: 16, opacity: 0.9, maxWidth: 680 }}>
                   {String(evento.descripcion).slice(0, 140)}
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                   <div
                     style={{
+                      display: "flex",
                       width: 360,
                       height: 14,
                       borderRadius: 999,
@@ -110,11 +114,11 @@ export default async function Image() {
                       }}
                     />
                   </div>
-                  <div style={{ fontSize: 16, fontWeight: 800 }}>{progreso}%</div>
+                  <div style={{ display: "flex", fontSize: 16, fontWeight: 800 }}>{`${progreso}%`}</div>
                 </div>
               </div>
             ) : (
-              <div style={{ fontSize: 24, fontWeight: 700, opacity: 0.95 }}>
+              <div style={{ display: "flex", fontSize: 24, fontWeight: 700, opacity: 0.95 }}>
                 Peces · Insectos · Aves · Animales · Cultivos · Logros
               </div>
             )}
@@ -143,7 +147,7 @@ export default async function Image() {
                 boxShadow: "0 16px 40px rgba(0,0,0,0.3)",
               }}
             />
-            <div style={{ fontSize: 18, fontWeight: 800, textAlign: "center", opacity: 0.95 }}>
+            <div style={{ display: "flex", fontSize: 18, fontWeight: 800, textAlign: "center", opacity: 0.95 }}>
               heartopiachile.vercel.app
             </div>
           </div>
