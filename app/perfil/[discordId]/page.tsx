@@ -118,6 +118,12 @@ const PROFILE_THEME_VARS: Record<string, CssVars> = {
 
 export default async function PerfilPublicoPage({ params }: PageProps) {
     const { discordId } = await params;
+    
+    // Validación de seguridad: discordId debe ser numérico (snowflake de Discord)
+    if (!/^\d{17,20}$/.test(discordId)) {
+        return notFound();
+    }
+    
     const db = getDb();
 
     // 1. Fetch user data
@@ -131,15 +137,22 @@ export default async function PerfilPublicoPage({ params }: PageProps) {
     }
 
     const user = resUser.rows[0];
-    const xp = Number(user.xp);
-    const nivel = Number(user.nivel);
-    const monedas = Number(user.monedas);
+    const xp = Number(user.xp || 0);
+    const nivel = Math.max(1, Number(user.nivel || 1));
+    const monedas = Number(user.monedas || 0);
     const tema = String(user.tema_perfil || 'default');
     const banner_url = String(user.banner_url || '');
     const marcoPerfil = String(user.marco_perfil || 'default');
     const mascotaId = user.mascota_activa;
     const username = user.username ? String(user.username) : null;
     const avatarData = user.avatar ? String(user.avatar) : null;
+    
+    // Helper: formatear números de forma compacta
+    const formatCompactNumber = (value: number) =>
+        new Intl.NumberFormat('es-CL', {
+            notation: 'compact',
+            maximumFractionDigits: 1,
+        }).format(value);
 
     const mascotaNombresMap = new Map<string, string>();
     try {
@@ -168,100 +181,214 @@ export default async function PerfilPublicoPage({ params }: PageProps) {
         ? (mascotaNombresMap.get(String(mascotaId)) || mascotaData?.nombre || String(mascotaId).replace("mascota_", ""))
         : null;
 
-    // 2. Fetch total items counts
-    const totals = await getTableCounts();
-
-    // 3. Fetch user collections
-    const resCol = await db.execute({
-        sql: "SELECT categoria, COUNT(*) as total FROM colecciones WHERE user_id = ? GROUP BY categoria",
-        args: [discordId]
-    });
+    // 2-8. OPTIMIZACIÓN: Paralelizar todas las queries independientes
+    const [
+        totals,
+        resCol,
+        resDestacados,
+        resHab,
+        resStats,
+        resTitulos,
+        resInventario,
+        resHerramientas,
+        resBitacora,
+    ] = await Promise.all([
+        // Totales de categorías
+        getTableCounts(),
+        
+        // Colecciones del usuario
+        db.execute({
+            sql: "SELECT categoria, COUNT(*) as total FROM colecciones WHERE user_id = ? GROUP BY categoria",
+            args: [discordId]
+        }),
+        
+        // Destacados (Vitrina)
+        db.execute({
+            sql: "SELECT slot, categoria, item_id FROM destacados WHERE user_id = ? ORDER BY slot ASC",
+            args: [discordId]
+        }),
+        
+        // Habilidades
+        db.execute({
+            sql: "SELECT habilidad, nivel FROM habilidades WHERE user_id = ?",
+            args: [discordId]
+        }),
+        
+        // Estadísticas
+        db.execute({
+            sql: "SELECT accion, cantidad FROM estadisticas WHERE user_id = ?",
+            args: [discordId]
+        }),
+        
+        // Títulos
+        db.execute({
+            sql: "SELECT titulo, equipado FROM titulos WHERE user_id = ?",
+            args: [discordId]
+        }),
+        
+        // Un solo query para todo el inventario (mascotas, temas, marcos, consumibles)
+        db.execute({
+            sql: `SELECT item_id, cantidad FROM inventario_economia 
+                  WHERE user_id = ? 
+                  AND (item_id LIKE 'mascota_%' 
+                       OR item_id LIKE 'tema_%' 
+                       OR item_id LIKE 'marco_perfil_%'
+                       OR item_id IN ('booster_xp_30m','amuleto_suerte_15m','reset_racha_perdon','etiqueta_mascota'))
+                  AND cantidad > 0`,
+            args: [discordId]
+        }),
+        
+        // Herramientas con durabilidad (NUEVO)
+        db.execute({
+            sql: `SELECT item_id, durabilidad, max_durabilidad, equipado 
+                  FROM herramientas_durabilidad 
+                  WHERE user_id = ? 
+                  ORDER BY equipado DESC, durabilidad DESC, item_id ASC`,
+            args: [discordId]
+        }),
+        
+        // Bitácora
+        db.execute({
+            sql: "SELECT accion, fecha FROM bitacora WHERE user_id = ? ORDER BY id DESC LIMIT 5",
+            args: [discordId]
+        }),
+    ]);
+    
+    // Procesar colecciones
     const collectionsCount = resCol.rows as unknown as { categoria: string; total: number }[];
-
-    // 4. Fetch user destacados (Vitrina)
-    const resDestacados = await db.execute({
-        sql: "SELECT slot, categoria, item_id FROM destacados WHERE user_id = ? ORDER BY slot ASC",
-        args: [discordId]
-    });
+    
+    // Procesar destacados
     const destacados = resDestacados.rows as unknown as { slot: number; categoria: string; item_id: string }[];
-
-    // 5. Fetch Habilidades y Estadisticas
-    const resHab = await db.execute({
-        sql: "SELECT habilidad, nivel FROM habilidades WHERE user_id = ?",
-        args: [discordId]
-    });
+    
+    // Procesar habilidades
     const habilidades = resHab.rows as unknown as { habilidad: string; nivel: number }[];
-
-    const resStats = await db.execute({
-        sql: "SELECT accion, cantidad FROM estadisticas WHERE user_id = ?",
-        args: [discordId]
-    });
+    
+    // Procesar estadísticas
     const statsMap: Record<string, number> = {};
     for (const r of resStats.rows) statsMap[String(r.accion)] = Number(r.cantidad);
-
-    // 6. Fetch Titulo Equipado y Todos
-    const resTitulos = await db.execute({
-        sql: "SELECT titulo, equipado FROM titulos WHERE user_id = ?",
-        args: [discordId]
-    });
+    
+    // Procesar títulos
     let tituloEquipado: string | null = null;
     const listaTitulos: string[] = [];
     for (const row of resTitulos.rows) {
         if (row.equipado === 1) tituloEquipado = String(row.titulo);
         listaTitulos.push(String(row.titulo));
     }
-
-    // 7. Fetch Mascotas Compradas
-    const resMascotas = await db.execute({
-        sql: "SELECT item_id FROM inventario_economia WHERE user_id = ? AND item_id LIKE 'mascota_%' AND cantidad > 0",
-        args: [discordId]
-    });
-    const mascotasSet = new Set(resMascotas.rows.map(r => String(r.item_id)));
+    
+    // Procesar inventario unificado
+    const mascotasSet = new Set<string>();
+    const temasSet = new Set<string>();
+    const marcosSet = new Set<string>();
+    const consumiblesComprados: { item_id: string; cantidad: number }[] = [];
+    
+    // Nombres amigables para consumibles
+    const CONSUMIBLE_NOMBRES: Record<string, string> = {
+        booster_xp_30m: "Booster XP 30m",
+        amuleto_suerte_15m: "Amuleto Suerte 15m",
+        reset_racha_perdon: "Reset Racha Perdón",
+        etiqueta_mascota: "Etiqueta Mascota",
+    };
+    
+    for (const row of resInventario.rows) {
+        const itemId = String(row.item_id);
+        const cantidad = Number(row.cantidad || 0);
+        
+        if (itemId.startsWith('mascota_')) {
+            mascotasSet.add(itemId);
+        } else if (itemId.startsWith('tema_')) {
+            temasSet.add(itemId.replace('tema_', ''));
+        } else if (itemId.startsWith('marco_perfil_')) {
+            marcosSet.add(itemId.replace('marco_perfil_', ''));
+        } else {
+            consumiblesComprados.push({ item_id: itemId, cantidad });
+        }
+    }
+    
+    // Agregar items actualmente equipados aunque no estén en inventario
     if (mascotaId && String(mascotaId).startsWith('mascota_')) {
         mascotasSet.add(String(mascotaId));
     }
-    const mascotasCompradas = Array.from(mascotasSet);
-
-    // 7.5 Fetch Temas Comprados
-    const resTemas = await db.execute({
-        sql: "SELECT item_id FROM inventario_economia WHERE user_id = ? AND item_id LIKE 'tema_%' AND cantidad > 0",
-        args: [discordId]
-    });
-    const temasSet = new Set(resTemas.rows.map(r => String(r.item_id).replace('tema_', '')));
     if (tema.startsWith('tema_')) {
         temasSet.add(tema.replace('tema_', ''));
     }
-    const temasComprados = Array.from(temasSet);
-
-    // 7.6 Fetch Marcos Comprados
-    const resMarcos = await db.execute({
-        sql: "SELECT item_id FROM inventario_economia WHERE user_id = ? AND item_id LIKE 'marco_perfil_%' AND cantidad > 0",
-        args: [discordId]
-    });
-    const marcosSet = new Set(resMarcos.rows.map(r => String(r.item_id).replace('marco_perfil_', '')));
     if (marcoPerfil.startsWith('marco_perfil_')) {
         marcosSet.add(marcoPerfil.replace('marco_perfil_', ''));
     }
+    
+    const mascotasCompradas = Array.from(mascotasSet);
+    const temasComprados = Array.from(temasSet);
     const marcosComprados = Array.from(marcosSet);
-
-    // 7.7 Fetch consumibles/servicios comprados + boosts activos
-    const resConsumibles = await db.execute({
-        sql: "SELECT item_id, cantidad FROM inventario_economia WHERE user_id = ? AND item_id IN ('booster_xp_30m','amuleto_suerte_15m','reset_racha_perdon') AND cantidad > 0",
-        args: [discordId]
-    });
-    const consumiblesComprados = resConsumibles.rows.map(r => ({
-        item_id: String(r.item_id),
-        cantidad: Number(r.cantidad || 0),
+    
+    // Procesar herramientas con durabilidad
+    const TOOL_NAMES: Record<string, string> = {
+        herr_pico_basico: "Pico Básico",
+        herr_pico_hierro: "Pico de Hierro",
+        herr_pico_acero: "Pico de Acero",
+        herr_hacha_basica: "Hacha Básica",
+        herr_hacha_hierro: "Hacha de Hierro",
+        herr_hacha_titanio: "Hacha de Titanio",
+        herr_cana_basica: "Caña Básica",
+        herr_cana_fibra: "Caña de Fibra",
+        herr_cana_lunar: "Caña Lunar",
+        herr_red_basica: "Red Básica",
+        herr_red_fina: "Red Fina",
+        herr_red_seda: "Red de Seda",
+    };
+    
+    const TOOL_EMOJIS: Record<string, string> = {
+        pico: "⛏️",
+        hacha: "🪓",
+        cana: "🎣",
+        red: "🪰",
+    };
+    
+    type Herramienta = { 
+        item_id: string; 
+        durabilidad: number; 
+        max_durabilidad: number; 
+        equipado: number;
+        familia: string;
+    };
+    
+    const herramientas: Herramienta[] = resHerramientas.rows.map(r => {
+        const itemId = String(r.item_id);
+        let familia = "otra";
+        if (itemId.includes("pico")) familia = "pico";
+        else if (itemId.includes("hacha")) familia = "hacha";
+        else if (itemId.includes("cana")) familia = "cana";
+        else if (itemId.includes("red")) familia = "red";
+        
+        return {
+            item_id: itemId,
+            durabilidad: Number(r.durabilidad),
+            max_durabilidad: Number(r.max_durabilidad),
+            equipado: Number(r.equipado),
+            familia,
+        };
+    }) as Herramienta[];
+    // Procesar bitácora
+    const bitacoraReciente = resBitacora.rows.map(r => ({
+        accion: String(r.accion),
+        fechaStr: new Date(String(r.fecha)).toLocaleDateString('es-ES', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
     }));
-
-    const boostsActivos: string[] = [];
-    try {
-        const resBoosts = await db.execute({
+    
+    // Queries opcionales (pueden fallar si las tablas no existen)
+    const [resBoosts, resCasino] = await Promise.allSettled([
+        db.execute({
             sql: "SELECT boost_id, fecha_expira FROM boosts_activos WHERE user_id = ?",
             args: [discordId],
-        });
+        }),
+        db.execute({
+            sql: "SELECT wins, losses, total_betted, net_winnings FROM casino_stats WHERE user_id = ?",
+            args: [discordId],
+        }),
+    ]);
+    
+    // Procesar boosts activos
+    const boostsActivos: string[] = [];
+    if (resBoosts.status === 'fulfilled') {
         const ahora = Date.now();
-        for (const row of resBoosts.rows) {
+        for (const row of resBoosts.value.rows) {
             const expira = Number(row.fecha_expira || 0);
             if (expira <= ahora) continue;
             const minutos = Math.max(1, Math.ceil((expira - ahora) / 60000));
@@ -270,11 +397,9 @@ export default async function PerfilPublicoPage({ params }: PageProps) {
             else if (id === "amuleto_suerte_15m") boostsActivos.push(`Amuleto de Suerte · ${minutos}m`);
             else boostsActivos.push(`${id} · ${minutos}m`);
         }
-    } catch {
-        // tabla puede no existir aún en algunos entornos
     }
-
-    // 7.8 Fetch Casino Stats
+    
+    // Procesar casino stats
     let casinoStats = {
         wins: 0,
         losses: 0,
@@ -282,53 +407,43 @@ export default async function PerfilPublicoPage({ params }: PageProps) {
         netWinnings: 0,
         winRate: 0,
     };
-    try {
-        const resCasino = await db.execute({
-            sql: "SELECT wins, losses, total_betted, net_winnings FROM casino_stats WHERE user_id = ?",
-            args: [discordId],
-        });
-        if (resCasino.rows.length > 0) {
-            const wins = Number(resCasino.rows[0].wins || 0);
-            const losses = Number(resCasino.rows[0].losses || 0);
-            const totalGames = wins + losses;
-            casinoStats = {
-                wins,
-                losses,
-                totalBetted: Number(resCasino.rows[0].total_betted || 0),
-                netWinnings: Number(resCasino.rows[0].net_winnings || 0),
-                winRate: totalGames > 0 ? (wins / totalGames) * 100 : 0,
-            };
-        }
-    } catch {
-        // tabla puede no existir aún
+    if (resCasino.status === 'fulfilled' && resCasino.value.rows.length > 0) {
+        const wins = Number(resCasino.value.rows[0].wins || 0);
+        const losses = Number(resCasino.value.rows[0].losses || 0);
+        const totalGames = wins + losses;
+        casinoStats = {
+            wins,
+            losses,
+            totalBetted: Number(resCasino.value.rows[0].total_betted || 0),
+            netWinnings: Number(resCasino.value.rows[0].net_winnings || 0),
+            winRate: totalGames > 0 ? (wins / totalGames) * 100 : 0,
+        };
     }
 
-    // 8. Fetch Bitacora
-    const resBitacora = await db.execute({
-        sql: "SELECT accion, fecha FROM bitacora WHERE user_id = ? ORDER BY id DESC LIMIT 5",
-        args: [discordId]
-    });
-    const bitacoraReciente = resBitacora.rows.map(r => ({
-        accion: String(r.accion),
-        fechaStr: new Date(String(r.fecha)).toLocaleDateString('es-ES', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
-    }));
-
-    // 9. Fetch Ranking Global
-    const resRanking = await db.execute({
-        sql: "SELECT COUNT(*) as rank FROM usuarios WHERE monedas > ?",
-        args: [monedas]
-    });
-    const puestoRanking = Number(resRanking.rows[0].rank) + 1;
-    const resTotalUsers = await db.execute("SELECT COUNT(*) as total FROM usuarios");
-    const totalUsers = Number(resTotalUsers.rows[0].total);
-
+    // 9. Fetch Rankings - Paralelizado
     const totalColeccionUsuario = collectionsCount.reduce((acc, row) => acc + Number(row.total), 0);
-    const resRankingColeccion = await db.execute({
-        sql: "SELECT COUNT(*) as rank FROM (SELECT user_id, COUNT(*) as total_items FROM colecciones GROUP BY user_id) t WHERE t.total_items > ?",
-        args: [totalColeccionUsuario],
-    });
+    
+    const [
+        resRanking,
+        resTotalUsers,
+        resRankingColeccion,
+        resTotalColeccionistas
+    ] = await Promise.all([
+        db.execute({
+            sql: "SELECT COUNT(*) as rank FROM usuarios WHERE monedas > ?",
+            args: [monedas]
+        }),
+        db.execute("SELECT COUNT(*) as total FROM usuarios"),
+        db.execute({
+            sql: "SELECT COUNT(*) as rank FROM (SELECT user_id, COUNT(*) as total_items FROM colecciones GROUP BY user_id) t WHERE t.total_items > ?",
+            args: [totalColeccionUsuario],
+        }),
+        db.execute("SELECT COUNT(DISTINCT user_id) as total FROM colecciones"),
+    ]);
+    
+    const puestoRanking = Number(resRanking.rows[0].rank) + 1;
+    const totalUsers = Number(resTotalUsers.rows[0].total);
     const puestoColeccion = Number(resRankingColeccion.rows[0]?.rank || 0) + 1;
-    const resTotalColeccionistas = await db.execute("SELECT COUNT(DISTINCT user_id) as total FROM colecciones");
     const totalColeccionistas = Math.max(1, Number(resTotalColeccionistas.rows[0]?.total || 1));
 
     const topEconomicoPercent = Math.min(100, Math.max(1, Math.ceil((puestoRanking / Math.max(1, totalUsers)) * 100)));
@@ -348,18 +463,14 @@ export default async function PerfilPublicoPage({ params }: PageProps) {
     else if (monedas >= 1000) tituloEconomico = "Comerciante Local";
     else if (monedas >= 200) tituloEconomico = "Ahorrador Acerrimo";
 
-    // Calcular xp base
-    const xpBaseNivelDesc = Math.pow((nivel - 1) * 10, 2);
+    // Calcular xp base y progreso (validando valores)
+    const xpBaseNivelDesc = Math.pow(Math.max(0, nivel - 1) * 10, 2);
     const xpSigNivel = Math.pow(nivel * 10, 2);
-    const progress = Math.min(100, Math.max(0, ((xp - xpBaseNivelDesc) / (xpSigNivel - xpBaseNivelDesc)) * 100));
+    const progress = Math.min(100, Math.max(0, ((xp - xpBaseNivelDesc) / Math.max(1, xpSigNivel - xpBaseNivelDesc)) * 100));
     const xpRestante = Math.max(0, xpSigNivel - xp);
-    const formatCompactNumber = (value: number) =>
-        new Intl.NumberFormat('es-CL', {
-            notation: 'compact',
-            maximumFractionDigits: 1,
-        }).format(value);
 
-    let objetivoColeccion = "Completa una categoría nueva en tu libretita";
+    // Objetivo de colección con datos estructurados para JSX
+    let objetivoColeccion: { emoji: string; categoria: string; faltan: number; owned: number; total: number } | null = null;
     let menorFaltante = Number.MAX_SAFE_INTEGER;
     for (const cat of categorias) {
         const owned = Number(colCount[cat] || 0);
@@ -368,7 +479,8 @@ export default async function PerfilPublicoPage({ params }: PageProps) {
         const faltan = total - owned;
         if (faltan < menorFaltante) {
             menorFaltante = faltan;
-            objetivoColeccion = `${cat}: te faltan ${faltan} (${owned}/${total})`;
+            const emoji = CATEGORIAS_EMOJIS[cat] || "📖";
+            objetivoColeccion = { emoji, categoria: cat, faltan, owned, total };
         }
     }
 
@@ -572,7 +684,7 @@ const TEMA_ACCENT: Record<string, { progress: string; badge: string }> = {
                             </Badge>
                         )}
                         <h1 className="text-3xl sm:text-4xl font-black text-foreground text-balance">
-                            {username ? username : `Invitado #${discordId.slice(-4)}`}
+                            {username || `Invitado #${discordId.slice(-4)}`}
                         </h1>
                         <div className="mt-3 space-y-2">
                             <div className="rounded-xl border border-primary/20 bg-primary/5 px-3 py-2">
@@ -588,7 +700,7 @@ const TEMA_ACCENT: Record<string, { progress: string; badge: string }> = {
                                     Ranking Global
                                 </p>
                                 <p className="text-sm sm:text-base font-extrabold text-foreground leading-tight">
-                                    Puesto #{puestoRanking} de {totalUsers} vecinitos
+                                    Puesto #{puestoRanking.toLocaleString('es-CL')} de {totalUsers.toLocaleString('es-CL')} vecinitos
                                 </p>
                             </div>
                         </div>
@@ -652,6 +764,68 @@ const TEMA_ACCENT: Record<string, { progress: string; badge: string }> = {
                     </div>
                 </div>
 
+                {/* ==================== HERRAMIENTAS EQUIPABLES ==================== */}
+                {herramientas.length > 0 && (
+                    <div className="bg-card rounded-3xl shadow-xl border border-border p-6 sm:p-8">
+                        <h3 className="text-xl font-black text-foreground mb-6 flex items-center gap-2">
+                            <Pickaxe className="h-5 w-5 text-amber-600" />
+                            Herramientas del Pueblito
+                        </h3>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            {["pico", "hacha", "cana", "red"].map(fam => {
+                                const toolsInFamily = herramientas.filter(h => h.familia === fam);
+                                if (toolsInFamily.length === 0) return null;
+                                
+                                return (
+                                    <div key={fam} className="rounded-2xl border border-border bg-secondary/20 p-4">
+                                        <p className="text-xs font-black uppercase tracking-wider text-primary mb-3 flex items-center gap-2">
+                                            <span className="text-lg">{TOOL_EMOJIS[fam]}</span>
+                                            {fam === "cana" ? "Cañas" : fam === "pico" ? "Picos" : fam === "hacha" ? "Hachas" : "Redes"}
+                                        </p>
+                                        <div className="space-y-2">
+                                            {toolsInFamily.map(tool => {
+                                                const durPercent = (tool.durabilidad / tool.max_durabilidad) * 100;
+                                                const isEquipped = tool.equipado === 1;
+                                                let durColor = "text-green-600";
+                                                if (durPercent < 30) durColor = "text-red-600";
+                                                else if (durPercent < 60) durColor = "text-yellow-600";
+                                                
+                                                return (
+                                                    <div key={tool.item_id} className={`text-xs font-semibold p-2 rounded-xl border ${
+                                                        isEquipped 
+                                                            ? 'border-primary bg-primary/10 text-foreground' 
+                                                            : 'border-border bg-card text-muted-foreground'
+                                                    }`}>
+                                                        <div className="flex items-center justify-between gap-2">
+                                                            <span className="font-bold">
+                                                                {isEquipped && '✅ '}{TOOL_NAMES[tool.item_id] || tool.item_id}
+                                                            </span>
+                                                            <span className={`font-black ${durColor}`}>
+                                                                {tool.durabilidad}/{tool.max_durabilidad}
+                                                            </span>
+                                                        </div>
+                                                        <div className="w-full h-1.5 mt-1.5 rounded-full overflow-hidden shrink-0 bg-secondary">
+                                                            <div 
+                                                                className={`h-full rounded-full ${
+                                                                    durPercent < 30 ? 'bg-red-500' : durPercent < 60 ? 'bg-yellow-500' : 'bg-green-500'
+                                                                }`} 
+                                                                style={{ width: `${durPercent}%` }} 
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                        <p className="text-xs text-muted-foreground mt-4 italic">
+                            💡 Usa <strong>/equipar</strong> en el bot para cambiar tu herramienta activa de cada familia
+                        </p>
+                    </div>
+                )}
+
                 {/* ==================== OBJETIVO / ACTIVIDAD / COMPARATIVA ==================== */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="bg-card rounded-3xl shadow-xl border border-border p-6">
@@ -660,8 +834,14 @@ const TEMA_ACCENT: Record<string, { progress: string; badge: string }> = {
                             <div className="rounded-xl border border-border bg-secondary/20 p-3">
                                 Te faltan <strong>{formatCompactNumber(xpRestante)} XP</strong> para subir a nivel <strong>{nivel + 1}</strong>.
                             </div>
-                            <div className="rounded-xl border border-border bg-secondary/20 p-3 capitalize">
-                                {objetivoColeccion}
+                            <div className="rounded-xl border border-border bg-secondary/20 p-3">
+                                {objetivoColeccion ? (
+                                    <>
+                                        {objetivoColeccion.emoji} <strong className="capitalize">{objetivoColeccion.categoria}</strong>: te faltan {objetivoColeccion.faltan} ({objetivoColeccion.owned}/{objetivoColeccion.total})
+                                    </>
+                                ) : (
+                                    "Completa una categoría nueva en tu libretita"
+                                )}
                             </div>
                         </div>
                     </div>
@@ -733,7 +913,7 @@ const TEMA_ACCENT: Record<string, { progress: string; badge: string }> = {
                                     <div className="flex flex-wrap gap-2">
                                         {consumiblesComprados.map((c) => (
                                             <Badge key={c.item_id} variant="secondary" className="text-xs font-bold px-3 py-1">
-                                                {c.item_id} x{c.cantidad}
+                                                {CONSUMIBLE_NOMBRES[c.item_id] || c.item_id} x{c.cantidad}
                                             </Badge>
                                         ))}
                                     </div>
