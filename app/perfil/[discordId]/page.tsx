@@ -141,12 +141,32 @@ export default async function PerfilPublicoPage({ params }: PageProps) {
     const username = user.username ? String(user.username) : null;
     const avatarData = user.avatar ? String(user.avatar) : null;
 
+    const mascotaNombresMap = new Map<string, string>();
+    try {
+        const resNombresMascota = await db.execute({
+            sql: "SELECT mascota_id, nombre FROM mascota_nombres WHERE user_id = ?",
+            args: [discordId],
+        });
+        for (const row of resNombresMascota.rows) {
+            const mascotaKey = String(row.mascota_id || "");
+            const nombre = String(row.nombre || "").trim();
+            if (mascotaKey && nombre) {
+                mascotaNombresMap.set(mascotaKey, nombre);
+            }
+        }
+    } catch {
+        // Compatibilidad: en entornos antiguos esta tabla puede no existir todavía.
+    }
+
     const MASCOTAS_INFO: Record<string, { emoji: string; nombre: string; isImage?: boolean }> = {
         mascota_kiltro: { emoji: "https://media.tenor.com/RboGj6iwlKYAAAAj/puppy.gif", nombre: "Kiltro", isImage: true },
         mascota_gatito: { emoji: "https://media1.giphy.com/media/v1.Y2lkPTZjMDliOTUycDJnNXd6Mnp1Z3B6cnZlbDZ0bG1oMWx6ZHI4ZW9nMWZiZXZycnh6ZiZlcD12MV9zdGlja2Vyc19zZWFyY2gmY3Q9cw/W9eUHIDf1PvycL3tMS/200.gif", nombre: "Gatito", isImage: true },
         mascota_pudu: { emoji: "https://fbi.cults3d.com/uploaders/37896446/illustration-file/31cb4cc0-8a39-4f81-b8b8-8fedad27147a/pudu.gif", nombre: "Pudu", isImage: true }
     };
     const mascotaData = mascotaId ? MASCOTAS_INFO[mascotaId as string] : null;
+    const mascotaNombreVisible = mascotaId
+        ? (mascotaNombresMap.get(String(mascotaId)) || mascotaData?.nombre || String(mascotaId).replace("mascota_", ""))
+        : null;
 
     // 2. Fetch total items counts
     const totals = await getTableCounts();
@@ -196,9 +216,9 @@ export default async function PerfilPublicoPage({ params }: PageProps) {
         sql: "SELECT item_id FROM inventario_economia WHERE user_id = ? AND item_id LIKE 'mascota_%' AND cantidad > 0",
         args: [discordId]
     });
-    const mascotasSet = new Set(resMascotas.rows.map(r => String(r.item_id).replace('mascota_', '')));
+    const mascotasSet = new Set(resMascotas.rows.map(r => String(r.item_id)));
     if (mascotaId && String(mascotaId).startsWith('mascota_')) {
-        mascotasSet.add(String(mascotaId).replace('mascota_', ''));
+        mascotasSet.add(String(mascotaId));
     }
     const mascotasCompradas = Array.from(mascotasSet);
 
@@ -512,16 +532,16 @@ const TEMA_ACCENT: Record<string, { progress: string; badge: string }> = {
 
                     {/* Pet companion */}
                     {mascotaData && (
-                        <div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-20 flex flex-col items-center" title={`Acompanado por su fiel ${mascotaData.nombre}`}>
+                        <div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-20 flex flex-col items-center" title={`Acompañado por su fiel ${mascotaNombreVisible || mascotaData.nombre}`}>
                             {mascotaData.isImage ? (
                                 <div className="relative w-16 h-16 sm:w-24 sm:h-24 drop-shadow-xl">
-                                    <Image src={mascotaData.emoji} alt={mascotaData.nombre} fill className="object-contain" unoptimized />
+                                    <Image src={mascotaData.emoji} alt={mascotaNombreVisible || mascotaData.nombre} fill className="object-contain" unoptimized />
                                 </div>
                             ) : (
                                 <span className="text-4xl sm:text-5xl drop-shadow-lg">{mascotaData.emoji}</span>
                             )}
                             <Badge variant="secondary" className="text-[10px] font-black uppercase tracking-widest mt-1">
-                                {mascotaData.nombre}
+                                {mascotaNombreVisible || mascotaData.nombre}
                             </Badge>
                         </div>
                     )}
@@ -780,14 +800,17 @@ const TEMA_ACCENT: Record<string, { progress: string; badge: string }> = {
                         </h3>
                         <div className="flex flex-wrap gap-3">
                             {mascotasCompradas.map(m => {
-                                const isActiva = mascotaData && mascotaData.nombre.toLowerCase() === m.toLowerCase();
+                                const mId = String(m);
+                                const nombreBase = mId.replace('mascota_', '');
+                                const nombreVisible = mascotaNombresMap.get(mId) || nombreBase;
+                                const isActiva = Boolean(mascotaId) && String(mascotaId) === mId;
                                 return (
                                     <Badge
-                                        key={m}
+                                        key={mId}
                                         variant={isActiva ? "default" : "secondary"}
-                                        className={`text-sm font-bold capitalize px-4 py-2 ${isActiva ? 'bg-pink-500 text-white hover:bg-pink-500' : ''}`}
+                                        className={`text-sm font-bold px-4 py-2 ${isActiva ? 'bg-pink-500 text-white hover:bg-pink-500' : ''}`}
                                     >
-                                        {isActiva && <PawPrint className="h-3 w-3 mr-1" />} {m}
+                                        {isActiva && <PawPrint className="h-3 w-3 mr-1" />} {nombreVisible}
                                     </Badge>
                                 );
                             })}
