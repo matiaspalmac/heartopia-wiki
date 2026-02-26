@@ -114,16 +114,96 @@ const PROFILE_THEME_VARS: Record<string, CssVars> = {
         "--ring": "oklch(0.72 0.13 280)",
         colorScheme: "dark",
     },
+    tema_morado: {
+        "--background": "oklch(0.97 0.025 300)",
+        "--foreground": "oklch(0.26 0.04 300)",
+        "--card": "oklch(0.99 0.015 300)",
+        "--card-foreground": "oklch(0.26 0.04 300)",
+        "--popover": "oklch(0.99 0.015 300)",
+        "--popover-foreground": "oklch(0.26 0.04 300)",
+        "--primary": "oklch(0.6 0.2 300)",
+        "--primary-foreground": "oklch(0.99 0.01 300)",
+        "--secondary": "oklch(0.945 0.03 300)",
+        "--secondary-foreground": "oklch(0.35 0.04 300)",
+        "--muted": "oklch(0.955 0.02 300)",
+        "--muted-foreground": "oklch(0.5 0.03 300)",
+        "--accent": "oklch(0.75 0.12 270)",
+        "--accent-foreground": "oklch(0.26 0.04 300)",
+        "--border": "oklch(0.9 0.03 300)",
+        "--input": "oklch(0.945 0.025 300)",
+        "--ring": "oklch(0.6 0.2 300)",
+        colorScheme: "light",
+    },
+    tema_negro: {
+        "--background": "oklch(0.13 0.01 260)",
+        "--foreground": "oklch(0.92 0.01 260)",
+        "--card": "oklch(0.18 0.01 260)",
+        "--card-foreground": "oklch(0.92 0.01 260)",
+        "--popover": "oklch(0.18 0.01 260)",
+        "--popover-foreground": "oklch(0.92 0.01 260)",
+        "--primary": "oklch(0.75 0.05 260)",
+        "--primary-foreground": "oklch(0.14 0.01 260)",
+        "--secondary": "oklch(0.22 0.01 260)",
+        "--secondary-foreground": "oklch(0.88 0.01 260)",
+        "--muted": "oklch(0.22 0.01 260)",
+        "--muted-foreground": "oklch(0.6 0.01 260)",
+        "--accent": "oklch(0.65 0.08 220)",
+        "--accent-foreground": "oklch(0.14 0.01 260)",
+        "--border": "oklch(0.28 0.015 260)",
+        "--input": "oklch(0.22 0.01 260)",
+        "--ring": "oklch(0.75 0.05 260)",
+        colorScheme: "dark",
+    },
+    tema_rojo: {
+        "--background": "oklch(0.975 0.015 15)",
+        "--foreground": "oklch(0.26 0.04 15)",
+        "--card": "oklch(0.99 0.01 15)",
+        "--card-foreground": "oklch(0.26 0.04 15)",
+        "--popover": "oklch(0.99 0.01 15)",
+        "--popover-foreground": "oklch(0.26 0.04 15)",
+        "--primary": "oklch(0.58 0.22 20)",
+        "--primary-foreground": "oklch(0.99 0.01 15)",
+        "--secondary": "oklch(0.945 0.02 15)",
+        "--secondary-foreground": "oklch(0.35 0.04 15)",
+        "--muted": "oklch(0.955 0.015 15)",
+        "--muted-foreground": "oklch(0.5 0.03 15)",
+        "--accent": "oklch(0.72 0.14 350)",
+        "--accent-foreground": "oklch(0.26 0.04 15)",
+        "--border": "oklch(0.9 0.025 15)",
+        "--input": "oklch(0.945 0.015 15)",
+        "--ring": "oklch(0.58 0.22 20)",
+        colorScheme: "light",
+    },
+    tema_celestial: {
+        "--background": "oklch(0.985 0.008 225)",
+        "--foreground": "oklch(0.3 0.025 225)",
+        "--card": "oklch(0.998 0.005 225)",
+        "--card-foreground": "oklch(0.3 0.025 225)",
+        "--popover": "oklch(0.998 0.005 225)",
+        "--popover-foreground": "oklch(0.3 0.025 225)",
+        "--primary": "oklch(0.65 0.1 225)",
+        "--primary-foreground": "oklch(0.99 0.005 225)",
+        "--secondary": "oklch(0.96 0.01 225)",
+        "--secondary-foreground": "oklch(0.38 0.025 225)",
+        "--muted": "oklch(0.965 0.008 225)",
+        "--muted-foreground": "oklch(0.52 0.02 225)",
+        "--accent": "oklch(0.8 0.07 200)",
+        "--accent-foreground": "oklch(0.3 0.025 225)",
+        "--border": "oklch(0.92 0.012 225)",
+        "--input": "oklch(0.96 0.008 225)",
+        "--ring": "oklch(0.65 0.1 225)",
+        colorScheme: "light",
+    },
 };
 
 export default async function PerfilPublicoPage({ params }: PageProps) {
     const { discordId } = await params;
-    
+
     // Validación de seguridad: discordId debe ser numérico (snowflake de Discord)
     if (!/^\d{17,20}$/.test(discordId)) {
         return notFound();
     }
-    
+
     const db = getDb();
 
     // 1. Fetch user data
@@ -146,7 +226,7 @@ export default async function PerfilPublicoPage({ params }: PageProps) {
     const mascotaId = user.mascota_activa;
     const username = user.username ? String(user.username) : null;
     const avatarData = user.avatar ? String(user.avatar) : null;
-    
+
     // Helper: formatear números de forma compacta
     const formatCompactNumber = (value: number) =>
         new Intl.NumberFormat('es-CL', {
@@ -195,37 +275,37 @@ export default async function PerfilPublicoPage({ params }: PageProps) {
     ] = await Promise.all([
         // Totales de categorías
         getTableCounts(),
-        
+
         // Colecciones del usuario
         db.execute({
             sql: "SELECT categoria, COUNT(*) as total FROM colecciones WHERE user_id = ? GROUP BY categoria",
             args: [discordId]
         }),
-        
+
         // Destacados (Vitrina)
         db.execute({
             sql: "SELECT slot, categoria, item_id FROM destacados WHERE user_id = ? ORDER BY slot ASC",
             args: [discordId]
         }),
-        
+
         // Habilidades
         db.execute({
             sql: "SELECT habilidad, nivel FROM habilidades WHERE user_id = ?",
             args: [discordId]
         }),
-        
+
         // Estadísticas
         db.execute({
             sql: "SELECT accion, cantidad FROM estadisticas WHERE user_id = ?",
             args: [discordId]
         }),
-        
+
         // Títulos
         db.execute({
             sql: "SELECT titulo, equipado FROM titulos WHERE user_id = ?",
             args: [discordId]
         }),
-        
+
         // Un solo query para todo el inventario (mascotas, temas, marcos, consumibles)
         db.execute({
             sql: `SELECT item_id, cantidad FROM inventario_economia 
@@ -237,7 +317,7 @@ export default async function PerfilPublicoPage({ params }: PageProps) {
                   AND cantidad > 0`,
             args: [discordId]
         }),
-        
+
         // Herramientas con durabilidad (NUEVO)
         db.execute({
             sql: `SELECT item_id, durabilidad, max_durabilidad, equipado 
@@ -246,27 +326,27 @@ export default async function PerfilPublicoPage({ params }: PageProps) {
                   ORDER BY equipado DESC, durabilidad DESC, item_id ASC`,
             args: [discordId]
         }),
-        
+
         // Bitácora
         db.execute({
             sql: "SELECT accion, fecha FROM bitacora WHERE user_id = ? ORDER BY id DESC LIMIT 5",
             args: [discordId]
         }),
     ]);
-    
+
     // Procesar colecciones
     const collectionsCount = resCol.rows as unknown as { categoria: string; total: number }[];
-    
+
     // Procesar destacados
     const destacados = resDestacados.rows as unknown as { slot: number; categoria: string; item_id: string }[];
-    
+
     // Procesar habilidades
     const habilidades = resHab.rows as unknown as { habilidad: string; nivel: number }[];
-    
+
     // Procesar estadísticas
     const statsMap: Record<string, number> = {};
     for (const r of resStats.rows) statsMap[String(r.accion)] = Number(r.cantidad);
-    
+
     // Procesar títulos
     let tituloEquipado: string | null = null;
     const listaTitulos: string[] = [];
@@ -274,13 +354,13 @@ export default async function PerfilPublicoPage({ params }: PageProps) {
         if (row.equipado === 1) tituloEquipado = String(row.titulo);
         listaTitulos.push(String(row.titulo));
     }
-    
+
     // Procesar inventario unificado
     const mascotasSet = new Set<string>();
     const temasSet = new Set<string>();
     const marcosSet = new Set<string>();
     const consumiblesComprados: { item_id: string; cantidad: number }[] = [];
-    
+
     // Nombres amigables para consumibles
     const CONSUMIBLE_NOMBRES: Record<string, string> = {
         booster_xp_30m: "Booster XP 30m",
@@ -288,11 +368,11 @@ export default async function PerfilPublicoPage({ params }: PageProps) {
         reset_racha_perdon: "Reset Racha Perdón",
         etiqueta_mascota: "Etiqueta Mascota",
     };
-    
+
     for (const row of resInventario.rows) {
         const itemId = String(row.item_id);
         const cantidad = Number(row.cantidad || 0);
-        
+
         if (itemId.startsWith('mascota_')) {
             mascotasSet.add(itemId);
         } else if (itemId.startsWith('tema_')) {
@@ -303,7 +383,7 @@ export default async function PerfilPublicoPage({ params }: PageProps) {
             consumiblesComprados.push({ item_id: itemId, cantidad });
         }
     }
-    
+
     // Agregar items actualmente equipados aunque no estén en inventario
     if (mascotaId && String(mascotaId).startsWith('mascota_')) {
         mascotasSet.add(String(mascotaId));
@@ -314,11 +394,11 @@ export default async function PerfilPublicoPage({ params }: PageProps) {
     if (marcoPerfil.startsWith('marco_perfil_')) {
         marcosSet.add(marcoPerfil.replace('marco_perfil_', ''));
     }
-    
+
     const mascotasCompradas = Array.from(mascotasSet);
     const temasComprados = Array.from(temasSet);
     const marcosComprados = Array.from(marcosSet);
-    
+
     // Procesar herramientas con durabilidad
     const TOOL_NAMES: Record<string, string> = {
         herr_pico_basico: "Pico Básico",
@@ -334,22 +414,22 @@ export default async function PerfilPublicoPage({ params }: PageProps) {
         herr_red_fina: "Red Fina",
         herr_red_seda: "Red de Seda",
     };
-    
+
     const TOOL_EMOJIS: Record<string, string> = {
         pico: "⛏️",
         hacha: "🪓",
         cana: "🎣",
         red: "🪰",
     };
-    
-    type Herramienta = { 
-        item_id: string; 
-        durabilidad: number; 
-        max_durabilidad: number; 
+
+    type Herramienta = {
+        item_id: string;
+        durabilidad: number;
+        max_durabilidad: number;
         equipado: number;
         familia: string;
     };
-    
+
     const herramientas: Herramienta[] = resHerramientas.rows.map(r => {
         const itemId = String(r.item_id);
         let familia = "otra";
@@ -357,7 +437,7 @@ export default async function PerfilPublicoPage({ params }: PageProps) {
         else if (itemId.includes("hacha")) familia = "hacha";
         else if (itemId.includes("cana")) familia = "cana";
         else if (itemId.includes("red")) familia = "red";
-        
+
         return {
             item_id: itemId,
             durabilidad: Number(r.durabilidad),
@@ -371,7 +451,7 @@ export default async function PerfilPublicoPage({ params }: PageProps) {
         accion: String(r.accion),
         fechaStr: new Date(String(r.fecha)).toLocaleDateString('es-ES', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
     }));
-    
+
     // Queries opcionales (pueden fallar si las tablas no existen)
     const [resBoosts, resCasino] = await Promise.allSettled([
         db.execute({
@@ -383,7 +463,7 @@ export default async function PerfilPublicoPage({ params }: PageProps) {
             args: [discordId],
         }),
     ]);
-    
+
     // Procesar boosts activos
     const boostsActivos: string[] = [];
     if (resBoosts.status === 'fulfilled') {
@@ -398,7 +478,7 @@ export default async function PerfilPublicoPage({ params }: PageProps) {
             else boostsActivos.push(`${id} · ${minutos}m`);
         }
     }
-    
+
     // Procesar casino stats
     let casinoStats = {
         wins: 0,
@@ -422,7 +502,7 @@ export default async function PerfilPublicoPage({ params }: PageProps) {
 
     // 9. Fetch Rankings - Paralelizado
     const totalColeccionUsuario = collectionsCount.reduce((acc, row) => acc + Number(row.total), 0);
-    
+
     const [
         resRanking,
         resTotalUsers,
@@ -440,7 +520,7 @@ export default async function PerfilPublicoPage({ params }: PageProps) {
         }),
         db.execute("SELECT COUNT(DISTINCT user_id) as total FROM colecciones"),
     ]);
-    
+
     const puestoRanking = Number(resRanking.rows[0].rank) + 1;
     const totalUsers = Number(resTotalUsers.rows[0].total);
     const puestoColeccion = Number(resRankingColeccion.rows[0]?.rank || 0) + 1;
@@ -597,27 +677,47 @@ export default async function PerfilPublicoPage({ params }: PageProps) {
     if (totalColeccionUsuario >= 100) insignias.push("📚 Coleccionista experto");
     if (rachaActiva >= 7) insignias.push("🔥 Constancia 7d");
 
-const TEMA_ACCENT: Record<string, { progress: string; badge: string }> = {
-  default: {
-    progress: "from-primary to-accent",
-    badge: "bg-primary/10 text-primary",
-  },
+    const TEMA_ACCENT: Record<string, { progress: string; badge: string }> = {
+        default: {
+            progress: "from-primary to-accent",
+            badge: "bg-primary/10 text-primary",
+        },
 
-  tema_bosque: {
-    progress: "from-emerald-700 via-emerald-500 to-lime-400",
-    badge: "bg-emerald-950/40 text-emerald-300 border border-emerald-700/60",
-  },
+        tema_bosque: {
+            progress: "from-emerald-700 via-emerald-500 to-lime-400",
+            badge: "bg-emerald-950/40 text-emerald-300 border border-emerald-700/60",
+        },
 
-  tema_playa: {
-    progress: "from-cyan-400 via-teal-400 to-blue-500",
-    badge: "bg-cyan-950/40 text-cyan-300 border border-cyan-700/50",
-  },
+        tema_playa: {
+            progress: "from-cyan-400 via-teal-400 to-blue-500",
+            badge: "bg-cyan-950/40 text-cyan-300 border border-cyan-700/50",
+        },
 
-  tema_noche: {
-    progress: "from-indigo-700 via-indigo-600 to-purple-600",
-    badge: "bg-purple-950/50 text-purple-300 border border-purple-800/60",
-  },
-};
+        tema_noche: {
+            progress: "from-indigo-700 via-indigo-600 to-purple-600",
+            badge: "bg-purple-950/50 text-purple-300 border border-purple-800/60",
+        },
+
+        tema_morado: {
+            progress: "from-purple-700 via-violet-500 to-fuchsia-400",
+            badge: "bg-purple-950/40 text-purple-200 border border-purple-700/60",
+        },
+
+        tema_negro: {
+            progress: "from-zinc-600 via-slate-500 to-zinc-400",
+            badge: "bg-zinc-900/70 text-zinc-300 border border-zinc-700/60",
+        },
+
+        tema_rojo: {
+            progress: "from-red-700 via-rose-500 to-pink-400",
+            badge: "bg-red-950/40 text-red-300 border border-red-700/60",
+        },
+
+        tema_celestial: {
+            progress: "from-sky-300 via-blue-200 to-indigo-300",
+            badge: "bg-sky-900/30 text-sky-600 border border-sky-400/50",
+        },
+    };
 
     const accent = TEMA_ACCENT[tema] || TEMA_ACCENT.default;
     const profileThemeVars = PROFILE_THEME_VARS[tema] || PROFILE_THEME_VARS.default;
@@ -775,7 +875,7 @@ const TEMA_ACCENT: Record<string, { progress: string; badge: string }> = {
                             {["pico", "hacha", "cana", "red"].map(fam => {
                                 const toolsInFamily = herramientas.filter(h => h.familia === fam);
                                 if (toolsInFamily.length === 0) return null;
-                                
+
                                 return (
                                     <div key={fam} className="rounded-2xl border border-border bg-secondary/20 p-4">
                                         <p className="text-xs font-black uppercase tracking-wider text-primary mb-3 flex items-center gap-2">
@@ -789,13 +889,12 @@ const TEMA_ACCENT: Record<string, { progress: string; badge: string }> = {
                                                 let durColor = "text-green-600";
                                                 if (durPercent < 30) durColor = "text-red-600";
                                                 else if (durPercent < 60) durColor = "text-yellow-600";
-                                                
+
                                                 return (
-                                                    <div key={tool.item_id} className={`text-xs font-semibold p-2 rounded-xl border ${
-                                                        isEquipped 
-                                                            ? 'border-primary bg-primary/10 text-foreground' 
-                                                            : 'border-border bg-card text-muted-foreground'
-                                                    }`}>
+                                                    <div key={tool.item_id} className={`text-xs font-semibold p-2 rounded-xl border ${isEquipped
+                                                        ? 'border-primary bg-primary/10 text-foreground'
+                                                        : 'border-border bg-card text-muted-foreground'
+                                                        }`}>
                                                         <div className="flex items-center justify-between gap-2">
                                                             <span className="font-bold">
                                                                 {isEquipped && '✅ '}{TOOL_NAMES[tool.item_id] || tool.item_id}
@@ -805,11 +904,10 @@ const TEMA_ACCENT: Record<string, { progress: string; badge: string }> = {
                                                             </span>
                                                         </div>
                                                         <div className="w-full h-1.5 mt-1.5 rounded-full overflow-hidden shrink-0 bg-secondary">
-                                                            <div 
-                                                                className={`h-full rounded-full ${
-                                                                    durPercent < 30 ? 'bg-red-500' : durPercent < 60 ? 'bg-yellow-500' : 'bg-green-500'
-                                                                }`} 
-                                                                style={{ width: `${durPercent}%` }} 
+                                                            <div
+                                                                className={`h-full rounded-full ${durPercent < 30 ? 'bg-red-500' : durPercent < 60 ? 'bg-yellow-500' : 'bg-green-500'
+                                                                    }`}
+                                                                style={{ width: `${durPercent}%` }}
                                                             />
                                                         </div>
                                                     </div>
