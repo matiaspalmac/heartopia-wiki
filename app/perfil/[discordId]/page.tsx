@@ -19,7 +19,8 @@ type CssVars = CSSProperties & Record<`--${string}`, string>;
 
 const CATEGORIAS_EMOJIS: Record<string, string> = {
     peces: "🐟", insectos: "🦋", aves: "🕊️", animales: "🦊",
-    cultivos: "🌱", recolectables: "🌿", recetas: "🍳", logros: "🏆"
+    cultivos: "🌱", recolectables: "🌿", recetas: "🍳", logros: "🏆",
+    fotos: "📸"
 };
 
 const CATEGORIAS_COLORS: Record<string, string> = {
@@ -31,6 +32,7 @@ const CATEGORIAS_COLORS: Record<string, string> = {
     recolectables: "text-emerald-600 bg-emerald-500/10",
     recetas: "text-rose-600 bg-rose-500/10",
     logros: "text-purple-600 bg-purple-500/10",
+    fotos: "text-pink-600 bg-pink-500/10",
 };
 
 const PROFILE_THEME_VARS: Record<string, CssVars> = {
@@ -306,15 +308,19 @@ export default async function PerfilPublicoPage({ params }: PageProps) {
             args: [discordId]
         }),
 
-        // Un solo query para todo el inventario (mascotas, temas, marcos, consumibles)
+        // Inventario
         db.execute({
-            sql: `SELECT item_id, cantidad FROM inventario_economia 
-                  WHERE user_id = ? 
-                  AND (item_id LIKE 'mascota_%' 
-                       OR item_id LIKE 'tema_%' 
-                       OR item_id LIKE 'marco_perfil_%'
-                       OR item_id IN ('booster_xp_30m','amuleto_suerte_15m','reset_racha_perdon','etiqueta_mascota'))
-                  AND cantidad > 0`,
+            sql: `SELECT i.item_id, i.cantidad, e.tipo, e.emoji
+                  FROM inventario_economia i
+                  LEFT JOIN items_economia e ON i.item_id = e.id
+                  WHERE i.user_id = ? 
+                  AND i.cantidad > 0
+                  AND (i.item_id LIKE 'mascota_%' 
+                       OR i.item_id LIKE 'tema_%' 
+                       OR i.item_id LIKE 'marco_perfil_%'
+                       OR i.item_id LIKE 'Foto %'
+                       OR i.item_id IN ('booster_xp_30m','amuleto_suerte_15m','reset_racha_perdon','etiqueta_mascota')
+                       OR e.tipo IN ('pez', 'bicho', 'mineral', 'fruta', 'objeto'))`,
             args: [discordId]
         }),
 
@@ -359,7 +365,15 @@ export default async function PerfilPublicoPage({ params }: PageProps) {
     const mascotasSet = new Set<string>();
     const temasSet = new Set<string>();
     const marcosSet = new Set<string>();
+    const fotosMap = new Map<string, number>(); // Name -> Quantity
     const consumiblesComprados: { item_id: string; cantidad: number }[] = [];
+
+    // Custom drops collections
+    const fishesMap = new Map<string, { cantidad: number, emoji: string }>();
+    const bugsMap = new Map<string, { cantidad: number, emoji: string }>();
+    const mineralsMap = new Map<string, { cantidad: number, emoji: string }>();
+    const fruitsMap = new Map<string, { cantidad: number, emoji: string }>();
+    const objectsMap = new Map<string, { cantidad: number, emoji: string }>();
 
     // Nombres amigables para consumibles
     const CONSUMIBLE_NOMBRES: Record<string, string> = {
@@ -372,6 +386,8 @@ export default async function PerfilPublicoPage({ params }: PageProps) {
     for (const row of resInventario.rows) {
         const itemId = String(row.item_id);
         const cantidad = Number(row.cantidad || 0);
+        const eTipo = row.tipo ? String(row.tipo) : null;
+        const eEmoji = row.emoji ? String(row.emoji) : "📦";
 
         if (itemId.startsWith('mascota_')) {
             mascotasSet.add(itemId);
@@ -379,6 +395,18 @@ export default async function PerfilPublicoPage({ params }: PageProps) {
             temasSet.add(itemId.replace('tema_', ''));
         } else if (itemId.startsWith('marco_perfil_')) {
             marcosSet.add(itemId.replace('marco_perfil_', ''));
+        } else if (itemId.startsWith('Foto ') || eTipo === 'foto') {
+            fotosMap.set(itemId, cantidad);
+        } else if (eTipo === 'pez') {
+            fishesMap.set(itemId, { cantidad, emoji: eEmoji });
+        } else if (eTipo === 'bicho') {
+            bugsMap.set(itemId, { cantidad, emoji: eEmoji });
+        } else if (eTipo === 'mineral') {
+            mineralsMap.set(itemId, { cantidad, emoji: eEmoji });
+        } else if (eTipo === 'fruta') {
+            fruitsMap.set(itemId, { cantidad, emoji: eEmoji });
+        } else if (eTipo === 'objeto') {
+            objectsMap.set(itemId, { cantidad, emoji: eEmoji });
         } else {
             consumiblesComprados.push({ item_id: itemId, cantidad });
         }
@@ -398,6 +426,12 @@ export default async function PerfilPublicoPage({ params }: PageProps) {
     const mascotasCompradas = Array.from(mascotasSet);
     const temasComprados = Array.from(temasSet);
     const marcosComprados = Array.from(marcosSet);
+    const fotosCompradas = Array.from(fotosMap.entries()).map(([nombre, cantidad]) => ({ nombre, cantidad }));
+    const fishCaught = Array.from(fishesMap.entries()).map(([nombre, data]) => ({ nombre, ...data }));
+    const bugsCaught = Array.from(bugsMap.entries()).map(([nombre, data]) => ({ nombre, ...data }));
+    const mineralsMined = Array.from(mineralsMap.entries()).map(([nombre, data]) => ({ nombre, ...data }));
+    const fruitsGathered = Array.from(fruitsMap.entries()).map(([nombre, data]) => ({ nombre, ...data }));
+    const objectsFound = Array.from(objectsMap.entries()).map(([nombre, data]) => ({ nombre, ...data }));
 
     // Procesar herramientas con durabilidad
     const TOOL_NAMES: Record<string, string> = {
@@ -447,7 +481,7 @@ export default async function PerfilPublicoPage({ params }: PageProps) {
         };
     }) as Herramienta[];
     // Procesar bitácora
-    const bitacoraReciente = resBitacora.rows.map(r => ({
+    const bitacoraReciente = resBitacora.rows.map((r: any) => ({
         accion: String(r.accion),
         fechaStr: new Date(String(r.fecha)).toLocaleDateString('es-ES', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
     }));
@@ -1096,6 +1130,134 @@ export default async function PerfilPublicoPage({ params }: PageProps) {
                     </div>
                 )}
 
+                {/* ==================== MIS FOTOGRAFIAS ==================== */}
+                {fotosCompradas.length > 0 && (
+                    <div className="bg-card rounded-3xl shadow-xl border border-border p-6 sm:p-8">
+                        <h3 className="text-xl font-black text-foreground mb-6 flex items-center gap-2">
+                            <span className="text-pink-500">📸</span>
+                            Mis Fotografías de Aves
+                        </h3>
+                        <div className="flex flex-wrap gap-3">
+                            {fotosCompradas.map(f => {
+                                return (
+                                    <Badge
+                                        key={f.nombre}
+                                        variant="secondary"
+                                        className="text-sm font-bold px-4 py-2 border-pink-500/30 bg-pink-500/10 text-pink-700 dark:text-pink-300"
+                                    >
+                                        📸 {f.nombre.replace('Foto ', '')} <span className="ml-1 opacity-70">x{f.cantidad}</span>
+                                    </Badge>
+                                );
+                            })}
+                        </div>
+                    </div>
+                )}
+
+                {/* ==================== MIS PECES ==================== */}
+                {fishCaught.length > 0 && (
+                    <div className="bg-card rounded-3xl shadow-xl border border-border p-6 sm:p-8">
+                        <h3 className="text-xl font-black text-foreground mb-6 flex items-center gap-2">
+                            <span className="text-blue-500">🎣</span>
+                            Peces Pescados
+                        </h3>
+                        <div className="flex flex-wrap gap-3">
+                            {fishCaught.map(f => (
+                                <Badge
+                                    key={f.nombre}
+                                    variant="secondary"
+                                    className="text-sm font-bold px-4 py-2 border-blue-500/30 bg-blue-500/10 text-blue-700 dark:text-blue-300"
+                                >
+                                    {f.emoji} {f.nombre} <span className="ml-1 opacity-70 border-l border-blue-500/30 pl-2">x{f.cantidad}</span>
+                                </Badge>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* ==================== MIS BICHOS ==================== */}
+                {bugsCaught.length > 0 && (
+                    <div className="bg-card rounded-3xl shadow-xl border border-border p-6 sm:p-8">
+                        <h3 className="text-xl font-black text-foreground mb-6 flex items-center gap-2">
+                            <span className="text-green-500">🪲</span>
+                            Bichos Atrapados
+                        </h3>
+                        <div className="flex flex-wrap gap-3">
+                            {bugsCaught.map(b => (
+                                <Badge
+                                    key={b.nombre}
+                                    variant="secondary"
+                                    className="text-sm font-bold px-4 py-2 border-green-500/30 bg-green-500/10 text-green-700 dark:text-green-300"
+                                >
+                                    {b.emoji} {b.nombre} <span className="ml-1 opacity-70 border-l border-green-500/30 pl-2">x{b.cantidad}</span>
+                                </Badge>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* ==================== MIS MINERALES ==================== */}
+                {mineralsMined.length > 0 && (
+                    <div className="bg-card rounded-3xl shadow-xl border border-border p-6 sm:p-8">
+                        <h3 className="text-xl font-black text-foreground mb-6 flex items-center gap-2">
+                            <span className="text-purple-500">⛏️</span>
+                            Minerales Minados
+                        </h3>
+                        <div className="flex flex-wrap gap-3">
+                            {mineralsMined.map(m => (
+                                <Badge
+                                    key={m.nombre}
+                                    variant="secondary"
+                                    className="text-sm font-bold px-4 py-2 border-purple-500/30 bg-purple-500/10 text-purple-700 dark:text-purple-300"
+                                >
+                                    {m.emoji} {m.nombre} <span className="ml-1 opacity-70 border-l border-purple-500/30 pl-2">x{m.cantidad}</span>
+                                </Badge>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* ==================== MIS FRUTAS ==================== */}
+                {fruitsGathered.length > 0 && (
+                    <div className="bg-card rounded-3xl shadow-xl border border-border p-6 sm:p-8">
+                        <h3 className="text-xl font-black text-foreground mb-6 flex items-center gap-2">
+                            <span className="text-orange-500">🧺</span>
+                            Frutas Recolectadas
+                        </h3>
+                        <div className="flex flex-wrap gap-3">
+                            {fruitsGathered.map(fr => (
+                                <Badge
+                                    key={fr.nombre}
+                                    variant="secondary"
+                                    className="text-sm font-bold px-4 py-2 border-orange-500/30 bg-orange-500/10 text-orange-700 dark:text-orange-300"
+                                >
+                                    {fr.emoji} {fr.nombre} <span className="ml-1 opacity-70 border-l border-orange-500/30 pl-2">x{fr.cantidad}</span>
+                                </Badge>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* ==================== OBJETOS CURIOSOS ==================== */}
+                {objectsFound.length > 0 && (
+                    <div className="bg-card rounded-3xl shadow-xl border border-border p-6 sm:p-8">
+                        <h3 className="text-xl font-black text-foreground mb-6 flex items-center gap-2">
+                            <span className="text-yellow-500">🧭</span>
+                            Objetos Curiosos
+                        </h3>
+                        <div className="flex flex-wrap gap-3">
+                            {objectsFound.map(o => (
+                                <Badge
+                                    key={o.nombre}
+                                    variant="secondary"
+                                    className="text-sm font-bold px-4 py-2 border-yellow-500/30 bg-yellow-500/10 text-yellow-700 dark:text-yellow-300"
+                                >
+                                    {o.emoji} {o.nombre} <span className="ml-1 opacity-70 border-l border-yellow-500/30 pl-2">x{o.cantidad}</span>
+                                </Badge>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
                 {/* ==================== TEMAS DESBLOQUEADOS ==================== */}
                 {temasComprados.length > 0 && (
                     <div className="bg-card rounded-3xl shadow-xl border border-border p-6 sm:p-8">
@@ -1219,7 +1381,7 @@ export default async function PerfilPublicoPage({ params }: PageProps) {
                             Diario de Aventuras
                         </h3>
                         <div className="space-y-3">
-                            {bitacoraReciente.map((b, i) => (
+                            {bitacoraReciente.map((b: any, i: number) => (
                                 <div key={i} className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 p-3 sm:p-4 rounded-xl border border-border bg-blue-500/5 relative overflow-hidden">
                                     <div className="absolute top-0 left-0 w-1 h-full bg-blue-500" />
                                     <div className="shrink-0 text-[10px] sm:text-xs font-bold px-2 py-1 rounded bg-secondary text-muted-foreground ml-2 sm:ml-3 w-fit">
@@ -1235,33 +1397,77 @@ export default async function PerfilPublicoPage({ params }: PageProps) {
                 )}
 
                 {/* ==================== SECRETITOS DE VECINO ==================== */}
-                {(statsMap["bichos_fallados"] > 0 || statsMap["robar_rico"] > 0 || statsMap["arboles_sacudidos"] > 0) && (
-                    <div className="bg-card rounded-3xl shadow-xl border border-border p-6 sm:p-8">
-                        <h3 className="text-xl font-black text-foreground mb-4 flex items-center gap-2">
-                            <span className="text-purple-500">{'🤫'}</span> Secretitos de Vecino
-                        </h3>
-                        <ul className="space-y-3 text-sm font-medium text-foreground">
-                            {statsMap["arboles_sacudidos"] > 0 && (
-                                <li className="flex items-start sm:items-center gap-3 p-3 rounded-xl bg-purple-500/5 border border-border">
-                                    <span className="text-xl shrink-0">{'🌳'}</span>
-                                    <span>Ha agitado ramas vigorosamente <strong className="text-foreground">{statsMap["arboles_sacudidos"]}</strong> veces.</span>
-                                </li>
-                            )}
-                            {statsMap["bichos_fallados"] > 0 && (
-                                <li className="flex items-start sm:items-center gap-3 p-3 rounded-xl bg-purple-500/5 border border-border">
-                                    <span className="text-xl shrink-0">{'🍂'}</span>
-                                    <span>Ha golpeado al aire intentando cazar <strong className="text-foreground">{statsMap["bichos_fallados"]}</strong> bichos.</span>
-                                </li>
-                            )}
-                            {statsMap["robar_rico"] > 0 && (
-                                <li className="flex items-start sm:items-center gap-3 p-3 rounded-xl bg-purple-500/5 border border-border">
-                                    <span className="text-xl shrink-0">{'🥷'}</span>
-                                    <span>Le ha metido la mano al bolsillo a vecinos con mas de 10k monedas <strong className="text-foreground">{statsMap["robar_rico"]}</strong> veces.</span>
-                                </li>
-                            )}
-                        </ul>
-                    </div>
-                )}
+                {(statsMap["bichos_fallados"] > 0 || statsMap["robar_rico"] > 0 || statsMap["arboles_sacudidos"] > 0 ||
+                    statsMap["peces_pescados"] > 0 || statsMap["peces_fallados"] > 0 || statsMap["bichos_capturados"] > 0 ||
+                    statsMap["minerales_minados"] > 0 || statsMap["fotos_tomadas"] > 0 || statsMap["monedas_gastadas"] > 0 || statsMap["veces_robado"] > 0) && (
+                        <div className="bg-card rounded-3xl shadow-xl border border-border p-6 sm:p-8">
+                            <h3 className="text-xl font-black text-foreground mb-4 flex items-center gap-2">
+                                <span className="text-purple-500">{'🤫'}</span> Secretitos de Vecino
+                            </h3>
+                            <ul className="space-y-3 text-sm font-medium text-foreground">
+                                {statsMap["peces_pescados"] > 0 && (
+                                    <li className="flex items-start sm:items-center gap-3 p-3 rounded-xl bg-blue-500/5 border border-border">
+                                        <span className="text-xl shrink-0">{'🎣'}</span>
+                                        <span>Ha lanzado la caña con éxito <strong className="text-foreground">{statsMap["peces_pescados"]}</strong> veces. ¡Los peces le temen!</span>
+                                    </li>
+                                )}
+                                {statsMap["peces_fallados"] > 0 && (
+                                    <li className="flex items-start sm:items-center gap-3 p-3 rounded-xl bg-blue-500/5 border border-border">
+                                        <span className="text-xl shrink-0">{'🌊'}</span>
+                                        <span>El río le ganó la batalla <strong className="text-foreground">{statsMap["peces_fallados"]}</strong> veces sin pescar nada.</span>
+                                    </li>
+                                )}
+                                {statsMap["arboles_sacudidos"] > 0 && (
+                                    <li className="flex items-start sm:items-center gap-3 p-3 rounded-xl bg-purple-500/5 border border-border">
+                                        <span className="text-xl shrink-0">{'🌳'}</span>
+                                        <span>Ha agitado ramas vigorosamente <strong className="text-foreground">{statsMap["arboles_sacudidos"]}</strong> veces.</span>
+                                    </li>
+                                )}
+                                {statsMap["bichos_capturados"] > 0 && (
+                                    <li className="flex items-start sm:items-center gap-3 p-3 rounded-xl bg-green-500/5 border border-border">
+                                        <span className="text-xl shrink-0">{'🪲'}</span>
+                                        <span>Ha atrapado <strong className="text-foreground">{statsMap["bichos_capturados"]}</strong> bichos con su red. ¡Es un cazador nato!</span>
+                                    </li>
+                                )}
+                                {statsMap["bichos_fallados"] > 0 && (
+                                    <li className="flex items-start sm:items-center gap-3 p-3 rounded-xl bg-purple-500/5 border border-border">
+                                        <span className="text-xl shrink-0">{'🍂'}</span>
+                                        <span>Ha golpeado al aire intentando cazar <strong className="text-foreground">{statsMap["bichos_fallados"]}</strong> bichos.</span>
+                                    </li>
+                                )}
+                                {statsMap["minerales_minados"] > 0 && (
+                                    <li className="flex items-start sm:items-center gap-3 p-3 rounded-xl bg-purple-500/5 border border-border">
+                                        <span className="text-xl shrink-0">{'⛏️'}</span>
+                                        <span>Ha golpeado rocas <strong className="text-foreground">{statsMap["minerales_minados"]}</strong> veces en busca de tesoros.</span>
+                                    </li>
+                                )}
+                                {statsMap["fotos_tomadas"] > 0 && (
+                                    <li className="flex items-start sm:items-center gap-3 p-3 rounded-xl bg-pink-500/5 border border-border">
+                                        <span className="text-xl shrink-0">{'📸'}</span>
+                                        <span>Ha inmortalizado <strong className="text-foreground">{statsMap["fotos_tomadas"]}</strong> aves con su cámara. ¡Un artista del pueblo!</span>
+                                    </li>
+                                )}
+                                {statsMap["monedas_gastadas"] > 0 && (
+                                    <li className="flex items-start sm:items-center gap-3 p-3 rounded-xl bg-yellow-500/5 border border-border">
+                                        <span className="text-xl shrink-0">{'🪙'}</span>
+                                        <span>Ha gastado <strong className="text-foreground">{statsMap["monedas_gastadas"].toLocaleString()}</strong> moneditas en la tienda del pueblito.</span>
+                                    </li>
+                                )}
+                                {statsMap["veces_robado"] > 0 && (
+                                    <li className="flex items-start sm:items-center gap-3 p-3 rounded-xl bg-red-500/5 border border-border">
+                                        <span className="text-xl shrink-0">{'😰'}</span>
+                                        <span>Le han robado <strong className="text-foreground">{statsMap["veces_robado"]}</strong> veces. ¡Tiene que guardar mejor sus monedas!</span>
+                                    </li>
+                                )}
+                                {statsMap["robar_rico"] > 0 && (
+                                    <li className="flex items-start sm:items-center gap-3 p-3 rounded-xl bg-purple-500/5 border border-border">
+                                        <span className="text-xl shrink-0">{'🥷'}</span>
+                                        <span>Le ha metido la mano al bolsillo a vecinos con mas de 10k monedas <strong className="text-foreground">{statsMap["robar_rico"]}</strong> veces.</span>
+                                    </li>
+                                )}
+                            </ul>
+                        </div>
+                    )}
             </div>
             <Footer embedded />
         </div>
