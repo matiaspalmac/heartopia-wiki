@@ -5,11 +5,11 @@ import { Footer } from "@/components/footer";
 import { WikiBreadcrumbs } from "@/components/wiki-breadcrumbs";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Calendar, 
-  ArrowRight, 
-  Clock, 
-  History, 
+import {
+  Calendar,
+  ArrowRight,
+  Clock,
+  History,
   PlayCircle,
   Timer
 } from "lucide-react";
@@ -63,8 +63,8 @@ const EVENTOS = [
     id: "festival-invierno",
     title: "Festival de Invierno 2026",
     status: "En Curso",
-    targetDate: "March 13, 2026 15:00:00", 
-    image: "/eventos/invierno/invierno.jpg", 
+    targetDate: "March 13, 2026 15:00:00",
+    image: "/eventos/invierno/invierno.jpg",
     color: "bg-blue-500",
     description: "¡La nieve cubrió Heartopia! Aprovecha las últimas semanas para coleccionar tickets de nieve y canjear la colección completa de pingüinos.",
     href: "/eventos/eventoinvierno",
@@ -84,20 +84,20 @@ const EVENTOS = [
   {
     id: "mlp-collab",
     title: "Colaboración: My Little Pony",
-    status: "Próximamente",
-    targetDate: "February 14, 2026 00:00:00",
+    status: "En Curso",
+    targetDate: "March 24, 2026 15:00:00",
     image: "/eventos/mlp/mlp.jpg",
     color: "bg-pink-400",
     description: "¡La magia de la amistad llega a Heartopia! Empuña los Elementos de la Armonía y despierta el Árbol de la Armonía en este evento limitado.",
     href: "/eventos/eventomlp",
-    type: "upcoming"
+    type: "active"
   }
 ];
 
 export default function EventosPage() {
   const renderEventSection = (title: string, icon: any, type: string) => {
     const filteredEvents = EVENTOS.filter(e => e.type === type);
-    
+
     return (
       <div className="mb-20">
         <div className="flex items-center gap-3 mb-8">
@@ -114,7 +114,7 @@ export default function EventosPage() {
               <Link href={evento.href} key={evento.id}>
                 <Card className="group overflow-hidden border-2 border-primary/10 hover:border-primary transition-all rounded-[2.5rem] shadow-lg hover:shadow-primary/5">
                   <CardContent className="p-0 flex flex-col md:flex-row h-full">
-                    
+
                     <div className="relative w-full md:w-[420px] aspect-video md:aspect-auto overflow-hidden bg-zinc-100">
                       <Image
                         src={evento.image}
@@ -132,13 +132,13 @@ export default function EventosPage() {
                     <div className="flex-1 p-6 md:p-8 flex flex-col justify-between bg-white dark:bg-zinc-900/50">
                       <div>
                         <div className="flex flex-col mb-4">
-                           <div className="flex items-center gap-2 text-zinc-500 mb-1">
-                             <Calendar className="h-4 w-4" />
-                             <span className="text-xs font-bold uppercase tracking-widest">
-                               {evento.type === 'active' ? 'Evento Activo' : 'Fecha de Inicio'}
-                             </span>
-                           </div>
-                           <EventCounter targetDate={evento.targetDate} type={evento.type as any} />
+                          <div className="flex items-center gap-2 text-zinc-500 mb-1">
+                            <Calendar className="h-4 w-4" />
+                            <span className="text-xs font-bold uppercase tracking-widest">
+                              {evento.type === 'active' ? 'Evento Activo' : 'Fecha de Inicio'}
+                            </span>
+                          </div>
+                          <EventCounter targetDate={evento.targetDate} type={evento.type as any} />
                         </div>
 
                         <h3 className="text-2xl md:text-3xl font-black mb-3 group-hover:text-primary transition-colors">
