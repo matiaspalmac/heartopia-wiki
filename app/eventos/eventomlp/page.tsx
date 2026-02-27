@@ -17,7 +17,7 @@ const CountdownTimer = () => {
   });
 
   useEffect(() => {
-    const targetDate = new Date("February 14, 2026 00:00:00").getTime();
+    const targetDate = new Date("March 24, 2026 15:00:00").getTime();
 
     const interval = setInterval(() => {
       const now = new Date().getTime();
@@ -121,7 +121,7 @@ export default function EventoMLP() {
         <WikiBreadcrumbs items={[{ label: "Eventos", href: "/eventos" }, { label: "My Little Pony" }]} />
         <section className="relative rounded-[3rem] overflow-hidden bg-gradient-to-r from-[#fdf4ff] to-[#fae8ff] dark:from-[#2e102e] dark:to-[#0a020a] p-12 mb-8 border-2 border-[#f0abfc] shadow-xl text-center">
           <Badge className="bg-[#d946ef] text-white mb-6 px-6 py-1 rounded-full uppercase font-black tracking-widest border-2 border-white/30 shadow-md">
-            Especial de San Valentín
+            Colaboración Especial · En Curso
           </Badge>
           <h1 className="text-5xl md:text-7xl font-black text-[#701a75] dark:text-[#f5d0fe] mb-4 italic">
             Friendship is <span className="text-[#db2777]">Magic</span>
@@ -129,19 +129,19 @@ export default function EventoMLP() {
           <div className="flex flex-col items-center">
             <div className="flex items-center justify-center gap-4 text-2xl font-black text-[#be185d]">
               <Calendar className="h-7 w-7" />
-              <span>14 de Febrero</span>
+              <span>Termina el 24 de Marzo</span>
             </div>
-            
+
             <CountdownTimer />
           </div>
         </section>
 
         <div className="relative mb-20 group">
           <div className="absolute -inset-2 bg-gradient-to-r from-pink-300 to-purple-400 rounded-[2.5rem] blur-xl opacity-30 group-hover:opacity-50 transition-opacity" />
-          <Image 
-            src="/eventos/mlp/mlp.jpg" 
-            alt="Colaboración My Little Pony x Heartopia" 
-            width={1200} 
+          <Image
+            src="/eventos/mlp/mlp.jpg"
+            alt="Colaboración My Little Pony x Heartopia"
+            width={1200}
             height={600}
             className="relative rounded-[2.5rem] border-4 border-white dark:border-zinc-800 shadow-2xl w-full object-cover"
             priority
@@ -158,15 +158,15 @@ export default function EventoMLP() {
 
           <div className="grid gap-10">
             {MLP_SETS.map((set) => (
-              <div 
-                key={set.pony} 
+              <div
+                key={set.pony}
                 className={`group flex flex-col md:flex-row overflow-hidden rounded-[3rem] border-2 border-transparent ${set.color} dark:bg-zinc-900 transition-all duration-300 ${set.border} hover:shadow-2xl`}
               >
                 <div className="relative w-full md:w-[45%] h-[400px] md:h-auto bg-white/50 dark:bg-black/10 backdrop-blur-sm">
-                  <Image 
-                    src={set.image} 
-                    alt={`Set de ${set.pony}`} 
-                    fill 
+                  <Image
+                    src={set.image}
+                    alt={`Set de ${set.pony}`}
+                    fill
                     className="object-contain p-6 md:p-10 transition-transform duration-700 group-hover:scale-105"
                   />
                 </div>
@@ -178,7 +178,7 @@ export default function EventoMLP() {
                       Set {set.pony}
                     </span>
                   </div>
-                  
+
                   <h3 className="text-4xl md:text-5xl font-black text-zinc-900 dark:text-white mb-8">
                     Colección <span className={set.accent}>{set.pony}</span>
                   </h3>
@@ -211,7 +211,7 @@ export default function EventoMLP() {
         <section className="mt-24 text-center">
           <p className="text-[#d946ef] font-black text-xl flex items-center justify-center gap-3 italic">
             <Heart className="h-6 w-6 fill-current" />
-            La magia de la amistad llegará pronto a Heartopia
+            La magia de la amistad ya está en Heartopia
             <Heart className="h-6 w-6 fill-current" />
           </p>
         </section>
